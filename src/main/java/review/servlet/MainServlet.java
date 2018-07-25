@@ -47,6 +47,12 @@ public class MainServlet {
     @Value("3")
     private int limitReviews;
 
+    @Value("3")
+    private int countRatings;
+
+    @Value("3")
+    private int ratingMiddleMark;
+
     private final String ALL_TITLES_FROM_CATEGORY = "titles";
 
     @GetMapping({"/", "/home"})
@@ -83,8 +89,8 @@ public class MainServlet {
         return "titles";
     }
 
-    @GetMapping("/title")
-    public String getPage(@RequestParam("page") int page, HttpSession session, Model model) {
+    @GetMapping("/title/page/{number}")
+    public String getPage(@PathVariable("number") int page, HttpSession session, Model model) {
         List<Title> titlesPagination = printResult((List<Title>) session.getAttribute(ALL_TITLES_FROM_CATEGORY), page * paginationTotal - paginationTotal, paginationTotal);
         model.addAttribute(ALL_TITLES_FROM_CATEGORY, titlesPagination);
         return "titles";
@@ -107,12 +113,62 @@ public class MainServlet {
                 ratingMap.put(title.getTitle() + "(" + cityDAO.getById(title.getIdCity()).getName() + ")", middleMark);
             }
         }
-        System.out.println(ratingMap);
-        // Dodelat vibor min i max (po 3)
-        model.addAttribute("ratings", ratingMap);
+        model.addAttribute("ratings", createRating(ratingMap));
         return "ratings";
     }
 
+    private List<Map<String, Double>> createRating(Map<String, Double> ratingMap) {
+        List<Map<String, Double>> resultList = new ArrayList<>();
+        List<Double> badRatings = new ArrayList<>();
+        List<Double> goodRatings = new ArrayList<>();
+        List<Double> values = new ArrayList<>(ratingMap.values());
+        if (!ratingMap.isEmpty()) {
+            Collections.sort(values);
+            for (Double value : values) {
+                if (badRatings.size() == countRatings) {
+                    break;
+                }
+                if (value < ratingMiddleMark) {
+                    badRatings.add(value);
+                } else {
+                    break;
+                }
+            }
+
+            Collections.reverse(values);
+            for (Double value : values) {
+                if (goodRatings.size() == countRatings) {
+                    break;
+                }
+                if (value > ratingMiddleMark) {
+                    goodRatings.add(value);
+                } else {
+                    break;
+                }
+            }
+        }
+
+        Map<String, Double> buffer = new HashMap<>();
+        for (Double e : badRatings) {
+            for (Map.Entry<String, Double> entry : ratingMap.entrySet()) {
+                if (entry.getValue().equals(e)) {
+                    buffer.put(entry.getKey(), e);
+                }
+            }
+        }
+        resultList.add(buffer);
+
+        buffer = new HashMap<>();
+        for (Double e : goodRatings) {
+            for (Map.Entry<String, Double> entry : ratingMap.entrySet()) {
+                if (entry.getValue().equals(e)) {
+                    buffer.put(entry.getKey(), e);
+                }
+            }
+        }
+        resultList.add(buffer);
+        return resultList;
+    }
 
 
     private List<PagesBean> pagesCount(List<Title> titles) {

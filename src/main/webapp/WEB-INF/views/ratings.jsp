@@ -72,8 +72,20 @@
 
 <br><br><br><br><br><br><br>
 <div class="container">
+    BAD RATING:<br><br>
     <div class="row">
-        <c:forEach items="${ratings}" var="rating">
+        <c:forEach items="${ratings.get(0)}" var="rating">
+            <p><b>${rating.getKey()}: ${rating.getValue()}</b></p>
+        </c:forEach>
+    </div>
+
+</div>
+
+<br><br><br><br><br><br><br>
+<div class="container">
+    GOOD RATING:<br><br>
+    <div class="row">
+        <c:forEach items="${ratings.get(1)}" var="rating">
             <p><b>${rating.getKey()}: ${rating.getValue()}</b></p>
         </c:forEach>
     </div>

@@ -83,7 +83,7 @@
                 <div class="col-md-2">
                     <p><b>${title.title} (${title.city})</b></p>
                     <p>${title.description}</p>
-                    <p><a href="/titles/${title.idTitle}" style="text-decoration: none;color:black">Show Reviews</a></p>
+                    <p><a href="/titles/${title.idTitle}" style="text-decoration: none;color:black"><spring:message code="show_reviews"/></a></p>
                 </div>
             </c:forEach>
         </div>
@@ -93,7 +93,7 @@
 
     <c:if test="${countPages.size() != 1}">
         <c:forEach items="${countPages}" var="elem">
-            <a href="/title?page=${elem.number}" class="text-center">${elem.number}</a>
+            <a href="/title/page/${elem.number}" class="text-center">${elem.number}</a>
         </c:forEach>
     </c:if>
 </div>
