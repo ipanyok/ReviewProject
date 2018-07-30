@@ -21,5 +21,5 @@
               username="root"
               password="root"
               driverClassName="com.mysql.jdbc.Driver"
-              url="jdbc:mysql://localhost:3306/reviews"/>
+              url="jdbc:mysql://localhost:3306/reviews?useSSL=false"/>
 </Context>

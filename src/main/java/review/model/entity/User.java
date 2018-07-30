@@ -22,21 +22,21 @@ public class User {
     private Integer id;
 
     @Column(name = "FIRSTNAME")
-    @Pattern(regexp = "[a-zA-Z]", message = "You can use only letters")
+    @Pattern(regexp = "\\+[a-zA-Z]+|[a-zA-Z]+", message = "You can use only letters")
     private String firstName;
 
     @Column(name = "LASTNAME")
     @NotNull(message = "Last name can't be empty")
-    @Pattern(regexp = "[a-zA-Z]", message = "You can use only letters")
+    @Pattern(regexp = "\\+[a-zA-Z]+|[a-zA-Z]+", message = "You can use only letters")
     private String lastName;
 
-    @Column(name = "LOGIN")
+    @Column(name = "LOGIN", unique = true)
     @Size(min = 3, max = 20, message = "Length must be between 3 and 20 symbols")
-    @Pattern(regexp = "[a-zA-Z][0-9][_\\-]]", message = "Incorrect format")
+    @Pattern(regexp = "\\+[a-zA-Z0-9_\\-]+|[a-zA-Z0-9_\\-]+", message = "Incorrect format")
     private String login;
 
     @Column(name = "EMAIL")
-    @Email
+    @Email(message = "Incorrect email format")
     private String email;
 
     @Column(name = "PASSWORD")
@@ -148,5 +148,18 @@ public class User {
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (city != null ? city.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", login='" + login + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", city='" + city + '\'' +
+                ", createDate=" + createDate +
+                '}';
     }
 }

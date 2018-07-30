@@ -4,18 +4,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import review.model.dao.ICityDAO;
 import review.model.entity.*;
 import review.service.*;
 import review.servlet.beans.PagesBean;
 import review.servlet.beans.TitlesBean;
+import review.servlet.utils.Pagination;
+import review.servlet.utils.RatingUtils;
 
-import javax.jws.WebParam;
 import javax.servlet.http.HttpSession;
-import java.util.*;
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 @Controller
 public class MainServlet {
@@ -81,9 +85,9 @@ public class MainServlet {
         session.setAttribute(ALL_TITLES_FROM_CATEGORY, titles);
 
         // pagination
-        List<PagesBean> pagesList = pagesCount((List<Title>) session.getAttribute(ALL_TITLES_FROM_CATEGORY));
+        List<PagesBean> pagesList = Pagination.pagesCount((List<Title>) session.getAttribute(ALL_TITLES_FROM_CATEGORY), paginationTotal);
         session.setAttribute("countPages", pagesList);
-        List<Title> titlesPagination = printResult((List<Title>) session.getAttribute(ALL_TITLES_FROM_CATEGORY), 0, paginationTotal);
+        List<Title> titlesPagination = Pagination.printResult((List<Title>) session.getAttribute(ALL_TITLES_FROM_CATEGORY), 0, paginationTotal);
         model.addAttribute(ALL_TITLES_FROM_CATEGORY, titlesPagination);
         //
         return "titles";
@@ -91,7 +95,7 @@ public class MainServlet {
 
     @GetMapping("/title/page/{number}")
     public String getPage(@PathVariable("number") int page, HttpSession session, Model model) {
-        List<Title> titlesPagination = printResult((List<Title>) session.getAttribute(ALL_TITLES_FROM_CATEGORY), page * paginationTotal - paginationTotal, paginationTotal);
+        List<Title> titlesPagination = Pagination.printResult((List<Title>) session.getAttribute(ALL_TITLES_FROM_CATEGORY), page * paginationTotal - paginationTotal, paginationTotal);
         model.addAttribute(ALL_TITLES_FROM_CATEGORY, titlesPagination);
         return "titles";
     }
@@ -113,109 +117,41 @@ public class MainServlet {
                 ratingMap.put(title.getTitle() + "(" + cityDAO.getById(title.getIdCity()).getName() + ")", middleMark);
             }
         }
-        model.addAttribute("ratings", createRating(ratingMap));
+        model.addAttribute("ratings", RatingUtils.createRating(ratingMap, countRatings, ratingMiddleMark));
         return "ratings";
     }
 
-    private List<Map<String, Double>> createRating(Map<String, Double> ratingMap) {
-        List<Map<String, Double>> resultList = new ArrayList<>();
-        List<Double> badRatings = new ArrayList<>();
-        List<Double> goodRatings = new ArrayList<>();
-        List<Double> values = new ArrayList<>(ratingMap.values());
-        if (!ratingMap.isEmpty()) {
-            Collections.sort(values);
-            for (Double value : values) {
-                if (badRatings.size() == countRatings) {
-                    break;
-                }
-                if (value < ratingMiddleMark) {
-                    badRatings.add(value);
-                } else {
-                    break;
-                }
-            }
+    @GetMapping("/login")
+    public String getLogin() {
+        return "login";
+    }
 
-            Collections.reverse(values);
-            for (Double value : values) {
-                if (goodRatings.size() == countRatings) {
-                    break;
-                }
-                if (value > ratingMiddleMark) {
-                    goodRatings.add(value);
-                } else {
-                    break;
-                }
-            }
-        }
+    @GetMapping("/register")
+    public String getRegister(Model model) {
+        model.addAttribute("user", new User());
+        return "register";
+    }
 
-        Map<String, Double> buffer = new HashMap<>();
-        for (Double e : badRatings) {
-            for (Map.Entry<String, Double> entry : ratingMap.entrySet()) {
-                if (entry.getValue().equals(e)) {
-                    buffer.put(entry.getKey(), e);
-                }
-            }
+    @PostMapping("/register")
+    public String registerUser(@ModelAttribute @Valid User user, BindingResult bindingResult, @RequestParam("city") String city) {
+        System.out.println(user);
+        if (bindingResult.hasErrors()) {
+            return "register";
         }
-        resultList.add(buffer);
-
-        buffer = new HashMap<>();
-        for (Double e : goodRatings) {
-            for (Map.Entry<String, Double> entry : ratingMap.entrySet()) {
-                if (entry.getValue().equals(e)) {
-                    buffer.put(entry.getKey(), e);
-                }
-            }
-        }
-        resultList.add(buffer);
-        return resultList;
+        userService.save(user, city);
+        return "redirect:/home";
     }
 
 
-    private List<PagesBean> pagesCount(List<Title> titles) {
-        int count = titles.size();
-        int result;
-        if (count % paginationTotal > 0) {
-            result = count / paginationTotal + 1;
-        } else {
-            result = count / paginationTotal;
-        }
-        List<PagesBean> pagesList = new ArrayList<>();
-        for (int i = 1; i <= result; i++) {
-            pagesList.add(new PagesBean(i));
-        }
-        return pagesList;
-    }
 
-    public List<Title> printResult(List<Title> list, int start, int total) {
-        int lenght = start + total;
-        List<Title> result = new ArrayList<>();
-        for (int i = start; i < lenght; i++) {
-            if (i < list.size()) {
-                result.add(list.get(i));
-            } else {
-                break;
-            }
-        }
-        return result;
-    }
 
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @GetMapping("/users")
     public String getAllUsers(Model model) {
         model.addAttribute("users", userService.getAll());
         return "users";
-    }
-
-    @GetMapping("/adduser")
-    public String showAddUserForm() {
-        return "adduser";
-    }
-
-
-    @PostMapping("/adduser")
-    public String addUser(@ModelAttribute User user, @RequestParam("city") String city) {
-        userService.save(user, city);
-        return "redirect:/users";
     }
 
     @GetMapping("/users/{id}")
