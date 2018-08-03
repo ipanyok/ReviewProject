@@ -54,6 +54,10 @@
         <div>
             <sf:label path="password">Password</sf:label>
             <sf:password path="password"/>
+        </div>
+        <div>
+            <label>Confirm Password</label>
+            <input type="password" name="confirmPassword"/>
             <sf:errors path="password" cssStyle="color: red"/>
         </div>
         <div>

@@ -17,36 +17,13 @@
                            http://www.springframework.org/schema/mvc
                            http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
+    <import resource="database-config.xml"/>
+    <import resource="security-config.xml"/>
+
     <context:component-scan base-package="review"/>
     <context:annotation-config/>
-    <tx:annotation-driven/>
     <mvc:resources mapping="/resources/**" location="/resources/"/>
     <mvc:annotation-driven/>
-
-    <jee:jndi-lookup id="dataSource" jndi-name="jdbc/reviews"/>
-
-    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-        <property name="entityManagerFactory" ref="emf"/>
-    </bean>
-
-    <bean id="emf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="dataSource" ref="dataSource"/>
-        <property name="jpaVendorAdapter">
-            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
-        </property>
-        <property name="packagesToScan" value="review.model.entity"/>
-        <property name="jpaProperties">
-            <props>
-                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
-                <prop key="hibernate.show_sql">true</prop>
-                <!--<prop key="hibernate.hbm2ddl.auto">create</prop>-->
-            </props>
-        </property>
-    </bean>
-
-    <bean class="org.springframework.jdbc.core.JdbcTemplate">
-        <property name="dataSource" ref="dataSource"/>
-    </bean>
 
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/views/"/>
@@ -63,35 +40,15 @@
         </mvc:interceptor>
     </mvc:interceptors>
 
-    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-        <property name="basenames" value="/WEB-INF/i18n/application, /WEB-INF/i18n/messages"/>
-    </bean>
-
     <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
         <property name="defaultLocale" value="en"/>
         <property name="cookieName" value="locale"/>
     </bean>
 
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basenames" value="/WEB-INF/i18n/application, /WEB-INF/i18n/messages"/>
+    </bean>
+
     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
-
-    <security:http use-expressions="true">
-        <security:intercept-url pattern="/users" access="isAuthenticated()"/>
-        <security:intercept-url pattern="/**" access="permitAll()"/>
-        <security:form-login default-target-url="/"
-                             login-processing-url="/login"
-                             login-page="/login"
-                             password-parameter="password"
-                             username-parameter="login"/>
-        <security:logout logout-url="/logout" logout-success-url="/"/>
-        <security:csrf disabled="true"/>
-    </security:http>
-
-    <security:authentication-manager>
-        <security:authentication-provider>
-            <security:jdbc-user-service data-source-ref="dataSource"
-                                        users-by-username-query="select login, password, true from user where login = ?"
-                                        authorities-by-username-query="select login, 'ROLE' from user where login = ?"/>
-        </security:authentication-provider>
-    </security:authentication-manager>
 
 </beans>

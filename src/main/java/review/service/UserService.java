@@ -1,6 +1,7 @@
 package review.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import review.model.dao.ICityDAO;
@@ -18,6 +19,9 @@ public class UserService {
     private IUserDAO userDAO;
 
     @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
     private ICityDAO cityDAO;
 
     public void save(User user, String cityName) {
@@ -26,6 +30,7 @@ public class UserService {
             city = new City(cityName);
             cityDAO.saveCity(city);
         }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDAO.saveUser(user);
     }
 

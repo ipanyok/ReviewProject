@@ -14,6 +14,7 @@ import java.util.Date;
         @NamedQuery(name = "User.getById", query = "select u from User u where u.id = :id"),
         @NamedQuery(name = "User.getByLogin", query = "select u from User u where u.login = :login")
 })
+
 public class User {
 
     @Id
@@ -22,24 +23,25 @@ public class User {
     private Integer id;
 
     @Column(name = "FIRSTNAME")
-    @Pattern(regexp = "\\+[a-zA-Z]+|[a-zA-Z]+", message = "You can use only letters")
+    @Pattern(regexp = "\\+[a-zA-Zа-яА-Я]+|[a-zA-Zа-яА-Я]+")
     private String firstName;
 
     @Column(name = "LASTNAME")
-    @NotNull(message = "Last name can't be empty")
-    @Pattern(regexp = "\\+[a-zA-Z]+|[a-zA-Z]+", message = "You can use only letters")
+    @NotNull
+    @Pattern(regexp = "\\+[a-zA-Zа-яА-Я]+|[a-zA-Zа-яА-Я]+")
     private String lastName;
 
-    @Column(name = "LOGIN", unique = true)
-    @Size(min = 3, max = 20, message = "Length must be between 3 and 20 symbols")
-    @Pattern(regexp = "\\+[a-zA-Z0-9_\\-]+|[a-zA-Z0-9_\\-]+", message = "Incorrect format")
+    @Column(name = "LOGIN")
+    @Size(min = 3, max = 20)
+    @Pattern(regexp = "\\+[a-zA-Z0-9_\\-]+|[a-zA-Z0-9_\\-]+")
     private String login;
 
     @Column(name = "EMAIL")
-    @Email(message = "Incorrect email format")
+    @Email
     private String email;
 
     @Column(name = "PASSWORD")
+    @NotNull
     private String password;
 
     @Column(name = "CITY")

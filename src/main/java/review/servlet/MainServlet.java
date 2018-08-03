@@ -2,6 +2,10 @@ package review.servlet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,6 +17,7 @@ import review.servlet.beans.PagesBean;
 import review.servlet.beans.TitlesBean;
 import review.servlet.utils.Pagination;
 import review.servlet.utils.RatingUtils;
+import review.servlet.utils.validator.UserValidator;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -44,6 +49,12 @@ public class MainServlet {
 
     @Autowired
     private ICityDAO cityDAO;
+
+    @Autowired
+    private UserValidator userValidator;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @Value("6")
     private int paginationTotal;
@@ -122,7 +133,10 @@ public class MainServlet {
     }
 
     @GetMapping("/login")
-    public String getLogin() {
+    public String getLogin(Model model, String error) {
+        if (error != null) {
+            model.addAttribute("error", "error.login");
+        }
         return "login";
     }
 
@@ -133,12 +147,20 @@ public class MainServlet {
     }
 
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute @Valid User user, BindingResult bindingResult, @RequestParam("city") String city) {
-        System.out.println(user);
+    public String registerUser(@ModelAttribute @Valid User user, BindingResult bindingResult, @RequestParam("city") String city, @RequestParam("confirmPassword") String confirmPassword) {
+        userValidator.validate(user, bindingResult);
+        if (!user.getPassword().equals(confirmPassword)) {
+            bindingResult.rejectValue("password", "error.password.confirm");
+        }
         if (bindingResult.hasErrors()) {
             return "register";
         }
         userService.save(user, city);
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(user.getLogin(), confirmPassword);
+        authenticationManager.authenticate(authentication);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
         return "redirect:/home";
     }
 
