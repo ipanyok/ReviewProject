@@ -2,6 +2,7 @@ package review.servlet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,6 +15,7 @@ import review.model.dao.ICityDAO;
 import review.model.entity.*;
 import review.service.*;
 import review.servlet.beans.PagesBean;
+import review.servlet.beans.ReviewsBean;
 import review.servlet.beans.TitlesBean;
 import review.servlet.utils.Pagination;
 import review.servlet.utils.RatingUtils;
@@ -21,10 +23,7 @@ import review.servlet.utils.validator.UserValidator;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 @Controller
 public class MainServlet {
@@ -48,7 +47,7 @@ public class MainServlet {
     private ReviewService reviewService;
 
     @Autowired
-    private ICityDAO cityDAO;
+    private CityService cityService;
 
     @Autowired
     private UserValidator userValidator;
@@ -114,7 +113,16 @@ public class MainServlet {
     @GetMapping("/titles/{id}")
     public String getTitle(@PathVariable("id") int idTitle, Model model) {
         List<Review> reviews = reviewService.getByTitleId(idTitle);
-        model.addAttribute("reviews", reviews);
+        Title title = titleService.getById(idTitle);
+        City city = cityService.getById(title.getIdCity());
+        List<ReviewsBean> reviewsBeans = new ArrayList<>();
+        for (Review review : reviews) {
+            User user = userService.getById(review.getIdUser());
+            reviewsBeans.add(new ReviewsBean(review.getReviewName(), review.getMark(), review.getText(), review.getDate(), user.getLogin()));
+        }
+        model.addAttribute("city", city);
+        model.addAttribute("title", title);
+        model.addAttribute("reviews", reviewsBeans);
         return "reviews";
     }
 
@@ -125,7 +133,7 @@ public class MainServlet {
         for (Title title : titles) {
             Double middleMark = ratingService.getMiddleMark(title.getId());
             if (middleMark != null) {
-                ratingMap.put(title.getTitle() + "(" + cityDAO.getById(title.getIdCity()).getName() + ")", middleMark);
+                ratingMap.put(title.getTitle() + "(" + cityService.getById(title.getIdCity()).getName() + ")", middleMark);
             }
         }
         model.addAttribute("ratings", RatingUtils.createRating(ratingMap, countRatings, ratingMiddleMark));
@@ -164,7 +172,10 @@ public class MainServlet {
         return "redirect:/home";
     }
 
-
+    @GetMapping("/titles/{idTitle}/addreview")
+    public String getAddReviewForm() {
+        return "addreview";
+    }
 
 
 
