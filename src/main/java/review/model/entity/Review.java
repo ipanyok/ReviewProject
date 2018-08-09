@@ -1,6 +1,8 @@
 package review.model.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -25,12 +27,15 @@ public class Review {
     private Integer idUser;
 
     @Column(name = "TEXT")
+    @NotEmpty
     private String text;
 
     @Column(name = "MARK")
+    @NotNull
     private int mark;
 
     @Column(name = "REVIEWNAME")
+    @NotEmpty
     private String reviewName;
 
     @Temporal(TemporalType.DATE)

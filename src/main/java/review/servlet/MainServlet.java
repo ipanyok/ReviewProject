@@ -23,6 +23,7 @@ import review.servlet.utils.validator.UserValidator;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.*;
 
 @Controller
@@ -81,9 +82,11 @@ public class MainServlet {
             session.setAttribute("categoryMap", categoryMap);
         }
         List<Review> lastAddedReviews = reviewService.getLastAddedReviewsByLimit(limitReviews);
+
         Map<Review, String> mapReviewWithTitles = new HashMap<>();
         for (Review elem : lastAddedReviews) {
-            mapReviewWithTitles.put(elem, titleService.getById(elem.getIdTitle()).getTitle());
+            City city = cityService.getById(titleService.getById(elem.getIdTitle()).getIdCity());
+            mapReviewWithTitles.put(elem, titleService.getById(elem.getIdTitle()).getTitle() + " (" + city.getName() + ")");
         }
         model.addAttribute("lastAddedReviews", mapReviewWithTitles);
         return "home";
@@ -133,7 +136,7 @@ public class MainServlet {
         for (Title title : titles) {
             Double middleMark = ratingService.getMiddleMark(title.getId());
             if (middleMark != null) {
-                ratingMap.put(title.getTitle() + "(" + cityService.getById(title.getIdCity()).getName() + ")", middleMark);
+                ratingMap.put(title.getTitle() + " (" + cityService.getById(title.getIdCity()).getName() + ")", middleMark);
             }
         }
         model.addAttribute("ratings", RatingUtils.createRating(ratingMap, countRatings, ratingMiddleMark));
@@ -173,11 +176,22 @@ public class MainServlet {
     }
 
     @GetMapping("/titles/{idTitle}/addreview")
-    public String getAddReviewForm() {
+    public String getAddReviewForm(@PathVariable("idTitle") int idTitle, Model model) {
+        model.addAttribute("idTitle", idTitle);
+        model.addAttribute("review", new Review());
         return "addreview";
     }
 
-
+    @PostMapping("/titles/{idTitle}/addreview")
+    public String addReview(@ModelAttribute @Valid Review review, BindingResult bindingResult, Principal principal) {
+        if (bindingResult.hasErrors()) {
+            return "addreview";
+        }
+        User currentUser = userService.getByLogin(principal.getName());
+        review.setIdUser(currentUser.getId());
+        reviewService.save(review);
+        return "redirect:/titles/" + review.getIdTitle();
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
