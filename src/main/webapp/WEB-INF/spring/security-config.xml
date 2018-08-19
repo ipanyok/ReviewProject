@@ -8,6 +8,7 @@
 
     <security:http use-expressions="true">
         <security:intercept-url pattern="/**/addreview" access="isAuthenticated()"/>
+        <security:intercept-url pattern="/admin" access="isAuthenticated() and principal.username == 'Admin'"/>
         <security:intercept-url pattern="/**" access="permitAll()"/>
         <security:form-login default-target-url="/"
                              login-processing-url="/login"

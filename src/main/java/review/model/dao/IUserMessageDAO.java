@@ -1,5 +1,6 @@
 package review.model.dao;
 
+import review.model.entity.User;
 import review.model.entity.UserMessage;
 
 import java.util.List;
@@ -15,5 +16,7 @@ public interface IUserMessageDAO {
     UserMessage getById(int id);
 
     List<UserMessage> getByAdminBufferId(int id);
+
+    int getCountNotReaded(User user);
 
 }

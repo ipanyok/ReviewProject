@@ -14,5 +14,7 @@ public interface IAdminBufferDAO {
 
     AdminBuffer getById(int id);
 
-    List<AdminBuffer> getByUserId(int idUser);
+    List<AdminBuffer> getByUserLogin(String userLogin);
+
+    int getCountFromUsers();
 }

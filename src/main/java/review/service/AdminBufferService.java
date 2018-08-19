@@ -31,7 +31,11 @@ public class AdminBufferService {
         return adminBufferDAO.getById(id);
     }
 
-    public List<AdminBuffer> getByUserId(int idUser) {
-        return adminBufferDAO.getByUserId(idUser);
+    public List<AdminBuffer> getByUserLogin(String userLogin) {
+        return adminBufferDAO.getByUserLogin(userLogin);
+    }
+
+    public int getCountFromUsers() {
+        return adminBufferDAO.getCountFromUsers();
     }
 }

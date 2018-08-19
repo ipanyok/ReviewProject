@@ -1,13 +1,12 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Register</title>
+    <title>Add Review To New Title</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -30,47 +29,44 @@
 <jsp:include page="menu.jsp"/>
 
 <div class="container">
-    <sf:form method="post" action="/register" modelAttribute="user">
+    <form action="/titles/subcat/${idSubCat}" method="post">
+        <p class="text-center"><h3>Title Params</h3></p><br>
         <div>
-            <sf:label path="firstName">First Name</sf:label>
-            <sf:input path="firstName"/>
-            <sf:errors path="firstName" cssStyle="color: red"/>
+            <label name="titleName">Title Name</label>
+            <input type="text" name="titleName"/>
+            <%--<sf:errors path="titleName" cssStyle="color: red"/>--%>
         </div>
         <div>
-            <sf:label path="lastName">Last Name</sf:label>
-            <sf:input path="lastName"/>
-            <sf:errors path="lastName" cssStyle="color: red"/>
+            <label name="titleDescription">Title Description</label>
+            <input type="textarea" name="titleDescription"/>
+            <%--<sf:errors path="titleDescription" cssStyle="color: red"/>--%>
         </div>
         <div>
-            <sf:label path="login">Login</sf:label>
-            <sf:input path="login"/>
-            <sf:errors path="login" cssStyle="color: red"/>
+            <label name="titleCity">Title City</label>
+            <input type="text" name="titleCity"/>
+            <%--<sf:errors path="titleCity" cssStyle="color: red"/>--%>
+        </div>
+
+        <p class="text-center"><h3>Review Params</h3></p><br>
+        <div>
+            <label name="reviewName">Review Name</label>
+            <input type="text" name="reviewName"/>
+            <%--<sf:errors path="reviewName" cssStyle="color: red"/>--%>
         </div>
         <div>
-            <sf:label path="email">Email</sf:label>
-            <sf:input path="email"/>
-            <sf:errors path="email" cssStyle="color: red"/>
+            <label name="text">Text</label>
+            <input type="textarea" name="text"/>
+            <%--<sf:errors path="text" cssStyle="color: red"/>--%>
         </div>
         <div>
-            <sf:label path="password">Password</sf:label>
-            <sf:password path="password"/>
+            <label name="mark">Mark</label>
+            <input type="text" name="mark"/>
+            <%--<sf:errors path="mark" cssStyle="color: red"/>--%>
         </div>
-        <div>
-            <label>Confirm Password</label>
-            <input type="password" name="confirmPassword"/>
-            <sf:errors path="password" cssStyle="color: red"/>
-        </div>
-        <div>
-            <sf:label path="city">City</sf:label>
-            <sf:select path="city">
-                <sf:option value="NONE"> --SELECT-- </sf:option>
-                <sf:options items="${cities}"/>
-            </sf:select>
-            <sf:errors path="city" cssStyle="color: red"/>
-        </div>
-        <input type="submit" name="ADD" value="ADD"/>
-    </sf:form>
+        <input type="submit" name="addreviewtonewtitle" value="COMMENT">
+    </form>
 </div>
+
 
 </body>
 </html>

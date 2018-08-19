@@ -27,6 +27,20 @@
 
 <jsp:include page="menu.jsp"/>
 
+<c:if test="${userMessage != null}">
+    <div class="container text-center">
+        <p><h3 style="color: green">${userMessage}</h3></p><br><br>
+    </div>
+</c:if>
+
+
+<security:authorize access="isAuthenticated() and principal.username != 'Admin'">
+<div class="container text-right">
+        <%--<a href=${requestScope['javax.servlet.forward.request_uri']}/addreview>ADD REVIEW</a>--%>
+    <a href="${requestScope['javax.servlet.forward.request_uri']}/addreviewtonewtitle">ADD COMMENT TO NEW TITLE</a><br><br>
+</div>
+</security:authorize>
+
 <div class="container">
 
     <c:if test="${titles.size() == 0}">

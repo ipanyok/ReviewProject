@@ -28,6 +28,12 @@
 
 <jsp:include page="menu.jsp"/>
 
+<security:authorize access="isAuthenticated() and principal.username != 'Admin'">
+    <div class="container text-right">
+        <a href="#">ADD ALL NEW</a><br><br>
+    </div>
+</security:authorize>
+
 <div class="container">
     <c:if test="${lastAddedReviews.size() == 0}">
         <label>NO REVIEWS</label>

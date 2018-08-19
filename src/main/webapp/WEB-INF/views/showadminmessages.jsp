@@ -28,27 +28,13 @@
 
 <jsp:include page="menu.jsp"/>
 
-<div class="container">
-    <sf:form action="/titles/${idTitle}/addreview" method="post" modelAttribute="review">
-        <div>
-            <sf:label path="reviewName">Review Name</sf:label>
-            <sf:input path="reviewName"/>
-            <sf:errors path="reviewName" cssStyle="color: red"/>
-        </div>
-        <div>
-            <sf:label path="text">Text</sf:label>
-            <sf:textarea path="text"/>
-            <sf:errors path="text" cssStyle="color: red"/>
-        </div>
-        <div>
-            <sf:label path="mark">Mark</sf:label>
-            <sf:input path="mark"/>
-            <sf:errors path="mark" cssStyle="color: red"/>
-        </div>
-        <input type="submit" name="addreview" value="COMMENT">
-    </sf:form>
-</div>
-
+<c:if test="${adminBufferList.size() != 0}">
+    <div class="container text-center">
+        <c:forEach items="${adminBufferList}" var="adminBuffer">
+            <p><h3>${adminBuffer.userName}: ${adminBuffer.categoryName} -> ${adminBuffer.subCategoryName} -> ${adminBuffer.titleName} (${adminBuffer.titleCity}) -> ${adminBuffer.reviewName} -> ${adminBuffer.reviewText} -> ${adminBuffer.mark}</h3></p>
+        </c:forEach>
+    </div>
+</c:if>
 
 </body>
 </html>

@@ -7,7 +7,7 @@ import javax.persistence.*;
 @NamedQueries({
         @NamedQuery(name = "AdminBuffer.findAll", query = "select ab from AdminBuffer ab"),
         @NamedQuery(name = "AdminBuffer.findById", query = "select ab from AdminBuffer ab where ab.id = :id"),
-        @NamedQuery(name = "AdminBuffer.findByUserId", query = "select ab from AdminBuffer ab where ab.idUser = :idUser")}
+        @NamedQuery(name = "AdminBuffer.findByUserLogin", query = "select ab from AdminBuffer ab where ab.userName = :userName")}
 )
 public class AdminBuffer {
 
@@ -16,8 +16,8 @@ public class AdminBuffer {
     @Column(name = "ID")
     private Integer id;
 
-    @Column(name = "IDUSER")
-    private Integer idUser;
+    @Column(name = "USERNAME")
+    private String userName;
 
     @Column(name = "CATEGORYNAME")
     private String categoryName;
@@ -28,42 +28,50 @@ public class AdminBuffer {
     @Column(name = "TITLENAME")
     private String titleName;
 
+    @Column(name = "TITLEDESCRIPTION")
+    private String titleDescription;
+
     @Column(name = "TITLECITY")
     private String titleCity;
 
-    @Column(name = "REVIEW")
-    private String review;
+    @Column(name = "REVIEWTEXT")
+    private String reviewText;
+
+    @Column(name = "REVIEWNAME")
+    private String reviewName;
 
     @Column(name = "MARK")
     private int mark;
 
-    @Column(name = "ISADD")
+    @Column(name = "ISADD", columnDefinition = "default 'false'")
     private boolean isAdd;
 
-    @Column(name = "ISUSERWAIT")
-    private boolean isUserWait;
-
-    @Column(name = "ISUSERMODIFY")
-    private boolean isUserModify;
-
-    @Column(name = "CANCEL")
+    @Column(name = "CANCEL", columnDefinition = "default 'false'")
     private boolean cancel;
 
     public AdminBuffer() {
     }
 
-    public AdminBuffer(Integer idUser, String categoryName, String subCategoryName, String titleName, String titleCity, String review, int mark, boolean isAdd, boolean isUserWait, boolean isUserModify, boolean cancel) {
-        this.idUser = idUser;
+    public AdminBuffer(String userName, String categoryName, String subCategoryName, String titleName, String titleDescription, String titleCity, String reviewText, String reviewName, int mark, boolean isAdd, boolean cancel) {
+        this.userName = userName;
         this.categoryName = categoryName;
         this.subCategoryName = subCategoryName;
         this.titleName = titleName;
+        this.titleDescription = titleDescription;
         this.titleCity = titleCity;
-        this.review = review;
+        this.reviewText = reviewText;
+        this.reviewName = reviewName;
         this.mark = mark;
         this.isAdd = isAdd;
-        this.isUserWait = isUserWait;
-        this.isUserModify = isUserModify;
         this.cancel = cancel;
+    }
+
+    public String getTitleCity() {
+        return titleCity;
+    }
+
+    public void setTitleCity(String titleCity) {
+        this.titleCity = titleCity;
     }
 
     public Integer getId() {
@@ -74,12 +82,12 @@ public class AdminBuffer {
         this.id = id;
     }
 
-    public int getIdUser() {
-        return idUser;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setIdUser(Integer idUser) {
-        this.idUser = idUser;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getCategoryName() {
@@ -106,20 +114,28 @@ public class AdminBuffer {
         this.titleName = titleName;
     }
 
-    public String getTitleCity() {
-        return titleCity;
+    public String getTitleDescription() {
+        return titleDescription;
     }
 
-    public void setTitleCity(String titleCity) {
-        this.titleCity = titleCity;
+    public void setTitleDescription(String titleDescription) {
+        this.titleDescription = titleDescription;
     }
 
-    public String getReview() {
-        return review;
+    public String getReviewText() {
+        return reviewText;
     }
 
-    public void setReview(String review) {
-        this.review = review;
+    public void setReviewText(String reviewText) {
+        this.reviewText = reviewText;
+    }
+
+    public String getReviewName() {
+        return reviewName;
+    }
+
+    public void setReviewName(String reviewName) {
+        this.reviewName = reviewName;
     }
 
     public int getMark() {
@@ -138,22 +154,6 @@ public class AdminBuffer {
         isAdd = add;
     }
 
-    public boolean isUserWait() {
-        return isUserWait;
-    }
-
-    public void setUserWait(boolean userWait) {
-        isUserWait = userWait;
-    }
-
-    public boolean isUserModify() {
-        return isUserModify;
-    }
-
-    public void setUserModify(boolean userModify) {
-        isUserModify = userModify;
-    }
-
     public boolean isCancel() {
         return cancel;
     }
@@ -169,33 +169,28 @@ public class AdminBuffer {
 
         AdminBuffer that = (AdminBuffer) o;
 
-        if (idUser != that.idUser) return false;
         if (mark != that.mark) return false;
-        if (isAdd != that.isAdd) return false;
-        if (isUserWait != that.isUserWait) return false;
-        if (isUserModify != that.isUserModify) return false;
-        if (cancel != that.cancel) return false;
+        if (userName != null ? !userName.equals(that.userName) : that.userName != null) return false;
         if (categoryName != null ? !categoryName.equals(that.categoryName) : that.categoryName != null) return false;
         if (subCategoryName != null ? !subCategoryName.equals(that.subCategoryName) : that.subCategoryName != null)
             return false;
         if (titleName != null ? !titleName.equals(that.titleName) : that.titleName != null) return false;
-        if (titleCity != null ? !titleCity.equals(that.titleCity) : that.titleCity != null) return false;
-        return review != null ? review.equals(that.review) : that.review == null;
+        if (titleDescription != null ? !titleDescription.equals(that.titleDescription) : that.titleDescription != null)
+            return false;
+        if (reviewText != null ? !reviewText.equals(that.reviewText) : that.reviewText != null) return false;
+        return reviewName != null ? reviewName.equals(that.reviewName) : that.reviewName == null;
     }
 
     @Override
     public int hashCode() {
-        int result = idUser;
+        int result = userName != null ? userName.hashCode() : 0;
         result = 31 * result + (categoryName != null ? categoryName.hashCode() : 0);
         result = 31 * result + (subCategoryName != null ? subCategoryName.hashCode() : 0);
         result = 31 * result + (titleName != null ? titleName.hashCode() : 0);
-        result = 31 * result + (titleCity != null ? titleCity.hashCode() : 0);
-        result = 31 * result + (review != null ? review.hashCode() : 0);
+        result = 31 * result + (titleDescription != null ? titleDescription.hashCode() : 0);
+        result = 31 * result + (reviewText != null ? reviewText.hashCode() : 0);
+        result = 31 * result + (reviewName != null ? reviewName.hashCode() : 0);
         result = 31 * result + mark;
-        result = 31 * result + (isAdd ? 1 : 0);
-        result = 31 * result + (isUserWait ? 1 : 0);
-        result = 31 * result + (isUserModify ? 1 : 0);
-        result = 31 * result + (cancel ? 1 : 0);
         return result;
     }
 }

@@ -22,12 +22,16 @@ public class UserMessage {
     @Column(name = "ADMINMESSAGE")
     private String adminMessage;
 
+    @Column(name = "ISREAD", columnDefinition = "default 'false'")
+    private boolean isRead;
+
     public UserMessage() {
     }
 
-    public UserMessage(Integer idAdminBuffer, String adminMessage) {
+    public UserMessage(Integer idAdminBuffer, String adminMessage, boolean isRead) {
         this.idAdminBuffer = idAdminBuffer;
         this.adminMessage = adminMessage;
+        this.isRead = isRead;
     }
 
     public Integer getId() {
@@ -52,6 +56,14 @@ public class UserMessage {
 
     public void setAdminMessage(String adminMessage) {
         this.adminMessage = adminMessage;
+    }
+
+    public boolean isRead() {
+        return isRead;
+    }
+
+    public void setRead(boolean read) {
+        isRead = read;
     }
 
     @Override

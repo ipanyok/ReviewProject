@@ -33,7 +33,7 @@ public class User {
 
     @Column(name = "LOGIN")
     @Size(min = 3, max = 20)
-    @Pattern(regexp = "\\+[a-zA-Z0-9_\\-]+|[a-zA-Z0-9_\\-]+")
+    @Pattern(regexp = "\\+[a-zA-Zа-яА-Я0-9_\\-]+|[a-zA-Zа-яА-Я0-9_\\-]+")
     private String login;
 
     @Column(name = "EMAIL")

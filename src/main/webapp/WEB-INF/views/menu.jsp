@@ -31,8 +31,9 @@
                 <li><a href="/ratings"><spring:message code="menu.ratings"/></a></li>
                 <li><a href="#"><spring:message code="menu.contact"/></a></li>
                 <security:authorize access="isAuthenticated()">
-                    <li><a href="#"><spring:message code="menu.messages"/> <span
-                            class="badge badge-success">9</span></a></li>
+                    <li><a href="/showmessages"><spring:message code="menu.messages"/>
+                        <c:if test="${messagesmenu != 0}"><span class="badge badge-success">${messagesmenu}</span></c:if>
+                    </a></li>
                 </security:authorize>
                 <security:authorize access="isAnonymous()">
                     <li><a href="/login"><spring:message code="menu.sign_in"/></a></li>
@@ -44,7 +45,18 @@
 
             <form class="navbar-form navbar-right" role="search">
                 <security:authorize access="isAuthenticated()">
-                    <label><h7 style="color: white">Hello, <security:authentication property="principal.username"/>&nbsp;&nbsp;&nbsp;&nbsp;</h7></label>
+                    <label>
+                        <h7 style="color: white">Hello, <security:authentication property="principal.username"/>&nbsp;&nbsp;&nbsp;&nbsp;</h7>
+                    </label>
+                </security:authorize>
+                <security:authorize access="isAuthenticated()">
+                    <select>
+                        <option>${currentCity}</option>
+                        <c:forEach items="${cities}" var="city">
+                            <option>${city}</option>
+                        </c:forEach>
+                    </select>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
                 </security:authorize>
                 <a href="${requestScope['javax.servlet.forward.request_uri']}?lang=en"
                    style="color:white;text-decoration: none;">EN&nbsp;&nbsp;&nbsp;&nbsp;</a>

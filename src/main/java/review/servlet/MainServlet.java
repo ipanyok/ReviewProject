@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import review.model.dao.ICityDAO;
 import review.model.entity.*;
 import review.service.*;
@@ -51,6 +52,12 @@ public class MainServlet {
     private CityService cityService;
 
     @Autowired
+    private UserMessageService userMessageService;
+
+    @Autowired
+    private AdminBufferService adminBufferService;
+
+    @Autowired
     private UserValidator userValidator;
 
     @Autowired
@@ -71,7 +78,7 @@ public class MainServlet {
     private final String ALL_TITLES_FROM_CATEGORY = "titles";
 
     @GetMapping({"/", "/home"})
-    public String showMain(HttpSession session, Model model) {
+    public String showMain(HttpSession session, Model model, Principal principal) {
         if (session.getAttribute("categoryMap") == null) {
             Map<String, List<SubCategory>> categoryMap = new TreeMap<>();
             List<Category> categories = categoryService.getAll();
@@ -81,14 +88,43 @@ public class MainServlet {
             }
             session.setAttribute("categoryMap", categoryMap);
         }
-        List<Review> lastAddedReviews = reviewService.getLastAddedReviewsByLimit(limitReviews);
 
+        List<Review> lastAddedReviews = reviewService.getLastAddedReviewsByLimit(limitReviews);
         Map<Review, String> mapReviewWithTitles = new HashMap<>();
         for (Review elem : lastAddedReviews) {
             City city = cityService.getById(titleService.getById(elem.getIdTitle()).getIdCity());
             mapReviewWithTitles.put(elem, titleService.getById(elem.getIdTitle()).getTitle() + " (" + city.getName() + ")");
         }
         model.addAttribute("lastAddedReviews", mapReviewWithTitles);
+
+        List<City> cities = cityService.getAll();
+        List<String> cityNames = new ArrayList<>();
+        for (City city : cities) {
+            cityNames.add(city.getName());
+        }
+        session.setAttribute("cities", cityNames);
+
+        if (principal != null) {
+            if (!principal.getName().equals("Admin")) {
+                User currentUser = userService.getByLogin(principal.getName());
+                session.setAttribute("currentCity", currentUser.getCity());
+                Iterator<String> iterator = cityNames.iterator();
+                while (iterator.hasNext()) {
+                    String elem = iterator.next();
+                    if (elem.equals(currentUser.getCity())) {
+                        iterator.remove();
+                        break;
+                    }
+                }
+                session.setAttribute("cities", cityNames);
+                session.setAttribute("messagesmenu", userMessageService.getCountNotReaded(currentUser));
+                return "home";
+            } else {
+                session.setAttribute("currentCity", "Get your choice");
+                session.setAttribute("messagesmenu", adminBufferService.getCountFromUsers());
+                return "admin";
+            }
+        }
         return "home";
     }
 
@@ -119,9 +155,11 @@ public class MainServlet {
         Title title = titleService.getById(idTitle);
         City city = cityService.getById(title.getIdCity());
         List<ReviewsBean> reviewsBeans = new ArrayList<>();
-        for (Review review : reviews) {
-            User user = userService.getById(review.getIdUser());
-            reviewsBeans.add(new ReviewsBean(review.getReviewName(), review.getMark(), review.getText(), review.getDate(), user.getLogin()));
+        if (!reviews.isEmpty()) {
+            for (Review review : reviews) {
+                User user = userService.getById(review.getIdUser());
+                reviewsBeans.add(new ReviewsBean(review.getReviewName(), review.getMark(), review.getText(), review.getDate(), user.getLogin()));
+            }
         }
         model.addAttribute("city", city);
         model.addAttribute("title", title);
@@ -176,15 +214,29 @@ public class MainServlet {
     }
 
     @GetMapping("/titles/{idTitle}/addreview")
-    public String getAddReviewForm(@PathVariable("idTitle") int idTitle, Model model) {
+    public String getAddReviewForm(@PathVariable("idTitle") int idTitle, Model model, Principal principal) {
         model.addAttribute("idTitle", idTitle);
         model.addAttribute("review", new Review());
+        User currentUser = userService.getByLogin(principal.getName());
+        List<Review> reviewsByCurrentTitle = reviewService.getByTitleId(idTitle);
+        boolean isReviewExist = false;
+        for (Review elem : reviewsByCurrentTitle) {
+            if (userService.getById(elem.getIdUser()).getLogin().equals(currentUser.getLogin())) {
+                isReviewExist = true;
+                break;
+            }
+        }
+        if (isReviewExist) {
+            model.addAttribute("message", "YOU ALREADY COMMENT THIS TITLE");
+            return getTitle(idTitle, model);
+        }
         return "addreview";
     }
 
     @PostMapping("/titles/{idTitle}/addreview")
-    public String addReview(@ModelAttribute @Valid Review review, BindingResult bindingResult, Principal principal) {
+    public String addReview(@ModelAttribute @Valid Review review, BindingResult bindingResult, Principal principal, Model model) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("idTitle", review.getIdTitle());
             return "addreview";
         }
         User currentUser = userService.getByLogin(principal.getName());
@@ -193,55 +245,44 @@ public class MainServlet {
         return "redirect:/titles/" + review.getIdTitle();
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    @GetMapping("/users")
-    public String getAllUsers(Model model) {
-        model.addAttribute("users", userService.getAll());
-        return "users";
+    @GetMapping("/titles/subcat/{idSubCat}/addreviewtonewtitle")
+    public String getAddReviewToNewTitle(@PathVariable("idSubCat") int idSubCat, Model model) {
+        model.addAttribute("idSubCat", idSubCat);
+        return "addreviewtonewtitle";
     }
 
-    @GetMapping("/users/{id}")
-    public String deleteUser(@PathVariable("id") int id) {
-        User user = userService.getById(id);
-        userService.delete(user);
-        return "redirect:/users";
+    @PostMapping("/titles/subcat/{idSubCat}")
+    public String addAdminBuffer(@PathVariable("idSubCat") int idSubCategory, Principal principal, RedirectAttributes redirectAttributes,
+                                 @RequestParam("titleName") String titleName,
+                                 @RequestParam("titleDescription") String titleDescription,
+                                 @RequestParam("titleCity") String titleCity,
+                                 @RequestParam("text") String reviewText,
+                                 @RequestParam("reviewName") String reviewName,
+                                 @RequestParam("mark") int mark) {
+        AdminBuffer adminBuffer = new AdminBuffer();
+        adminBuffer.setUserName(userService.getByLogin(principal.getName()).getLogin());
+        adminBuffer.setCategoryName(categoryService.getById(subCategoryService.getById(idSubCategory).getIdCategory()).getName());
+        adminBuffer.setSubCategoryName(subCategoryService.getById(idSubCategory).getName());
+        adminBuffer.setTitleName(titleName);
+        adminBuffer.setTitleDescription(titleDescription);
+        adminBuffer.setTitleCity(titleCity);
+        adminBuffer.setReviewText(reviewText);
+        adminBuffer.setReviewName(reviewName);
+        adminBuffer.setMark(mark);
+        adminBuffer.setAdd(true);
+        adminBufferService.save(adminBuffer);
+        redirectAttributes.addFlashAttribute("userMessage", "You comment send to Admin");
+        return "redirect:/titles/subcat/" + idSubCategory;
     }
 
-    @GetMapping("/user")
-    public String getUserInfo(@RequestParam("login") String login, Model model) {
-        model.addAttribute("user", userService.getByLogin(login));
-        return "showuser";
+    @GetMapping("/showmessages")
+    public String getMessages(Model model, Principal principal) {
+        if (principal.getName().equals("Admin")) {
+            List<AdminBuffer> adminBufferList = adminBufferService.getAll();
+            model.addAttribute("adminBufferList", adminBufferList);
+            return "showadminmessages";
+        }
+        return "";
     }
-
-    @GetMapping("/user/{id}")
-    public String getUserInfoId(@PathVariable("id") int id, Model model) {
-        model.addAttribute("user", userService.getById(id));
-        return "showuser";
-    }
-
-    @GetMapping("/update/{id}")
-    public String showUpdateUserForm(@PathVariable("id") int id, Model model) {
-        model.addAttribute("user", userService.getById(id));
-        return "updateuser";
-    }
-
-    @PostMapping("/update/{id}")
-    public String updateUser(@ModelAttribute User user, @RequestParam("city") String city) {
-        userService.save(user, city);
-        return "redirect:/users";
-    }
-
-//    @PostMapping("/adduser")
-//    public String addUser(@RequestParam("firstName") String firstName,
-//                          @RequestParam("lastName") String lastName,
-//                          @RequestParam("login") String login,
-//                          @RequestParam("email") String email,
-//                          @RequestParam("password") String password,
-//                          @RequestParam("firstName") String city) {
-//
-//        userService.addUser(new User(firstName, lastName, login, email, password, city));
-//        return "redirect:users";
-//    }
 
 }

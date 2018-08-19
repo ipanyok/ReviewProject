@@ -49,10 +49,17 @@
 </div>
 
 
+<c:if test="${message != null}">
+    <div class="container">
+        <p style="color: red">${message}</p>
+    </div>
+</c:if>
+
 <security:authorize url="/**/addreview">
-<div class="container">
-    <a href=${requestScope['javax.servlet.forward.request_uri']}/addreview>ADD REVIEW</a>
-</div>
+    <div class="container">
+            <%--<a href=${requestScope['javax.servlet.forward.request_uri']}/addreview>ADD REVIEW</a>--%>
+        <a href="/titles/${title.id}/addreview">ADD REVIEW</a>
+    </div>
 </security:authorize>
 
 </body>
