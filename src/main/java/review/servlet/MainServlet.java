@@ -2,7 +2,6 @@ package review.servlet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -12,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import review.model.dao.ICityDAO;
 import review.model.entity.*;
 import review.service.*;
 import review.servlet.beans.PagesBean;
@@ -132,6 +130,7 @@ public class MainServlet {
     public String getTitle(@PathVariable("id") int idSubCategory, HttpSession session, Model model) {
         List<TitlesBean> titles = titleService.getBySubCategoryIdWithCity(idSubCategory);
         session.setAttribute(ALL_TITLES_FROM_CATEGORY, titles);
+        model.addAttribute("idSubCategory", idSubCategory);
 
         // pagination
         List<PagesBean> pagesList = Pagination.pagesCount((List<Title>) session.getAttribute(ALL_TITLES_FROM_CATEGORY), paginationTotal);
@@ -142,10 +141,11 @@ public class MainServlet {
         return "titles";
     }
 
-    @GetMapping("/title/page/{number}")
-    public String getPage(@PathVariable("number") int page, HttpSession session, Model model) {
+    @GetMapping("/title/{idSubCategory}/page/{number}")
+    public String getPage(@PathVariable("number") int page, @PathVariable("idSubCategory") int idSubCategory, HttpSession session, Model model) {
         List<Title> titlesPagination = Pagination.printResult((List<Title>) session.getAttribute(ALL_TITLES_FROM_CATEGORY), page * paginationTotal - paginationTotal, paginationTotal);
         model.addAttribute(ALL_TITLES_FROM_CATEGORY, titlesPagination);
+        model.addAttribute("idSubCategory", idSubCategory);
         return "titles";
     }
 
@@ -245,7 +245,7 @@ public class MainServlet {
         return "redirect:/titles/" + review.getIdTitle();
     }
 
-    @GetMapping("/titles/subcat/{idSubCat}/addreviewtonewtitle")
+    @GetMapping({"/titles/subcat/{idSubCat}/addreviewtonewtitle", "/title/{idSubCat}/page/{number}/addreviewtonewtitle"})
     public String getAddReviewToNewTitle(@PathVariable("idSubCat") int idSubCat, Model model) {
         model.addAttribute("idSubCat", idSubCat);
         return "addreviewtonewtitle";
@@ -279,7 +279,11 @@ public class MainServlet {
     public String getMessages(Model model, Principal principal) {
         if (principal.getName().equals("Admin")) {
             List<AdminBuffer> adminBufferList = adminBufferService.getAll();
+            List<Category> categoriesList = categoryService.getAll();
+            List<SubCategory> subCategoriesList = subCategoryService.getAll();
             model.addAttribute("adminBufferList", adminBufferList);
+            model.addAttribute("categoriesList", categoriesList);
+            model.addAttribute("subCategoriesList", subCategoriesList);
             return "showadminmessages";
         }
         return "";

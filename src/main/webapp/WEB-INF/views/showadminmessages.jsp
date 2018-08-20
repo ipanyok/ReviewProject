@@ -31,7 +31,29 @@
 <c:if test="${adminBufferList.size() != 0}">
     <div class="container text-center">
         <c:forEach items="${adminBufferList}" var="adminBuffer">
-            <p><h3>${adminBuffer.userName}: ${adminBuffer.categoryName} -> ${adminBuffer.subCategoryName} -> ${adminBuffer.titleName} (${adminBuffer.titleCity}) -> ${adminBuffer.reviewName} -> ${adminBuffer.reviewText} -> ${adminBuffer.mark}</h3></p>
+            <p>
+            <h3>${adminBuffer.userName}:
+                <select>
+                    <option>${adminBuffer.categoryName}</option>
+                    <c:forEach items="${categoriesList}" var="category">
+                        <option>${category.name}</option>
+                    </c:forEach>
+                </select> ->
+                <select>
+                    <option>${adminBuffer.subCategoryName}</option>
+                    <c:forEach items="${subCategoriesList}" var="subCategory">
+                        <option>${subCategory.name}</option>
+                    </c:forEach>
+                </select>
+                -> ${adminBuffer.titleName} (${adminBuffer.titleCity})
+                -> ${adminBuffer.titleDescription}
+                -> ${adminBuffer.reviewName}
+                -> ${adminBuffer.reviewText}
+                -> ${adminBuffer.mark}
+            </h3>
+            <button>Add</button>
+            <button>Cancel</button>
+            </p>
         </c:forEach>
     </div>
 </c:if>

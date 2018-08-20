@@ -34,7 +34,7 @@
 </c:if>
 
 
-<security:authorize access="isAuthenticated() and principal.username != 'Admin'">
+<security:authorize url="/**/addreviewtonewtitle">
 <div class="container text-right">
         <%--<a href=${requestScope['javax.servlet.forward.request_uri']}/addreview>ADD REVIEW</a>--%>
     <a href="${requestScope['javax.servlet.forward.request_uri']}/addreviewtonewtitle">ADD COMMENT TO NEW TITLE</a><br><br>
@@ -63,7 +63,7 @@
 
     <c:if test="${countPages.size() != 1}">
         <c:forEach items="${countPages}" var="elem">
-            <a href="/title/page/${elem.number}" class="text-center">${elem.number}</a>
+            <a href="/title/${idSubCategory}/page/${elem.number}" class="text-center">${elem.number}</a>
         </c:forEach>
     </c:if>
 </div>
