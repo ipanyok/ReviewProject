@@ -67,8 +67,12 @@ public class UserMessageDAO implements IUserMessageDAO {
 
     @Override
     public UserMessage getByAdminBufferId(int id) {
-        TypedQuery<UserMessage> query = entityManager.createNamedQuery("UserMessage.getByAdminBufferId", UserMessage.class).setParameter("idAdminBuffer", id);
-        return query.getSingleResult();
+        try {
+            TypedQuery<UserMessage> query = entityManager.createNamedQuery("UserMessage.getByAdminBufferId", UserMessage.class).setParameter("idAdminBuffer", id);
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
