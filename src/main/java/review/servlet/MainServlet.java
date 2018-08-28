@@ -569,4 +569,16 @@ public class MainServlet {
         return "home";
     }
 
+    @PostMapping("/read")
+    public String readMessage(@RequestParam("id") int idUserMessage, @RequestParam(value = "read", defaultValue = "") String readButton, HttpSession session, Principal principal) {
+        if (readButton.equals("read" + idUserMessage)) {
+            UserMessage userMessage = userMessageService.getById(idUserMessage);
+            userMessage.setRead(true);
+            userMessageService.save(userMessage);
+            User currentUser = userService.getByLogin(principal.getName());
+            session.setAttribute("messagesmenu", userMessageService.getCountNotReaded(currentUser));
+        }
+        return "redirect:/showmessages";
+    }
+
 }

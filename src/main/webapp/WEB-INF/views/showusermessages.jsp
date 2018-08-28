@@ -32,6 +32,12 @@
     <div class="container text-center">
         <c:forEach items="${userMessageList}" var="userMessage">
             <h3>${userMessage.adminMessage}</h3>
+            <c:if test="${userMessage.read == false}">
+                <form action="/read" method="post">
+                    <input type="hidden" name="id" value="${userMessage.id}">
+                    <button name="read" value="read${userMessage.id}">READ</button>
+                </form>
+            </c:if>
         </c:forEach>
     </div>
 </c:if>
