@@ -33,7 +33,11 @@ public class CategoryDAO implements ICategoryDAO {
 
     @Override
     public List<Category> getAll() {
-        return entityManager.createNamedQuery("Category.getAll", Category.class).getResultList();
+        List<Category> result = entityManager.createNamedQuery("Category.getAll", Category.class).getResultList();
+        if (result.size() == 0) {
+            return null;
+        }
+        return result;
     }
 
     @Override

@@ -17,7 +17,7 @@ import java.util.List;
 @Repository
 public class ReviewDAO implements IReviewDAO {
 
-    private Log logger = LogFactory.getLog(CategoryDAO.class);
+    private Log logger = LogFactory.getLog(ReviewDAO.class);
 
     @PersistenceContext
     private EntityManager entityManager;

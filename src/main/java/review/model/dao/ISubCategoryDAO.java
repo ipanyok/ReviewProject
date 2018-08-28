@@ -16,4 +16,5 @@ public interface ISubCategoryDAO {
 
     List<SubCategory> getByCategoryId(int idCategory);
 
+    SubCategory getByName(String name);
 }

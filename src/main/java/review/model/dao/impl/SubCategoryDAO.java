@@ -15,7 +15,7 @@ import java.util.List;
 @Repository
 public class SubCategoryDAO implements ISubCategoryDAO {
 
-    private Log logger = LogFactory.getLog(CategoryDAO.class);
+    private Log logger = LogFactory.getLog(SubCategoryDAO.class);
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -56,5 +56,15 @@ public class SubCategoryDAO implements ISubCategoryDAO {
     public List<SubCategory> getByCategoryId(int idCategory) {
         TypedQuery<SubCategory> query = entityManager.createNamedQuery("SubCategory.getByCategoryId", SubCategory.class).setParameter("idCategory", idCategory);
         return query.getResultList();
+    }
+
+    @Override
+    public SubCategory getByName(String name) {
+        try {
+            TypedQuery<SubCategory> query = entityManager.createNamedQuery("SubCategory.getByName", SubCategory.class).setParameter("name", name);
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 }

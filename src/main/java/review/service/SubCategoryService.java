@@ -34,4 +34,8 @@ public class SubCategoryService {
     public List<SubCategory> getByCategoryId(int idCategory) {
         return subCategoryDAO.getByCategoryId(idCategory);
     }
+
+    public SubCategory getByName(String name) {
+        return subCategoryDAO.getByName(name);
+    }
 }

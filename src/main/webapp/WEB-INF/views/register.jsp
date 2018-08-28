@@ -61,11 +61,13 @@
             <sf:errors path="password" cssStyle="color: red"/>
         </div>
         <div>
-            <sf:label path="city">City</sf:label>
-            <sf:select path="city">
-                <sf:option value="NONE"> --SELECT-- </sf:option>
-                <sf:options items="${cities}"/>
-            </sf:select>
+            <label>City</label>
+            <sf:input path="city" list="cities"/>
+            <datalist id="cities">
+                <c:forEach items="${cities}" var="city">
+                    <option value="${city}"/>
+                </c:forEach>
+            </datalist>
             <sf:errors path="city" cssStyle="color: red"/>
         </div>
         <input type="submit" name="ADD" value="ADD"/>

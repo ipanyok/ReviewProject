@@ -15,7 +15,7 @@ public interface IUserMessageDAO {
 
     UserMessage getById(int id);
 
-    List<UserMessage> getByAdminBufferId(int id);
+    UserMessage getByAdminBufferId(int id);
 
     int getCountNotReaded(User user);
 

@@ -45,13 +45,12 @@ public class Review {
     public Review() {
     }
 
-    public Review(Integer idTitle, Integer idUser, String text, int mark, String reviewName, Date date) {
+    public Review(Integer idTitle, Integer idUser, String text, int mark, String reviewName) {
         this.idTitle = idTitle;
         this.idUser = idUser;
         this.text = text;
         this.mark = mark;
         this.reviewName = reviewName;
-        this.date = date;
     }
 
     public String getReviewName() {

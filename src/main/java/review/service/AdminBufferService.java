@@ -7,6 +7,7 @@ import review.model.dao.IAdminBufferDAO;
 import review.model.entity.AdminBuffer;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -37,5 +38,9 @@ public class AdminBufferService {
 
     public int getCountFromUsers() {
         return adminBufferDAO.getCountFromUsers();
+    }
+
+    public Map<String, Object> getStatusRequests(Integer idAdminBuffer) {
+        return adminBufferDAO.getStatusRequests(idAdminBuffer);
     }
 }

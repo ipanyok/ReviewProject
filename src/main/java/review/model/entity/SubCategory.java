@@ -7,7 +7,8 @@ import javax.persistence.*;
 @NamedQueries({
         @NamedQuery(name = "SubCategory.getAll", query = "select s from SubCategory s"),
         @NamedQuery(name = "SubCategory.getById", query = "select s from SubCategory s where s.id = :id"),
-        @NamedQuery(name = "SubCategory.getByCategoryId", query = "select s from SubCategory s where s.idCategory = :idCategory")
+        @NamedQuery(name = "SubCategory.getByCategoryId", query = "select s from SubCategory s where s.idCategory = :idCategory"),
+        @NamedQuery(name = "SubCategory.getByName", query = "select s from SubCategory s where s.name = :name")
 })
 public class SubCategory {
 

@@ -43,10 +43,10 @@ public class AdminBuffer {
     @Column(name = "MARK")
     private int mark;
 
-    @Column(name = "ISADD", columnDefinition = "default 'false'")
+    @Column(name = "ISADD")
     private boolean isAdd;
 
-    @Column(name = "CANCEL", columnDefinition = "default 'false'")
+    @Column(name = "CANCEL")
     private boolean cancel;
 
     public AdminBuffer() {

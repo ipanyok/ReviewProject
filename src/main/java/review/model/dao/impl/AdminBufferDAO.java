@@ -12,6 +12,7 @@ import javax.annotation.Resource;
 import javax.persistence.*;
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class AdminBufferDAO implements IAdminBufferDAO {
@@ -28,6 +29,7 @@ public class AdminBufferDAO implements IAdminBufferDAO {
     private EntityManager entityManager;
 
     private final String query = "select count(*) from reviews.adminbuffer where isadd = true";
+    private final String queryForStatusRequests = "select isAdd, cancel from reviews.adminbuffer where id = ?";
 
     @Override
     public void saveBuffer(AdminBuffer adminBuffer) {
@@ -70,5 +72,10 @@ public class AdminBufferDAO implements IAdminBufferDAO {
     @Override
     public int getCountFromUsers() {
         return jdbcTemplate.queryForObject(query, Integer.class);
+    }
+
+    @Override
+    public Map<String, Object> getStatusRequests(Integer idAdminBuffer) {
+        return jdbcTemplate.queryForMap(queryForStatusRequests, new Object[]{idAdminBuffer});
     }
 }

@@ -17,7 +17,7 @@ import java.util.List;
 @Repository
 public class UserDAO implements IUserDAO {
 
-    private Log logger = LogFactory.getLog(CategoryDAO.class);
+    private Log logger = LogFactory.getLog(UserDAO.class);
 
     @PersistenceContext
     private EntityManager entityManager;

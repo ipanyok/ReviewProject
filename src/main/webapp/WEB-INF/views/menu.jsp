@@ -29,10 +29,29 @@
                     </ul>
                 </li>
                 <li><a href="/ratings"><spring:message code="menu.ratings"/></a></li>
-                <li><a href="#"><spring:message code="menu.contact"/></a></li>
+
+                <security:authorize access="(isAuthenticated() and principal.username != 'Admin') or isAnonymous()">
+                    <li><a href="#"><spring:message code="menu.contact"/></a></li>
+                </security:authorize>
+
+
+                <security:authorize url="/**/addtitle">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><spring:message code="menu.add"/> <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="/addtitle">Add Title</a>
+                                <a href="/addcategories">Add Categories</a>
+                            </li>
+                        </ul>
+                    </li>
+                </security:authorize>
+
+
                 <security:authorize access="isAuthenticated()">
                     <li><a href="/showmessages"><spring:message code="menu.messages"/>
-                        <c:if test="${messagesmenu != 0}"><span class="badge badge-success">${messagesmenu}</span></c:if>
+                        <c:if test="${messagesmenu != 0}"><span
+                                class="badge badge-success">${messagesmenu}</span></c:if>
                     </a></li>
                 </security:authorize>
                 <security:authorize access="isAnonymous()">
@@ -51,13 +70,14 @@
                 </security:authorize>
                 <security:authorize access="isAuthenticated()">
                     <select>
-                        <option>${currentCity}</option>
+                        <option value="${currentCity}">${currentCity}</option>
                         <c:forEach items="${cities}" var="city">
                             <option>${city}</option>
                         </c:forEach>
                     </select>
                     &nbsp;&nbsp;&nbsp;&nbsp;
                 </security:authorize>
+
                 <a href="${requestScope['javax.servlet.forward.request_uri']}?lang=en"
                    style="color:white;text-decoration: none;">EN&nbsp;&nbsp;&nbsp;&nbsp;</a>
                 <label style="color:white;">|</label>

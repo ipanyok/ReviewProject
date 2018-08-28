@@ -31,30 +31,55 @@
 <c:if test="${adminBufferList.size() != 0}">
     <div class="container text-center">
         <c:forEach items="${adminBufferList}" var="adminBuffer">
-            <p>
-            <h3>${adminBuffer.userName}:
-                <select>
-                    <option>${adminBuffer.categoryName}</option>
-                    <c:forEach items="${categoriesList}" var="category">
-                        <option>${category.name}</option>
-                    </c:forEach>
-                </select> ->
-                <select>
-                    <option>${adminBuffer.subCategoryName}</option>
-                    <c:forEach items="${subCategoriesList}" var="subCategory">
-                        <option>${subCategory.name}</option>
-                    </c:forEach>
-                </select>
-                -> ${adminBuffer.titleName} (${adminBuffer.titleCity})
-                -> ${adminBuffer.titleDescription}
-                -> ${adminBuffer.reviewName}
-                -> ${adminBuffer.reviewText}
-                -> ${adminBuffer.mark}
-            </h3>
-            <button>Add</button>
-            <button>Cancel</button>
-            </p>
+            <form action="/newcategory" method="post">
+                <input type="hidden" name="idAdminBuffer" value="${adminBuffer.adminBuffer.id}">
+                <input type="hidden" name="titleName" value="${adminBuffer.adminBuffer.titleName}">
+                <input type="hidden" name="titleCity" value="${adminBuffer.adminBuffer.titleCity}">
+                <input type="hidden" name="titleDescription" value="${adminBuffer.adminBuffer.titleDescription}">
+                <input type="hidden" name="reviewName" value="${adminBuffer.adminBuffer.reviewName}">
+                <input type="hidden" name="reviewText" value="${adminBuffer.adminBuffer.reviewText}">
+                <input type="hidden" name="mark" value="${adminBuffer.adminBuffer.mark}">
+                <input type="hidden" name="userName" value="${adminBuffer.adminBuffer.userName}">
+
+                <p>
+                    <h4>${adminBuffer.adminBuffer.userName}:
+                        <select name="categoryName">
+                            <option>${adminBuffer.adminBuffer.categoryName}</option>
+                            <c:forEach items="${categoriesList}" var="category">
+                                <option>${category.name}</option>
+                            </c:forEach>
+                        </select> ->
+                        <select name="subCategoryName">
+                            <option>${adminBuffer.adminBuffer.subCategoryName}</option>
+                            <c:forEach items="${subCategoriesList}" var="subCategory">
+                                <option>${subCategory.name}</option>
+                            </c:forEach>
+                        </select>
+                        -> ${adminBuffer.adminBuffer.titleName} (${adminBuffer.adminBuffer.titleCity})
+                        -> ${adminBuffer.adminBuffer.titleDescription}
+                        -> ${adminBuffer.adminBuffer.reviewName}
+                        -> ${adminBuffer.adminBuffer.reviewText}
+                        -> ${adminBuffer.adminBuffer.mark}
+
+                        <c:if test="${adminBuffer.status == 'ADDED'}">
+                            <p style="color: green">${adminBuffer.status}</p>
+                        </c:if>
+                        <c:if test="${adminBuffer.status == 'IN PROGRESS'}">
+                            <p style="color: blue">${adminBuffer.status}</p>
+                        </c:if>
+                        <c:if test="${adminBuffer.status == 'CANCEL'}">
+                            <p style="color: red">${adminBuffer.status}</p>
+                        </c:if>
+
+                </h3>
+                <c:if test="${adminBuffer.status == 'IN PROGRESS'}">
+                    <button name="add" value="add${adminBuffer.adminBuffer.id}">Add</button>
+                    <button name="cancel" value="cancel${adminBuffer.adminBuffer.id}">Cancel</button>
+                </c:if>
+                </p>
+            </form>
         </c:forEach>
+
     </div>
 </c:if>
 

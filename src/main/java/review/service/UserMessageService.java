@@ -32,7 +32,7 @@ public class UserMessageService {
         return userMessagesDAO.getById(id);
     }
 
-    public List<UserMessage> getByAdminBufferId(int id) {
+    public UserMessage getByAdminBufferId(int id) {
         return userMessagesDAO.getByAdminBufferId(id);
     }
 

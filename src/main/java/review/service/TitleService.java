@@ -27,6 +27,7 @@ public class TitleService {
             city = new City(cityName);
             cityDAO.saveCity(city);
         }
+        title.setIdCity(city.getId());
         titleDAO.saveTitle(title);
     }
 

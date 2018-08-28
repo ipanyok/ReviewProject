@@ -3,6 +3,7 @@ package review.model.dao;
 import review.model.entity.AdminBuffer;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IAdminBufferDAO {
 
@@ -17,4 +18,6 @@ public interface IAdminBufferDAO {
     List<AdminBuffer> getByUserLogin(String userLogin);
 
     int getCountFromUsers();
+
+    Map<String, Object> getStatusRequests(Integer idAdminBuffer);
 }

@@ -20,7 +20,7 @@ import java.util.List;
 @Repository
 public class UserMessageDAO implements IUserMessageDAO {
 
-    private Log logger = LogFactory.getLog(CategoryDAO.class);
+    private Log logger = LogFactory.getLog(UserMessageDAO.class);
 
     @Resource(name = "dataSource")
     private DataSource dataSource;
@@ -66,9 +66,9 @@ public class UserMessageDAO implements IUserMessageDAO {
     }
 
     @Override
-    public List<UserMessage> getByAdminBufferId(int id) {
+    public UserMessage getByAdminBufferId(int id) {
         TypedQuery<UserMessage> query = entityManager.createNamedQuery("UserMessage.getByAdminBufferId", UserMessage.class).setParameter("idAdminBuffer", id);
-        return query.getResultList();
+        return query.getSingleResult();
     }
 
     @Override

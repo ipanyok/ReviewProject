@@ -15,7 +15,7 @@ import java.util.List;
 @Repository
 public class CityDAO implements ICityDAO {
 
-    private Log logger = LogFactory.getLog(CategoryDAO.class);
+    private Log logger = LogFactory.getLog(CityDAO.class);
 
     @PersistenceContext
     private EntityManager entityManager;

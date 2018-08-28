@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public class TitleDAO implements ITitleDAO {
 
-    private Log logger = LogFactory.getLog(CategoryDAO.class);
+    private Log logger = LogFactory.getLog(TitleDAO.class);
 
     @PersistenceContext
     private EntityManager entityManager;

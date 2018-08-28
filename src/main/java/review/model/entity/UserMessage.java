@@ -22,7 +22,7 @@ public class UserMessage {
     @Column(name = "ADMINMESSAGE")
     private String adminMessage;
 
-    @Column(name = "ISREAD", columnDefinition = "default 'false'")
+    @Column(name = "ISREAD")
     private boolean isRead;
 
     public UserMessage() {

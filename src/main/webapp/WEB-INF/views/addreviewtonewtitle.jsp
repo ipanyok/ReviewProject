@@ -30,9 +30,10 @@
 
 <div class="container">
     <form action="/titles/subcat/${idSubCat}" method="post">
-        <p class="text-center"><h3>Title Params</h3></p><br>
+        <p class="text-center">
+        <h3>Title Params</h3></p><br>
         <div>
-            <label name="titleName">Title Name</label>
+            <label name="titleName">Title Name*</label>
             <input type="text" name="titleName"/>
             <%--<sf:errors path="titleName" cssStyle="color: red"/>--%>
         </div>
@@ -42,30 +43,40 @@
             <%--<sf:errors path="titleDescription" cssStyle="color: red"/>--%>
         </div>
         <div>
-            <label name="titleCity">Title City</label>
-            <input type="text" name="titleCity"/>
-            <%--<sf:errors path="titleCity" cssStyle="color: red"/>--%>
+            <label name="titleCity">Title City*</label>
+            <input type="text" name="titleCity" list="cities"/>
+            <datalist id="cities">
+                <c:forEach items="${cities}" var="city">
+                    <option value="${city}"/>
+                </c:forEach>
+            </datalist>
         </div>
-
-        <p class="text-center"><h3>Review Params</h3></p><br>
+        <p class="text-center">
+        <h3>Review Params</h3></p><br>
         <div>
-            <label name="reviewName">Review Name</label>
+            <label name="reviewName">Review Name*</label>
             <input type="text" name="reviewName"/>
             <%--<sf:errors path="reviewName" cssStyle="color: red"/>--%>
         </div>
         <div>
-            <label name="text">Text</label>
+            <label name="text">Text*</label>
             <input type="textarea" name="text"/>
             <%--<sf:errors path="text" cssStyle="color: red"/>--%>
         </div>
         <div>
-            <label name="mark">Mark</label>
+            <label name="mark">Mark*</label>
             <input type="text" name="mark"/>
             <%--<sf:errors path="mark" cssStyle="color: red"/>--%>
         </div>
         <input type="submit" name="addreviewtonewtitle" value="COMMENT">
     </form>
 </div>
+
+<c:if test="${errors != null}">
+    <div class="container" style="color: red">
+        <spring:message code="review.empty"/>
+    </div>
+</c:if>
 
 
 </body>
