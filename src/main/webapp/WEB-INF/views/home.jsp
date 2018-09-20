@@ -30,7 +30,7 @@
 
 <security:authorize access="isAuthenticated() and principal.username != 'Admin'">
     <div class="container text-right">
-        <a href="#">ADD ALL NEW</a><br><br>
+        <a href="/addallnew">ADD ALL NEW</a><br><br>
     </div>
 </security:authorize>
 
@@ -52,6 +52,12 @@
         </div>
     </c:if>
 </div>
+
+<c:if test="${userMessage != null}">
+    <div class="container text-center">
+        <p><h3 style="color: green">${userMessage}</h3></p><br><br>
+    </div>
+</c:if>
 
 </body>
 </html>

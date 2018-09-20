@@ -1,6 +1,5 @@
 package review.servlet;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,8 +21,6 @@ import review.servlet.utils.Pagination;
 import review.servlet.utils.RatingUtils;
 import review.servlet.utils.validator.UserValidator;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.security.Principal;
@@ -579,6 +576,41 @@ public class MainServlet {
             session.setAttribute("messagesmenu", userMessageService.getCountNotReaded(currentUser));
         }
         return "redirect:/showmessages";
+    }
+
+    @GetMapping("/addallnew")
+    public String getAddAll() {
+        return "addallnew";
+    }
+
+    @PostMapping("/addallnew")
+    public String addAllNew(@RequestParam("categoryName") String categoryName, Principal principal, RedirectAttributes redirectAttributes, Model model,
+                            @RequestParam("subCategoryName") String subCategoryName,
+                            @RequestParam("titleName") String titleName,
+                            @RequestParam("titleDescription") String titleDescription,
+                            @RequestParam("titleCity") String titleCity,
+                            @RequestParam("text") String reviewText,
+                            @RequestParam("reviewName") String reviewName,
+                            @RequestParam("mark") Integer mark) {
+        if ((titleName == null || titleName.equals("")) || (titleCity == null || titleCity.equals("")) || (reviewName == null || reviewName.equals("")) || (reviewText == null || reviewText.equals("")) || mark == null || (categoryName == null || categoryName.equals("")) || (subCategoryName == null || subCategoryName.equals(""))) {
+            model.addAttribute("errors", "review.empty");
+            return "addallnew";
+        }
+
+        AdminBuffer adminBuffer = new AdminBuffer();
+        adminBuffer.setUserName(userService.getByLogin(principal.getName()).getLogin());
+        adminBuffer.setCategoryName(categoryName);
+        adminBuffer.setSubCategoryName(subCategoryName);
+        adminBuffer.setTitleName(titleName);
+        adminBuffer.setTitleDescription(titleDescription);
+        adminBuffer.setTitleCity(titleCity);
+        adminBuffer.setReviewText(reviewText);
+        adminBuffer.setReviewName(reviewName);
+        adminBuffer.setMark(mark);
+        adminBuffer.setAdd(true);
+        adminBufferService.save(adminBuffer);
+        redirectAttributes.addFlashAttribute("userMessage", "You comment send to Admin");
+        return "redirect:/home";
     }
 
 }
