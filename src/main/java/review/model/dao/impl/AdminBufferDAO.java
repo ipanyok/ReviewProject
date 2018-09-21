@@ -1,7 +1,6 @@
 package review.model.dao.impl;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -17,7 +16,7 @@ import java.util.Map;
 @Repository
 public class AdminBufferDAO implements IAdminBufferDAO {
 
-    private Log logger = LogFactory.getLog(AdminBufferDAO.class);
+    private static final Logger logger = Logger.getLogger(AdminBufferDAO.class);
 
     @Resource(name = "dataSource")
     private DataSource dataSource;
@@ -35,10 +34,10 @@ public class AdminBufferDAO implements IAdminBufferDAO {
     public void saveBuffer(AdminBuffer adminBuffer) {
         if (adminBuffer.getId() == null) {
             entityManager.persist(adminBuffer);
-            logger.info("Successfully create");
+            logger.info("Message send to admin");
         } else {
             entityManager.merge(adminBuffer);
-            logger.info("Successfully update");
+            logger.info("Message update");
         }
     }
 

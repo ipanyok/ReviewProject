@@ -1,7 +1,6 @@
 package review.model.dao.impl;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -20,7 +19,7 @@ import java.util.List;
 @Repository
 public class UserMessageDAO implements IUserMessageDAO {
 
-    private Log logger = LogFactory.getLog(UserMessageDAO.class);
+    private static final Logger logger = Logger.getLogger(UserMessageDAO.class);
 
     @Resource(name = "dataSource")
     private DataSource dataSource;
@@ -37,10 +36,10 @@ public class UserMessageDAO implements IUserMessageDAO {
     public void saveMessage(UserMessage userMessage) {
         if (userMessage.getId() == null) {
             entityManager.persist(userMessage);
-            logger.info("UserMessage was create");
+            logger.info("Message send to user");
         } else {
             entityManager.merge(userMessage);
-            logger.info("UserMessage[id=" + userMessage.getId() + "] was update");
+            logger.info("Message[id=" + userMessage.getId() + "] was update");
         }
     }
 

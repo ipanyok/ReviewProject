@@ -1,5 +1,6 @@
 package review.servlet;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,6 +18,7 @@ import review.servlet.beans.AdminBufferBean;
 import review.servlet.beans.PagesBean;
 import review.servlet.beans.ReviewsBean;
 import review.servlet.beans.TitlesBean;
+import review.servlet.utils.CategoriesUtils;
 import review.servlet.utils.Pagination;
 import review.servlet.utils.RatingUtils;
 import review.servlet.utils.validator.UserValidator;
@@ -28,6 +30,8 @@ import java.util.*;
 
 @Controller
 public class MainServlet {
+
+    private static final Logger logger = Logger.getLogger(MainServlet.class);
 
     @Autowired
     private UserService userService;
@@ -62,23 +66,29 @@ public class MainServlet {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @Value("6")
+    @Value("${pagination.size}")
     private int paginationTotal;
 
-    @Value("3")
+    @Value("${reviews.limit}")
     private int limitReviews;
 
-    @Value("3")
+    @Value("${rating.count}")
     private int countRatings;
 
-    @Value("3")
+    @Value("${rating.middlemark}")
     private int ratingMiddleMark;
+
+    @Value("${admin.login}")
+    private String adminLogin;
+
+    @Value("${categories.attribute}")
+    private String categoryMapAttribute;
 
     private final String ALL_TITLES_FROM_CATEGORY = "titles";
 
     @GetMapping({"/", "/home"})
     public String showMain(HttpSession session, Model model, Principal principal) {
-        if (session.getAttribute("categoryMap") == null) {
+        if (session.getAttribute(categoryMapAttribute) == null) {
             List<Category> categories = categoryService.getAll();
             if (categories != null) {
                 Map<String, List<SubCategory>> categoryMap = new TreeMap<>();
@@ -86,9 +96,9 @@ public class MainServlet {
                     List<SubCategory> subCategories = subCategoryService.getByCategoryId(elem.getId());
                     categoryMap.put(elem.getName(), subCategories);
                 }
-                session.setAttribute("categoryMap", categoryMap);
+                session.setAttribute(categoryMapAttribute, categoryMap);
             } else {
-                session.setAttribute("categoryMap", null);
+                session.setAttribute(categoryMapAttribute, null);
             }
         }
 
@@ -108,7 +118,7 @@ public class MainServlet {
         session.setAttribute("cities", cityNames);
 
         if (principal != null) {
-            if (!principal.getName().equals("Admin")) {
+            if (!principal.getName().equals(adminLogin)) {
                 User currentUser = userService.getByLogin(principal.getName());
                 session.setAttribute("currentCity", currentUser.getCity());
                 Iterator<String> iterator = cityNames.iterator();
@@ -133,6 +143,7 @@ public class MainServlet {
 
     @GetMapping("/titles/subcat/{id}")
     public String getTitle(@PathVariable("id") int idSubCategory, HttpSession session, Model model) {
+        logger.info("Start getAllTitles()...");
         List<TitlesBean> titles = titleService.getBySubCategoryIdWithCity(idSubCategory);
         session.setAttribute(ALL_TITLES_FROM_CATEGORY, titles);
         model.addAttribute("idSubCategory", idSubCategory);
@@ -156,6 +167,7 @@ public class MainServlet {
 
     @GetMapping("/titles/{id}")
     public String getTitle(@PathVariable("id") int idTitle, Model model) {
+        logger.info("Start showReviews()...");
         List<Review> reviews = reviewService.getByTitleId(idTitle);
         Title title = titleService.getById(idTitle);
         City city = cityService.getById(title.getIdCity());
@@ -174,6 +186,7 @@ public class MainServlet {
 
     @GetMapping("/ratings")
     public String getRating(Model model) {
+        logger.info("Start showRating()...");
         List<Title> titles = titleService.getAll();
         Map<String, Double> ratingMap = new HashMap<>();
         for (Title title : titles) {
@@ -207,6 +220,7 @@ public class MainServlet {
             bindingResult.rejectValue("password", "error.password.confirm");
         }
         if (bindingResult.hasErrors()) {
+            logger.error("No register, see error fields.");
             return "register";
         }
         userService.save(user, city);
@@ -214,7 +228,7 @@ public class MainServlet {
         Authentication authentication = new UsernamePasswordAuthenticationToken(user.getLogin(), confirmPassword);
         authenticationManager.authenticate(authentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
+        logger.info("User " + user.getLogin() + " was register");
         return "redirect:/home";
     }
 
@@ -247,6 +261,7 @@ public class MainServlet {
         User currentUser = userService.getByLogin(principal.getName());
         review.setIdUser(currentUser.getId());
         reviewService.save(review);
+        logger.info("Review was added");
         return "redirect:/titles/" + review.getIdTitle();
     }
 
@@ -342,30 +357,11 @@ public class MainServlet {
         titleService.save(title, titleCity);
 
         // Add category in category map
-        Map<String, List<SubCategory>> categoryMap = (Map<String, List<SubCategory>>) session.getAttribute("categoryMap");
-        List<SubCategory> subCategories = new ArrayList<>();
-        if (categoryMap != null) {
-            for (Map.Entry<String, List<SubCategory>> elem : categoryMap.entrySet()) {
-                if (elem.getKey().equals(categoryName)) {
-                    subCategories = elem.getValue();
-                    if (subCategories == null) {
-                        subCategories = new ArrayList<>();
-                    }
-                    break;
-                }
-            }
-            if (!subCategories.contains(subCategory)) {
-                subCategories.add(subCategory);
-                categoryMap.put(categoryName, subCategories);
-            }
-        } else {
-            categoryMap = new TreeMap<>();
-            categoryMap.put(categoryName, new ArrayList<>(Arrays.asList(subCategory)));
-        }
+        Map<String, List<SubCategory>> categoryMap = CategoriesUtils.addCategoryInMap(session, categoryName, subCategory, categoryMapAttribute);
 
         redirectAttributes.addFlashAttribute("success", "title.success");
-        session.setAttribute("categoryMap", categoryMap);
-
+        session.setAttribute(categoryMapAttribute, categoryMap);
+        logger.info("Title " + titleName + " was create");
         return "redirect:/addtitle";
     }
 
@@ -393,7 +389,7 @@ public class MainServlet {
             Category category = new Category(categoryName);
             categoryService.save(category);
 
-            Map<String, List<SubCategory>> categoryMap = (Map<String, List<SubCategory>>) session.getAttribute("categoryMap");
+            Map<String, List<SubCategory>> categoryMap = (Map<String, List<SubCategory>>) session.getAttribute(categoryMapAttribute);
             if (categoryMap != null) {
                 categoryMap.put(categoryName, null); // возможно надо создать пустой arraylist
             } else {
@@ -402,7 +398,7 @@ public class MainServlet {
             }
 
             redirectAttributes.addFlashAttribute("success", "category.success");
-            session.setAttribute("categoryMap", categoryMap);
+            session.setAttribute(categoryMapAttribute, categoryMap);
         }
         if (subCategoryName != null && !subCategoryName.equals("")) {
             if (categoryName == null || categoryName.equals("")) {
@@ -430,26 +426,9 @@ public class MainServlet {
                 redirectAttributes.addFlashAttribute("success", "category.success");
 
                 // Add in category map
-                Map<String, List<SubCategory>> categoryMap = (Map<String, List<SubCategory>>) session.getAttribute("categoryMap");
-                List<SubCategory> subCategoriesList = new ArrayList<>();
-                if (categoryMap != null) {
-                    for (Map.Entry<String, List<SubCategory>> elem : categoryMap.entrySet()) {
-                        if (elem.getKey().equals(categoryName)) {
-                            subCategoriesList = elem.getValue();
-                            if (subCategoriesList == null) {
-                                subCategoriesList = new ArrayList<>();
-                            }
-                            break;
-                        }
-                    }
-                    subCategoriesList.add(subCategory);
-                    categoryMap.put(categoryName, subCategoriesList);
-                } else {
-                    categoryMap = new TreeMap<>();
-                    categoryMap.put(categoryName, new ArrayList<>(Arrays.asList(subCategory)));
-                }
+                Map<String, List<SubCategory>> categoryMap = CategoriesUtils.addCategoryInMap(session, categoryName, subCategory, categoryMapAttribute);
 
-                session.setAttribute("categoryMap", categoryMap);
+                session.setAttribute(categoryMapAttribute, categoryMap);
             } else {
                 Category newCategory = new Category(categoryName);
                 categoryService.save(newCategory);
@@ -465,17 +444,17 @@ public class MainServlet {
                     categoryMap.put(categoryName, new ArrayList<>(Arrays.asList(subCategory)));
                 }
 
-                session.setAttribute("categoryMap", categoryMap);
+                session.setAttribute(categoryMapAttribute, categoryMap);
             }
         }
-
+        logger.info("Category " + categoryName + " was created");
         return "redirect:/addcategories";
     }
 
 
     @GetMapping("/showmessages")
     public String getMessages(Model model, Principal principal) {
-        if (principal.getName().equals("Admin")) {
+        if (principal.getName().equals(adminLogin)) {
             List<AdminBuffer> adminBufferList = adminBufferService.getAll();
             List<Category> categoriesList = categoryService.getAll();
             List<SubCategory> subCategoriesList = subCategoryService.getAll();
@@ -518,6 +497,7 @@ public class MainServlet {
     public String addNewUserCategory(@RequestParam(value = "add", defaultValue = "") String add,
                                      @RequestParam(value = "cancel", defaultValue = "") String cancel,
                                      @RequestParam("idAdminBuffer") Integer idAdminBuffer,
+                                     @RequestParam("categoryName") String categoryName,
                                      @RequestParam("subCategoryName") String subCategoryName,
                                      @RequestParam("titleName") String titleName,
                                      @RequestParam("titleCity") String titleCity,
@@ -543,9 +523,10 @@ public class MainServlet {
             reviewService.save(review);
 
             // add message to user
-            String adminMessage = "Your review \"" + reviewName + "\" to \"" + titleName + "(" + titleCity + ")\" successfully added.";
+            String adminMessage = "Your review \"" + reviewName + "\" to \"" + titleName + "(" + titleCity + ")\" successfully added in " + categoryName + " -> " + subCategoryName + ".";
             UserMessage userMessage = new UserMessage(idAdminBuffer, adminMessage, false);
             userMessageService.save(userMessage);
+            logger.info("Review was added");
 
             return "redirect:/showmessages";
         }
@@ -560,6 +541,7 @@ public class MainServlet {
             String adminMessage = "Your review \"" + reviewName + "\" to \"" + titleName + "(" + titleCity + ")\" is cancel!";
             UserMessage userMessage = new UserMessage(idAdminBuffer, adminMessage, false);
             userMessageService.save(userMessage);
+            logger.info("Review was cancelled");
 
             return "redirect:/showmessages";
         }

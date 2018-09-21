@@ -1,7 +1,6 @@
 package review.model.dao.impl;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import review.model.dao.ISubCategoryDAO;
 import review.model.entity.SubCategory;
@@ -15,7 +14,7 @@ import java.util.List;
 @Repository
 public class SubCategoryDAO implements ISubCategoryDAO {
 
-    private Log logger = LogFactory.getLog(SubCategoryDAO.class);
+    private static final Logger logger = Logger.getLogger(SubCategoryDAO.class);
 
     @PersistenceContext
     private EntityManager entityManager;

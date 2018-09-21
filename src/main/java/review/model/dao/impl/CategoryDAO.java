@@ -1,7 +1,6 @@
 package review.model.dao.impl;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import review.model.dao.ICategoryDAO;
 import review.model.entity.Category;
@@ -12,10 +11,11 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
+
 @Repository
 public class CategoryDAO implements ICategoryDAO {
 
-    private Log logger = LogFactory.getLog(CategoryDAO.class);
+    private static final Logger logger = Logger.getLogger(CategoryDAO.class);
 
     @PersistenceContext
     private EntityManager entityManager;

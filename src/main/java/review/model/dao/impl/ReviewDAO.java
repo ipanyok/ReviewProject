@@ -1,7 +1,6 @@
 package review.model.dao.impl;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import review.model.dao.IReviewDAO;
 import review.model.entity.Review;
@@ -17,7 +16,7 @@ import java.util.List;
 @Repository
 public class ReviewDAO implements IReviewDAO {
 
-    private Log logger = LogFactory.getLog(ReviewDAO.class);
+    private static final Logger logger = Logger.getLogger(ReviewDAO.class);
 
     @PersistenceContext
     private EntityManager entityManager;

@@ -1,8 +1,6 @@
 package review.model.dao.impl;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import review.model.dao.ITitleDAO;
 import review.model.entity.Title;
@@ -14,7 +12,7 @@ import java.util.List;
 @Repository
 public class TitleDAO implements ITitleDAO {
 
-    private Log logger = LogFactory.getLog(TitleDAO.class);
+    private static final Logger logger = Logger.getLogger(TitleDAO.class);
 
     @PersistenceContext
     private EntityManager entityManager;

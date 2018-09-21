@@ -1,7 +1,5 @@
 package review.model.dao.impl;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -12,8 +10,6 @@ import javax.sql.DataSource;
 
 @Repository
 public class RatingDAO implements IRatingDAO {
-
-    private Log logger = LogFactory.getLog(RatingDAO.class);
 
     @Resource(name = "dataSource")
     private DataSource dataSource;

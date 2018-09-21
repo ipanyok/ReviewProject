@@ -15,6 +15,7 @@
 
     <context:component-scan base-package="review"/>
     <context:annotation-config/>
+    <context:property-placeholder location="classpath:/configuration.properties" />
     <mvc:resources mapping="/resources/**" location="/resources/"/>
     <mvc:annotation-driven/>
 

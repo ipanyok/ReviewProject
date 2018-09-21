@@ -1,7 +1,6 @@
 package review.model.dao.impl;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import review.model.dao.IUserDAO;
 import review.model.entity.User;
@@ -17,7 +16,7 @@ import java.util.List;
 @Repository
 public class UserDAO implements IUserDAO {
 
-    private Log logger = LogFactory.getLog(UserDAO.class);
+    private static final Logger logger = Logger.getLogger(UserDAO.class);
 
     @PersistenceContext
     private EntityManager entityManager;

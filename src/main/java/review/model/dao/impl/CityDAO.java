@@ -1,7 +1,6 @@
 package review.model.dao.impl;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import review.model.dao.ICityDAO;
 import review.model.entity.City;
@@ -15,7 +14,7 @@ import java.util.List;
 @Repository
 public class CityDAO implements ICityDAO {
 
-    private Log logger = LogFactory.getLog(CityDAO.class);
+    private static final Logger logger = Logger.getLogger(CityDAO.class);
 
     @PersistenceContext
     private EntityManager entityManager;
