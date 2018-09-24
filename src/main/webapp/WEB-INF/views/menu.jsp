@@ -62,7 +62,7 @@
                 </security:authorize>
             </ul>
 
-            <form class="navbar-form navbar-right" role="search">
+            <form class="navbar-form navbar-right" role="search" method="post" action="/search">
                 <security:authorize access="isAuthenticated()">
                     <label>
                         <h7 style="color: white">Hello, <security:authentication property="principal.username"/>&nbsp;&nbsp;&nbsp;&nbsp;</h7>
@@ -84,7 +84,7 @@
                 <a href="${requestScope['javax.servlet.forward.request_uri']}?lang=ua"
                    style="color:white;text-decoration: none;">&nbsp;&nbsp;&nbsp;&nbsp;UA&nbsp;&nbsp;&nbsp;&nbsp;</a>
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Search">
+                    <input type="text" class="form-control" placeholder="Search" name="search">
                 </div>
                 <button type="submit" class="btn btn-success" style="height: 35px"><span
                         class="glyphicon glyphicon-search" aria-hidden="true"></span></button>

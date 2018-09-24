@@ -5,7 +5,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Titles</title>
+    <title>Search View</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -27,45 +27,29 @@
 
 <jsp:include page="menu.jsp"/>
 
-<c:if test="${userMessage != null}">
-    <div class="container text-center">
-        <p><h3 style="color: green">${userMessage}</h3></p><br><br>
-    </div>
-</c:if>
-
-
-<security:authorize url="/**/addreviewtonewtitle">
-<div class="container text-right">
-        <%--<a href=${requestScope['javax.servlet.forward.request_uri']}/addreview>ADD REVIEW</a>--%>
-    <a href="${requestScope['javax.servlet.forward.request_uri']}/addreviewtonewtitle">ADD COMMENT TO NEW TITLE</a><br><br>
-</div>
-</security:authorize>
-
 <div class="container">
 
-    <c:if test="${titles.size() == 0}">
+    <c:if test="${searchResult.size() == 0}">
         <label>NO TITLES</label>
     </c:if>
 
-    <c:if test="${titles.size() != 0}">
-        <p class="text-center"><b>${titles.get(0).category} -> ${titles.get(0).subCategory}</b></p>
+    <c:if test="${searchResult.size() != 0}">
         <div class="row">
-            <c:forEach items="${titles}" var="title">
+            <c:forEach items="${searchResult}" var="title">
                 <div class="col-md-2">
-                    <p><b>${title.title} (${title.city})</b></p>
+                    <p><b>${title.title}</b></p>
                     <p>${title.description}</p>
-                    <p><a href="/titles/${title.idTitle}" style="text-decoration: none;color:black"><spring:message code="show_reviews"/></a></p>
+                    <p><a href="/titles/${title.id}" style="text-decoration: none;color:black"><spring:message code="show_reviews"/></a></p>
                 </div>
             </c:forEach>
         </div>
     </c:if>
 
-
     <!-- Pagination -->
 
-    <c:if test="${countPages.size() != 1}">
-        <c:forEach items="${countPages}" var="elem">
-            <a href="/title/${idSubCategory}/page/${elem.number}" class="text-center">${elem.number}</a>
+    <c:if test="${countPagesSearch.size() != 1}">
+        <c:forEach items="${countPagesSearch}" var="elem">
+            <a href="/search/page/${elem.number}" class="text-center">${elem.number}</a>
         </c:forEach>
     </c:if>
 </div>

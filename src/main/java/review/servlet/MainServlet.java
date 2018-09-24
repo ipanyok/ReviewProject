@@ -165,8 +165,15 @@ public class MainServlet {
         return "titles";
     }
 
+    @GetMapping("/search/page/{number}")
+    public String getPageSearch(@PathVariable("number") int page, HttpSession session, Model model) {
+        List<Title> titlesPagination = Pagination.printResult((List<Title>) session.getAttribute("searchResult"), page * paginationTotal - paginationTotal, paginationTotal);
+        model.addAttribute("searchResult", titlesPagination);
+        return "search";
+    }
+
     @GetMapping("/titles/{id}")
-    public String getTitle(@PathVariable("id") int idTitle, Model model) {
+    public String getReviews(@PathVariable("id") int idTitle, Model model) {
         logger.info("Start showReviews()...");
         List<Review> reviews = reviewService.getByTitleId(idTitle);
         Title title = titleService.getById(idTitle);
@@ -247,7 +254,7 @@ public class MainServlet {
         }
         if (isReviewExist) {
             model.addAttribute("message", "YOU ALREADY COMMENT THIS TITLE");
-            return getTitle(idTitle, model);
+            return getReviews(idTitle, model);
         }
         return "addreview";
     }
@@ -593,6 +600,28 @@ public class MainServlet {
         adminBufferService.save(adminBuffer);
         redirectAttributes.addFlashAttribute("userMessage", "You comment send to Admin");
         return "redirect:/home";
+    }
+
+    @PostMapping("/search")
+    public String search(@RequestParam("search") String searchName, Model model, HttpSession session) {
+        logger.info("Searching for \"" + searchName + "\"");
+        List<Title> titlesList = titleService.getAll();
+        List<Title> resultSearch = new ArrayList<>();
+        for (Title title : titlesList) {
+            if (title.getTitle().toLowerCase().contains(searchName.toLowerCase())) {
+                resultSearch.add(title);
+            }
+        }
+        session.setAttribute("searchResult", resultSearch);
+
+        // pagination
+        List<PagesBean> pagesList = Pagination.pagesCount(resultSearch, paginationTotal);
+        session.setAttribute("countPagesSearch", pagesList);
+        List<Title> titlesPagination = Pagination.printResult(resultSearch, 0, paginationTotal);
+        model.addAttribute("searchResult", titlesPagination);
+        //
+
+        return "search";
     }
 
 }
