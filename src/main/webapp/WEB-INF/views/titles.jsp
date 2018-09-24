@@ -48,6 +48,7 @@
     </c:if>
 
     <c:if test="${titles.size() != 0}">
+        <p class="text-center"><b>${titles.get(0).category} -> ${titles.get(0).subCategory}</b></p>
         <div class="row">
             <c:forEach items="${titles}" var="title">
                 <div class="col-md-2">

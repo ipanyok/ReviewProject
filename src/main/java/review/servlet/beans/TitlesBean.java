@@ -6,12 +6,16 @@ public class TitlesBean {
     private String title;
     private String description;
     private String city;
+    private String category;
+    private String subCategory;
 
-    public TitlesBean(Integer idTitle, String title, String description, String city) {
+    public TitlesBean(Integer idTitle, String title, String description, String city, String category, String subCategory) {
         this.idTitle = idTitle;
         this.title = title;
         this.description = description;
         this.city = city;
+        this.category = category;
+        this.subCategory = subCategory;
     }
 
     public Integer getIdTitle() {
@@ -28,5 +32,13 @@ public class TitlesBean {
 
     public String getCity() {
         return city;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public String getSubCategory() {
+        return subCategory;
     }
 }

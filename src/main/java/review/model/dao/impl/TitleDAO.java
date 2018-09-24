@@ -63,7 +63,7 @@ public class TitleDAO implements ITitleDAO {
 
     @Override
     public List<TitlesBean> getBySubCategoryIdWithCity(int id) {
-        Query query = entityManager.createQuery("select new review.servlet.beans.TitlesBean(t.id, t.title, t.description, c.name) from Title t, City c where t.idCity = c.id and t.idSubCategory = :idSubCategory order by t.id", TitlesBean.class).setParameter("idSubCategory", id);
+        Query query = entityManager.createQuery("select new review.servlet.beans.TitlesBean(t.id, t.title, t.description, c.name, cat.name, sub.name) from Title t, City c, Category cat, SubCategory sub where t.idCity = c.id and t.idSubCategory = :idSubCategory and t.idSubCategory = sub.id and sub.idCategory = cat.id order by t.id", TitlesBean.class).setParameter("idSubCategory", id);
         return query.getResultList();
     }
 
