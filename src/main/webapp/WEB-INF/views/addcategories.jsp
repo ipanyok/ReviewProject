@@ -40,7 +40,7 @@
         <label>Subcategory</label>
         <input type="text" name="subCategories"/>
 
-        <input type="submit" name="ADD" value="ADD"/>
+        <input style="color: black" type="submit" name="ADD" value="ADD"/>
     </form>
 </div>
 

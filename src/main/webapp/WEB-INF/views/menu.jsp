@@ -2,6 +2,15 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<style>
+    body {
+        background-color: #3a3a3a;
+        background-image: url("/resources/img/444.jpg");
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        color: white;
+    }
+</style>
 <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -37,7 +46,8 @@
 
                 <security:authorize url="/**/addtitle">
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><spring:message code="menu.add"/> <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><spring:message code="menu.add"/> <b
+                                class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li>
                                 <a href="/addtitle">Add Title</a>
@@ -47,13 +57,16 @@
                     </li>
                 </security:authorize>
 
-
                 <security:authorize access="isAuthenticated()">
-                    <li><a href="/showmessages"><spring:message code="menu.messages"/>
-                        <c:if test="${messagesmenu != 0}"><span
-                                class="badge badge-success">${messagesmenu}</span></c:if>
-                    </a></li>
+                    <li class="cart-icon">
+                        <a href="/showmessages"><i class="glyphicon glyphicon-envelope"></i>
+                            <c:if test="${messagesmenu != 0}">
+                                <span class="badge badge-success">${messagesmenu}</span>
+                            </c:if>
+                        </a>
+                    </li>
                 </security:authorize>
+
                 <security:authorize access="isAnonymous()">
                     <li><a href="/login"><spring:message code="menu.sign_in"/></a></li>
                 </security:authorize>
@@ -69,20 +82,18 @@
                     </label>
                 </security:authorize>
                 <security:authorize access="isAuthenticated()">
-                    <select>
-                        <option value="${currentCity}">${currentCity}</option>
+                    <select style="color: black">
+                        <option style="color: black" value="${currentCity}">${currentCity}</option>
                         <c:forEach items="${cities}" var="city">
-                            <option>${city}</option>
+                            <option style="color: black">${city}</option>
                         </c:forEach>
                     </select>
                     &nbsp;&nbsp;&nbsp;&nbsp;
                 </security:authorize>
 
-                <a href="${requestScope['javax.servlet.forward.request_uri']}?lang=en"
-                   style="color:white;text-decoration: none;">EN&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                <a href="${requestScope['javax.servlet.forward.request_uri']}?lang=en" style="color:white;text-decoration: none;">EN&nbsp;&nbsp;&nbsp;&nbsp;</a>
                 <label style="color:white;">|</label>
-                <a href="${requestScope['javax.servlet.forward.request_uri']}?lang=ua"
-                   style="color:white;text-decoration: none;">&nbsp;&nbsp;&nbsp;&nbsp;UA&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                <a href="${requestScope['javax.servlet.forward.request_uri']}?lang=ua" style="color:white;text-decoration: none;">&nbsp;&nbsp;&nbsp;&nbsp;UA&nbsp;&nbsp;&nbsp;&nbsp;</a>
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="Search" name="search">
                 </div>

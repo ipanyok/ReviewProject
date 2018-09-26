@@ -184,15 +184,13 @@
 
         <div class="col-md-offset-3 col-md-6">
             <form class="form-horizontal" action="/login" method="post">
-                <span class="heading"><spring:message code="login.autorize"/></span>
+                <span class="heading" style="color: black"><spring:message code="login.autorize"/></span>
                 <div class="form-group">
-                    <input type="text" class="form-control" id="inputLogin" name="login" placeholder=<spring:message
-                            code="login.login"/>>
+                    <input type="text" class="form-control" id="inputLogin" name="login" placeholder=<spring:message code="login.login"/>>
                     <i class="fa fa-user"></i>
                 </div>
                 <div class="form-group help">
-                    <input type="password" class="form-control" id="inputPassword" name="password" placeholder=
-                    <spring:message code="login.password"/>>
+                    <input type="password" class="form-control" id="inputPassword" name="password" placeholder=<spring:message code="login.password"/>>
                     <i class="fa fa-lock"></i>
                 </div>
                 <c:if test="${error != null}">
@@ -202,10 +200,8 @@
                     </div>
                 </c:if>
                 <div class="form-group">
+                    <h4><a class="text" style="color: black; text-decoration: none" href="/register"><spring:message code="login.reg"/></a></h4>
                     <button type="submit" class="btn btn-default"><spring:message code="login.sign"/></button>
-                </div>
-                <div class="form-group text-right">
-                    <a href="/register"><spring:message code="login.reg"/></a>
                 </div>
             </form>
         </div>

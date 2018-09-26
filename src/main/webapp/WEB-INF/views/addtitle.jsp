@@ -60,7 +60,7 @@
         <input type="text" name="titleDescription"/>
 
 
-        <input type="submit" name="ADD" value="ADD"/>
+        <input style="color: black" type="submit" name="ADD" value="ADD"/>
     </form>
 </div>
 

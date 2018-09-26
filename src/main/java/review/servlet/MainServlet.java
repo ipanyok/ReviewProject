@@ -106,7 +106,7 @@ public class MainServlet {
         Map<Review, String> mapReviewWithTitles = new HashMap<>();
         for (Review elem : lastAddedReviews) {
             City city = cityService.getById(titleService.getById(elem.getIdTitle()).getIdCity());
-            mapReviewWithTitles.put(elem, titleService.getById(elem.getIdTitle()).getTitle() + " (" + city.getName() + ")");
+            mapReviewWithTitles.put(elem, titleService.getById(elem.getIdTitle()).getTitle() + ", " + city.getName());
         }
         model.addAttribute("lastAddedReviews", mapReviewWithTitles);
 
@@ -602,6 +602,17 @@ public class MainServlet {
         return "redirect:/home";
     }
 
+    @GetMapping("/search")
+    public String getSearch(HttpSession session, Model model) {
+        // pagination
+        List<PagesBean> pagesList = Pagination.pagesCount((List<Title>) session.getAttribute("searchResult"), paginationTotal);
+        session.setAttribute("countPagesSearch", pagesList);
+        List<Title> titlesPagination = Pagination.printResult((List<Title>) session.getAttribute("searchResult"), 0, paginationTotal);
+        model.addAttribute("searchResult", titlesPagination);
+        //
+        return "search";
+    }
+
     @PostMapping("/search")
     public String search(@RequestParam("search") String searchName, Model model, HttpSession session) {
         logger.info("Searching for \"" + searchName + "\"");
@@ -622,6 +633,21 @@ public class MainServlet {
         //
 
         return "search";
+    }
+
+    @GetMapping("/404")
+    public String getErrorNotFound() {
+        return "404";
+    }
+
+    @GetMapping("/400")
+    public String getBadRequest() {
+        return "404";
+    }
+
+    @GetMapping("/403")
+    public String getErrorAccessDenied() {
+        return "403";
     }
 
 }

@@ -68,7 +68,7 @@
             <input type="text" name="mark"/>
             <%--<sf:errors path="mark" cssStyle="color: red"/>--%>
         </div>
-        <input type="submit" name="addreviewtonewtitle" value="COMMENT">
+        <input style="color: black" type="submit" name="addreviewtonewtitle" value="COMMENT">
     </form>
 </div>
 
