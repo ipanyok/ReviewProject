@@ -37,7 +37,7 @@
 <security:authorize url="/**/addreviewtonewtitle">
 <div class="container text-right">
         <%--<a href=${requestScope['javax.servlet.forward.request_uri']}/addreview>ADD REVIEW</a>--%>
-    <a href="${requestScope['javax.servlet.forward.request_uri']}/addreviewtonewtitle">ADD COMMENT TO NEW TITLE</a><br><br>
+    <a href="${requestScope['javax.servlet.forward.request_uri']}/addreviewtonewtitle" style="color: black; text-decoration: none; margin-bottom: 5px">ADD NEW TITLE</a><br><br>
 </div>
 </security:authorize>
 

@@ -30,13 +30,14 @@
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">${cat.getKey()}</a>
                                 <ul class="dropdown-menu">
                                     <c:forEach items="${cat.getValue()}" var="catSub">
-                                        <li><a href="/titles/subcat/${catSub.id}">${catSub.name}</a></li>
+                                        <li><a href="/titles/subcat/${catSub.id}/${currentCity}">${catSub.name}</a></li>
                                     </c:forEach>
                                 </ul>
                             </li>
                         </c:forEach>
                     </ul>
                 </li>
+
                 <li><a href="/ratings"><spring:message code="menu.ratings"/></a></li>
 
                 <security:authorize access="(isAuthenticated() and principal.username != 'Admin') or isAnonymous()">
@@ -82,7 +83,7 @@
                     </label>
                 </security:authorize>
                 <security:authorize access="isAuthenticated()">
-                    <select style="color: black">
+                    <select style="color: black" onchange="window.location='/changecity?city=' + this.value;">
                         <option style="color: black" value="${currentCity}">${currentCity}</option>
                         <c:forEach items="${cities}" var="city">
                             <option style="color: black">${city}</option>
@@ -104,4 +105,4 @@
         </div>
     </div>
 </div>
-<br><br><br><br><br>
+<br><br><br><br>

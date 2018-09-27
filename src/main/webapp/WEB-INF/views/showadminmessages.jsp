@@ -43,16 +43,16 @@
 
                 <p>
                     <h4>${adminBuffer.adminBuffer.userName}:
-                        <select name="categoryName">
-                            <option>${adminBuffer.adminBuffer.categoryName}</option>
+                        <select name="categoryName" style="color: black">
+                            <option style="color: black">${adminBuffer.adminBuffer.categoryName}</option>
                             <c:forEach items="${categoriesList}" var="category">
-                                <option>${category.name}</option>
+                                <option style="color: black">${category.name}</option>
                             </c:forEach>
                         </select> ->
-                        <select name="subCategoryName">
-                            <option>${adminBuffer.adminBuffer.subCategoryName}</option>
+                        <select name="subCategoryName" style="color: black">
+                            <option style="color: black">${adminBuffer.adminBuffer.subCategoryName}</option>
                             <c:forEach items="${subCategoriesList}" var="subCategory">
-                                <option>${subCategory.name}</option>
+                                <option style="color: black">${subCategory.name}</option>
                             </c:forEach>
                         </select>
                         -> ${adminBuffer.adminBuffer.titleName} (${adminBuffer.adminBuffer.titleCity})

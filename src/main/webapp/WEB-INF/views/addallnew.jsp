@@ -34,24 +34,24 @@
         <h3>Category Params</h3></p><br>
         <div>
             <label name="categoryName">Category Name*</label>
-            <input type="text" name="categoryName"/>
+            <input type="text" name="categoryName" style="color: black"/>
         </div>
         <div>
             <label name="subCategoryName">Subcategory Name*</label>
-            <input type="text" name="subCategoryName"/>
+            <input type="text" name="subCategoryName" style="color: black"/>
         </div>
         <h3>Title Params</h3></p><br>
         <div>
             <label name="titleName">Title Name*</label>
-            <input type="text" name="titleName"/>
+            <input type="text" name="titleName" style="color: black"/>
         </div>
         <div>
             <label name="titleDescription">Title Description</label>
-            <input type="textarea" name="titleDescription"/>
+            <input type="textarea" name="titleDescription" style="color: black"/>
         </div>
         <div>
             <label name="titleCity">Title City*</label>
-            <input type="text" name="titleCity" list="cities"/>
+            <input type="text" name="titleCity" list="cities" style="color: black"/>
             <datalist id="cities">
                 <c:forEach items="${cities}" var="city">
                     <option value="${city}"/>
@@ -62,15 +62,15 @@
         <h3>Review Params</h3></p><br>
         <div>
             <label name="reviewName">Review Name*</label>
-            <input type="text" name="reviewName"/>
+            <input type="text" name="reviewName" style="color: black"/>
         </div>
         <div>
             <label name="text">Text*</label>
-            <input type="textarea" name="text"/>
+            <input type="textarea" name="text" style="color: black"/>
         </div>
         <div>
             <label name="mark">Mark*</label>
-            <input type="text" name="mark"/>
+            <input type="text" name="mark" style="color: black"/>
         </div>
         <input style="color: black" type="submit" name="addreviewtonewtitle" value="COMMENT">
     </form>

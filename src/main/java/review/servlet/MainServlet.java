@@ -23,6 +23,7 @@ import review.servlet.utils.Pagination;
 import review.servlet.utils.RatingUtils;
 import review.servlet.utils.validator.UserValidator;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.security.Principal;
@@ -103,10 +104,13 @@ public class MainServlet {
         }
 
         List<Review> lastAddedReviews = reviewService.getLastAddedReviewsByLimit(limitReviews);
-        Map<Review, String> mapReviewWithTitles = new HashMap<>();
+        Map<Review, List<String>> mapReviewWithTitles = new HashMap<>();
         for (Review elem : lastAddedReviews) {
             City city = cityService.getById(titleService.getById(elem.getIdTitle()).getIdCity());
-            mapReviewWithTitles.put(elem, titleService.getById(elem.getIdTitle()).getTitle() + ", " + city.getName());
+            List<String> lastAddedList = new ArrayList<>();
+            lastAddedList.add(titleService.getById(elem.getIdTitle()).getTitle());
+            lastAddedList.add(city.getName());
+            mapReviewWithTitles.put(elem, lastAddedList);
         }
         model.addAttribute("lastAddedReviews", mapReviewWithTitles);
 
@@ -115,25 +119,34 @@ public class MainServlet {
         for (City city : cities) {
             cityNames.add(city.getName());
         }
+        cityNames.add("All");
         session.setAttribute("cities", cityNames);
 
         if (principal != null) {
             if (!principal.getName().equals(adminLogin)) {
                 User currentUser = userService.getByLogin(principal.getName());
-                session.setAttribute("currentCity", currentUser.getCity());
-                Iterator<String> iterator = cityNames.iterator();
-                while (iterator.hasNext()) {
-                    String elem = iterator.next();
-                    if (elem.equals(currentUser.getCity())) {
-                        iterator.remove();
-                        break;
-                    }
+                if (session.getAttribute("currentCity") == null) {
+                    session.setAttribute("currentCity", currentUser.getCity());
                 }
-                session.setAttribute("cities", cityNames);
                 session.setAttribute("messagesmenu", userMessageService.getCountNotReaded(currentUser));
+
+                // review by city of current user
+                if (!session.getAttribute("currentCity").equals("All")) {
+                    Map<Review, List<String>> buf = new HashMap<>();
+                    for (Map.Entry<Review, List<String>> entry : mapReviewWithTitles.entrySet()) {
+                        if (entry.getValue().get(1).equals(session.getAttribute("currentCity"))) {
+                            buf.put(entry.getKey(), entry.getValue());
+                        }
+                    }
+                    model.addAttribute("lastAddedReviews", buf);
+                }
+                //
+
                 return "home";
             } else {
-                session.setAttribute("currentCity", "Get your choice");
+                if (session.getAttribute("currentCity") == null) {
+                    session.setAttribute("currentCity", "All");
+                }
                 session.setAttribute("messagesmenu", adminBufferService.getCountFromUsers());
                 return "admin";
             }
@@ -141,11 +154,22 @@ public class MainServlet {
         return "home";
     }
 
-    @GetMapping("/titles/subcat/{id}")
+    @GetMapping({"/titles/subcat/{id}/{cityOption}", "/titles/subcat/{id}"})
     public String getTitle(@PathVariable("id") int idSubCategory, HttpSession session, Model model) {
         logger.info("Start getAllTitles()...");
         List<TitlesBean> titles = titleService.getBySubCategoryIdWithCity(idSubCategory);
-        session.setAttribute(ALL_TITLES_FROM_CATEGORY, titles);
+        String currentCity = (String) session.getAttribute("currentCity");
+        List<TitlesBean> buf = new ArrayList<>();
+        if (currentCity != null && !currentCity.equals("All")) {
+            for (TitlesBean title : titles) {
+                if (title.getCity().equals(currentCity)) {
+                    buf.add(title);
+                }
+            }
+            session.setAttribute(ALL_TITLES_FROM_CATEGORY, buf);
+        } else {
+            session.setAttribute(ALL_TITLES_FROM_CATEGORY, titles);
+        }
         model.addAttribute("idSubCategory", idSubCategory);
 
         // pagination
@@ -155,6 +179,14 @@ public class MainServlet {
         model.addAttribute(ALL_TITLES_FROM_CATEGORY, titlesPagination);
         //
         return "titles";
+    }
+
+    @GetMapping("/changecity")
+    public String show(@RequestParam("city") String city, HttpSession session, HttpServletRequest request) {
+        session.setAttribute("currentCity", city);
+        String url = request.getHeader("referer");
+        url = url.substring(url.indexOf("/") + 1);
+        return "redirect:/" + url;
     }
 
     @GetMapping("/title/{idSubCategory}/page/{number}")
@@ -649,5 +681,4 @@ public class MainServlet {
     public String getErrorAccessDenied() {
         return "403";
     }
-
 }

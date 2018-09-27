@@ -60,34 +60,10 @@
 
 <security:authorize access="isAuthenticated() and principal.username != 'Admin'">
     <div class="container text-right">
-        <a href="/addallnew">ADD ALL NEW</a><br><br>
+        <a href="/addallnew" style="color: black; text-decoration: none; margin-bottom: 5px">ADD NEW
+            CATEGORY</a><br><br>
     </div>
 </security:authorize>
-
-<%--<div class="container">--%>
-<%--<c:if test="${lastAddedReviews.size() == 0}">--%>
-<%--<label>NO REVIEWS</label>--%>
-<%--</c:if>--%>
-
-<%--<c:if test="${lastAddedReviews.size() != 0}">--%>
-<%--<div class="row">--%>
-<%--<c:forEach items="${lastAddedReviews}" var="review">--%>
-<%--<div class="col-md-4">--%>
-<%--<p><b>${review.getValue()}</b></p>--%>
-<%--<p>${review.getKey().reviewName} (mark: ${review.getKey().mark})</p>--%>
-<%--<p>${review.getKey().text}</p>--%>
-<%--<p>${review.getKey().date}</p>--%>
-<%--</div>--%>
-<%--</c:forEach>--%>
-<%--</div>--%>
-<%--</c:if>--%>
-<%--</div>--%>
-
-<%--<c:if test="${userMessage != null}">--%>
-<%--<div class="container text-center">--%>
-<%--<p><h3 style="color: green">${userMessage}</h3></p><br><br>--%>
-<%--</div>--%>
-<%--</c:if>--%>
 
 <div class="container">
     <c:if test="${lastAddedReviews.size() == 0}">
@@ -95,10 +71,14 @@
     </c:if>
 
     <c:if test="${lastAddedReviews.size() != 0}">
+        <p class="text-center" style="font-size: 40px; color: white">OUR REVIEWS</p>
+        <div>
+            <hr style="border: none; background-color: grey; color: grey; height: 2px;">
+        </div>
         <div class="row">
             <c:forEach items="${lastAddedReviews}" var="review">
                 <div class="col-md-4 col-sm-6">
-                    <div class="sticker" data-sticker="${review.getValue()}">
+                    <div class="sticker" data-sticker="${review.getValue().get(0)}, ${review.getValue().get(1)}">
                         <div class="serviceBox">
                             <div class="service-content">
                                 <h3><label
@@ -116,23 +96,59 @@
                                     <br><br><br>
                                 </c:if>
                             </div>
-                            <div>
-                                <a href="#" class="btn btn-default">Read more</a>
+                            <div class="card-body">
+                                <a href="#" class="btn btn-primary">Read more</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </c:forEach>
         </div>
+
+        <%--<div class="card border-dark mb-3" style="max-width: 28rem;">--%>
+            <%--<img class="card-img-top" src="/resources/img/la.jpg" alt="Card image cap" style="width: 15vw; height: 10vw; object-fit: cover;">--%>
+            <%--<div class="card-body">--%>
+                <%--<h5 class="card-title">Card title</h5>--%>
+                <%--<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>--%>
+                <%--<a href="#" class="btn btn-primary">Go somewhere</a>--%>
+            <%--</div>--%>
+        <%--</div>--%>
+
+        <c:if test="${userMessage != null}">
+            <div class="container text-center">
+                <p>
+                <h3 style="color: green">${userMessage}</h3></p><br><br>
+            </div>
+        </c:if>
+
+        <div class="navbar-fixed-bottom row-fluid">
+            <div class="navbar-inner">
+                <div class="container">
+                    <p class="text-center" style="margin-top: 150px; font-size: 40px; color: white">ABOUT US</p>
+                    <div>
+                        <hr style="border: none; background-color: grey; color: grey; height: 2px;">
+                    </div>
+                    <div class="text-center">
+                        U.S. Highway 25 in the state of Michigan (U.S. 25) was a highway that ran northeasterly from the
+                        Ohio state line near Toledo through Monroe and Detroit to Port Huron.
+                        Continuing near the foot of the Blue Water Bridge, it proceeded north and northwesterly along
+                        the Lake Huron shoreline to the tip of The Thumb in Port Austin.
+                        Created with the initial U.S. Highway System in 1926, U.S. 25 followed some roadways dating from
+                        the 19th and early 20th centuries, and replaced several state highway designations.
+                        The highway was extended to Port Austin in 1933.
+                        Starting in the early 1960s, segments of Interstate 75 and Interstate 94 were built, and U.S. 25
+                        was shifted to follow them concurrently south of Detroit to Port Huron.
+                        On September 26, 1973, the entire designation was removed from the state. The final routing of
+                        the highway is still maintained by the state under eight different designations, some unsigned.
+                        <br><br><br>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     </c:if>
 </div>
-
-<c:if test="${userMessage != null}">
-    <div class="container text-center">
-        <p>
-        <h3 style="color: green">${userMessage}</h3></p><br><br>
-    </div>
-</c:if>
 
 </body>
 </html>

@@ -32,7 +32,7 @@
 
     /* Form Style */
     .form-horizontal {
-        background: #fff;
+        background: white;
         padding-bottom: 40px;
         border-radius: 15px;
         text-align: center;

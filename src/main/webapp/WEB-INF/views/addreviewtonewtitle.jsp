@@ -23,6 +23,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
+
 </head>
 <body>
 
@@ -34,17 +35,17 @@
         <h3>Title Params</h3></p><br>
         <div>
             <label name="titleName">Title Name*</label>
-            <input type="text" name="titleName"/>
+            <input type="text" name="titleName" style="color: black"/>
             <%--<sf:errors path="titleName" cssStyle="color: red"/>--%>
         </div>
         <div>
             <label name="titleDescription">Title Description</label>
-            <input type="textarea" name="titleDescription"/>
+            <input type="textarea" name="titleDescription" style="color: black"/>
             <%--<sf:errors path="titleDescription" cssStyle="color: red"/>--%>
         </div>
         <div>
             <label name="titleCity">Title City*</label>
-            <input type="text" name="titleCity" list="cities"/>
+            <input type="text" name="titleCity" list="cities" style="color: black"/>
             <datalist id="cities">
                 <c:forEach items="${cities}" var="city">
                     <option value="${city}"/>
@@ -55,21 +56,30 @@
         <h3>Review Params</h3></p><br>
         <div>
             <label name="reviewName">Review Name*</label>
-            <input type="text" name="reviewName"/>
+            <input type="text" name="reviewName" style="color: black"/>
             <%--<sf:errors path="reviewName" cssStyle="color: red"/>--%>
         </div>
         <div>
             <label name="text">Text*</label>
-            <input type="textarea" name="text"/>
+            <input type="textarea" name="text" style="color: black"/>
             <%--<sf:errors path="text" cssStyle="color: red"/>--%>
         </div>
         <div>
             <label name="mark">Mark*</label>
-            <input type="text" name="mark"/>
+            <input type="text" name="mark" style="color: black"/>
             <%--<sf:errors path="mark" cssStyle="color: red"/>--%>
         </div>
         <input style="color: black" type="submit" name="addreviewtonewtitle" value="COMMENT">
     </form>
+
+    <%--<div class="card bg-light mb-3" style="max-width: 18rem; color: black">--%>
+        <%--<div class="card-header">Header</div>--%>
+        <%--<div class="card-body">--%>
+            <%--<h5 class="card-title">Light card title</h5>--%>
+            <%--<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>--%>
+        <%--</div>--%>
+    <%--</div>--%>
+
 </div>
 
 <c:if test="${errors != null}">
@@ -77,6 +87,9 @@
         <spring:message code="review.empty"/>
     </div>
 </c:if>
+
+
+
 
 
 </body>
