@@ -49,7 +49,7 @@
     }
 
     .form-horizontal .form-group {
-        padding: 0 40px;
+        padding: 0 103px;
         margin: 0 0 8px 0;
         position: relative;
     }
@@ -155,7 +155,7 @@
         color: #fff;
         background: #00b4ef;
         border-radius: 30px;
-        padding: 10px 210px;
+        padding: 10px 147px;
         border: none;
         text-transform: capitalize;
         transition: all 0.5s ease 0s;

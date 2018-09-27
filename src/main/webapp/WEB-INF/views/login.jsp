@@ -33,7 +33,7 @@
     /* Form Style */
     .form-horizontal {
         background: white;
-        padding-bottom: 40px;
+        padding-bottom: 25px;
         border-radius: 15px;
         text-align: center;
     }
@@ -42,14 +42,14 @@
         display: block;
         font-size: 35px;
         font-weight: 700;
-        padding: 35px 0;
+        padding: 25px 0;
         border-bottom: 1px solid #f0f0f0;
         margin-bottom: 30px;
     }
 
     .form-horizontal .form-group {
-        padding: 0 40px;
-        margin: 0 0 25px 0;
+        padding: 0 103px;
+        margin: 0 0 8px 0;
         position: relative;
     }
 
@@ -149,15 +149,16 @@
     }
 
     .form-horizontal .btn {
-        float: right;
+        float: bottom;
         font-size: 14px;
         color: #fff;
         background: #00b4ef;
         border-radius: 30px;
-        padding: 10px 25px;
+        padding: 10px 150px;
         border: none;
         text-transform: capitalize;
         transition: all 0.5s ease 0s;
+        margin-top: 20px;
     }
 
     @media only screen and (max-width: 479px) {
@@ -200,9 +201,9 @@
                     </div>
                 </c:if>
                 <div class="form-group">
-                    <h4><a class="text" style="color: black; text-decoration: none" href="/register"><spring:message code="login.reg"/></a></h4>
                     <button type="submit" class="btn btn-default"><spring:message code="login.sign"/></button>
                 </div>
+                <h4><a class="text-center" style="color: #00b4ef; text-decoration: none" href="/register"><spring:message code="login.reg"/></a></h4>
             </form>
         </div>
 
