@@ -73,8 +73,8 @@
 
                 </h3>
                 <c:if test="${adminBuffer.status == 'IN PROGRESS'}">
-                    <button name="add" value="add${adminBuffer.adminBuffer.id}">Add</button>
-                    <button name="cancel" value="cancel${adminBuffer.adminBuffer.id}">Cancel</button>
+                    <button name="add" value="add${adminBuffer.adminBuffer.id}" style="color: black">Add</button>
+                    <button name="cancel" value="cancel${adminBuffer.adminBuffer.id}" style="color: black">Cancel</button>
                 </c:if>
                 </p>
             </form>

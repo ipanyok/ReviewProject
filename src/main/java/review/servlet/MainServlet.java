@@ -304,7 +304,7 @@ public class MainServlet {
         return "redirect:/titles/" + review.getIdTitle();
     }
 
-    @GetMapping({"/titles/subcat/{idSubCat}/addreviewtonewtitle", "/title/{idSubCat}/page/{number}/addreviewtonewtitle"})
+    @GetMapping({"/titles/subcat/{idSubCat}/{currentCity}/addreviewtonewtitle", "/title/{idSubCat}/page/{number}/addreviewtonewtitle"})
     public String getAddReviewToNewTitle(@PathVariable("idSubCat") int idSubCat, Model model) {
         model.addAttribute("idSubCat", idSubCat);
         return "addreviewtonewtitle";
@@ -321,6 +321,17 @@ public class MainServlet {
         if ((titleName == null || titleName.equals("")) || (titleCity == null || titleCity.equals("")) || (reviewName == null || reviewName.equals("")) || (reviewText == null || reviewText.equals("")) || mark == null) {
             model.addAttribute("errors", "review.empty");
             return "addreviewtonewtitle";
+        }
+
+        List<Title> titles = titleService.getByName(titleName);
+        if (titles != null) {
+            for (Title title : titles) {
+                if (cityService.getById(title.getIdCity()).getName().equals(titleCity)) {
+                    logger.error("This title already exist");
+                    model.addAttribute("errors", "error.title.unique");
+                    return "addreviewtonewtitle";
+                }
+            }
         }
 
         AdminBuffer adminBuffer = new AdminBuffer();

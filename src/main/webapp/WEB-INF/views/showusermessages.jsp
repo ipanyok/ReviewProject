@@ -35,7 +35,7 @@
             <c:if test="${userMessage.read == false}">
                 <form action="/read" method="post">
                     <input type="hidden" name="id" value="${userMessage.id}">
-                    <button name="read" value="read${userMessage.id}">READ</button>
+                    <button name="read" value="read${userMessage.id}" style="color: black">READ</button>
                 </form>
             </c:if>
         </c:forEach>

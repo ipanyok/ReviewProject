@@ -59,8 +59,9 @@
 
 <security:authorize access="isAuthenticated() and principal.username != 'Admin'">
     <div class="container text-right">
-        <a href="/addallnew" style="color: black; text-decoration: none; margin-bottom: 5px">ADD NEW
-            CATEGORY</a><br><br>
+        <div class="card-body">
+            <a href="/addallnew" class="btn btn-success">Add new category</a>
+        </div>
     </div>
 </security:authorize>
 
@@ -70,7 +71,7 @@
     </c:if>
 
     <c:if test="${lastAddedReviews.size() != 0}">
-        <p class="text-center" style="font-size: 40px; color: white">OUR REVIEWS</p>
+        <p class="text-center" style="font-size: 40px; color: white; font-family: 'Arial Narrow'">LAST REVIEWS</p>
         <div>
             <hr style="border: none; background-color: grey; color: grey; height: 2px;">
         </div>

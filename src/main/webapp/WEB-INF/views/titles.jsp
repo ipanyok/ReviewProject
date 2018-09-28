@@ -27,17 +27,13 @@
 
 <jsp:include page="menu.jsp"/>
 
-<c:if test="${userMessage != null}">
-    <div class="container text-center">
-        <p><h3 style="color: green">${userMessage}</h3></p><br><br>
-    </div>
-</c:if>
-
 
 <security:authorize url="/**/addreviewtonewtitle">
 <div class="container text-right">
         <%--<a href=${requestScope['javax.servlet.forward.request_uri']}/addreview>ADD REVIEW</a>--%>
-    <a href="${requestScope['javax.servlet.forward.request_uri']}/addreviewtonewtitle" style="color: black; text-decoration: none; margin-bottom: 5px">ADD NEW TITLE</a><br><br>
+            <div class="card-body">
+                <a href="${requestScope['javax.servlet.forward.request_uri']}/addreviewtonewtitle" class="btn btn-success">Add new title</a>
+            </div>
 </div>
 </security:authorize>
 
@@ -69,6 +65,13 @@
             <a href="/title/${idSubCategory}/page/${elem.number}" class="text-center">${elem.number}</a>
         </c:forEach>
     </c:if>
+
+    <c:if test="${userMessage != null}">
+        <div class="container text-center">
+            <p><h3 style="color: green">${userMessage}</h3></p><br><br>
+        </div>
+    </c:if>
+
 </div>
 
 </body>

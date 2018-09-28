@@ -84,7 +84,7 @@
 
 <c:if test="${errors != null}">
     <div class="container" style="color: red">
-        <spring:message code="review.empty"/>
+        <spring:message code="${errors}"/>
     </div>
 </c:if>
 

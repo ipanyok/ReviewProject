@@ -51,8 +51,12 @@ public class TitleDAO implements ITitleDAO {
 
     @Override
     public List<Title> getByName(String name) {
-        TypedQuery<Title> query = entityManager.createNamedQuery("Title.getByName", Title.class).setParameter("title", name);
-        return query.getResultList();
+        try {
+            TypedQuery<Title> query = entityManager.createNamedQuery("Title.getByName", Title.class).setParameter("title", name);
+            return query.getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override

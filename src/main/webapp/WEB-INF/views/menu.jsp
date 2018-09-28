@@ -94,7 +94,7 @@
 
                 <a href="${requestScope['javax.servlet.forward.request_uri']}?lang=en" style="color:white;text-decoration: none;">EN&nbsp;&nbsp;&nbsp;&nbsp;</a>
                 <label style="color:white;">|</label>
-                <a href="${requestScope['javax.servlet.forward.request_uri']}?lang=ua" style="color:white;text-decoration: none;">&nbsp;&nbsp;&nbsp;&nbsp;UA&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                <a href="${requestScope['javax.servlet.forward.request_uri']}?lang=ua" style="color:lightslategrey;text-decoration: none; pointer-events: none">&nbsp;&nbsp;&nbsp;&nbsp;UA&nbsp;&nbsp;&nbsp;&nbsp;</a>
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="Search" name="search">
                 </div>
