@@ -29,6 +29,10 @@ public class Title {
     @Column(name = "DESCRIPTION")
     private String description;
 
+    @Column(name = "PICTURE")
+    @Lob
+    private byte[] picture;
+
     public Title() {
     }
 
@@ -41,6 +45,14 @@ public class Title {
 
     public String getDescription() {
         return description;
+    }
+
+    public byte[] getPicture() {
+        return picture;
+    }
+
+    public void setPicture(byte[] picture) {
+        this.picture = picture;
     }
 
     public void setDescription(String description) {

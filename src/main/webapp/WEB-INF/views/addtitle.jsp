@@ -28,28 +28,28 @@
 <jsp:include page="menu.jsp"/>
 
 <div class="container-fluid text-center">
-    <form method="post" action="/addtitle">
+    <form method="post" action="/addtitle" enctype="multipart/form-data">
         <label>Category</label>
-        <input type="text" name="categories" list="categories"/>
-        <datalist id="categories">
+        <input type="text" name="categories" list="categories" style="color: black"/>
+        <datalist id="categories" style="color: black">
             <c:forEach items="${categories}" var="category">
                 <option value="${category.name}"/>
             </c:forEach>
         </datalist>
 
         <label>Subcategory</label>
-        <input type="text" name="subCategories" list="subCategories"/>
-        <datalist id="subCategories">
+        <input type="text" name="subCategories" list="subCategories" style="color: black"/>
+        <datalist id="subCategories" style="color: black">
             <c:forEach items="${subCategories}" var="subCategory">
                 <option value="${subCategory.name}"/>
             </c:forEach>
         </datalist>
 
         <label>Title</label>
-        <input type="text" name="title"/>
+        <input type="text" name="title" style="color: black"/>
 
         <label>Title City</label>
-        <input type="text" name="cities" list="cities"/>
+        <input type="text" name="cities" list="cities" style="color: black"/>
         <datalist id="cities">
             <c:forEach items="${cities}" var="city">
                 <option value="${city}"/>
@@ -57,8 +57,10 @@
         </datalist>
 
         <label>Title Description</label>
-        <input type="text" name="titleDescription"/>
+        <input type="text" name="titleDescription" style="color: black"/>
 
+        <br><br>
+        <input name="file" type="file" value="Download Photo"/>
 
         <input style="color: black" type="submit" name="ADD" value="ADD"/>
     </form>

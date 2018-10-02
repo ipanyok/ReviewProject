@@ -30,7 +30,7 @@
 <jsp:include page="menu.jsp"/>
 
 <div class="container">
-    <form action="/titles/subcat/${idSubCat}" method="post">
+    <form action="/titles/subcat/${idSubCat}" method="post" enctype="multipart/form-data">
         <p class="text-center">
         <h3>Title Params</h3></p><br>
         <div>
@@ -51,6 +51,9 @@
                     <option value="${city}"/>
                 </c:forEach>
             </datalist>
+        </div>
+        <div>
+            <input name="file" type="file" value="Download Photo"/>
         </div>
         <p class="text-center">
         <h3>Review Params</h3></p><br>

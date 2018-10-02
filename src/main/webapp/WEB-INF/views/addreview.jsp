@@ -32,17 +32,17 @@
     <sf:form action="/titles/${idTitle}/addreview" method="post" modelAttribute="review">
         <div>
             <sf:label path="reviewName">Review Name</sf:label>
-            <sf:input path="reviewName"/>
+            <sf:input path="reviewName" cssStyle="color: black"/>
             <sf:errors path="reviewName" cssStyle="color: red"/>
         </div>
         <div>
             <sf:label path="text">Text</sf:label>
-            <sf:textarea path="text"/>
+            <sf:textarea path="text" cssStyle="color: black"/>
             <sf:errors path="text" cssStyle="color: red"/>
         </div>
         <div>
             <sf:label path="mark">Mark</sf:label>
-            <sf:input path="mark"/>
+            <sf:input path="mark" cssStyle="color: black"/>
             <sf:errors path="mark" cssStyle="color: red"/>
         </div>
         <input style="color: black" type="submit" name="addreview" value="COMMENT">

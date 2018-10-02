@@ -60,6 +60,7 @@
                         -> ${adminBuffer.adminBuffer.reviewName}
                         -> ${adminBuffer.adminBuffer.reviewText}
                         -> ${adminBuffer.adminBuffer.mark}
+                        -> <img class="card-img-top img-circle" src="/getphoto/admin/${adminBuffer.adminBuffer.id}" style="width: 15vw; height: 10vw; object-fit: cover;">
 
                         <c:if test="${adminBuffer.status == 'ADDED'}">
                             <p style="color: green">${adminBuffer.status}</p>

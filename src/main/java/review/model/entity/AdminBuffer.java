@@ -34,6 +34,9 @@ public class AdminBuffer {
     @Column(name = "TITLECITY")
     private String titleCity;
 
+    @Column(name = "TITLEPICTURE")
+    private byte[] titlePicture;
+
     @Column(name = "REVIEWTEXT")
     private String reviewText;
 
@@ -52,18 +55,27 @@ public class AdminBuffer {
     public AdminBuffer() {
     }
 
-    public AdminBuffer(String userName, String categoryName, String subCategoryName, String titleName, String titleDescription, String titleCity, String reviewText, String reviewName, int mark, boolean isAdd, boolean cancel) {
+    public AdminBuffer(String userName, String categoryName, String subCategoryName, String titleName, String titleDescription, String titleCity, byte[] titlePicture, String reviewText, String reviewName, int mark, boolean isAdd, boolean cancel) {
         this.userName = userName;
         this.categoryName = categoryName;
         this.subCategoryName = subCategoryName;
         this.titleName = titleName;
         this.titleDescription = titleDescription;
         this.titleCity = titleCity;
+        this.titlePicture = titlePicture;
         this.reviewText = reviewText;
         this.reviewName = reviewName;
         this.mark = mark;
         this.isAdd = isAdd;
         this.cancel = cancel;
+    }
+
+    public byte[] getTitlePicture() {
+        return titlePicture;
+    }
+
+    public void setTitlePicture(byte[] titlePicture) {
+        this.titlePicture = titlePicture;
     }
 
     public String getTitleCity() {

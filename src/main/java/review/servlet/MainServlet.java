@@ -11,14 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import review.model.entity.*;
 import review.service.*;
 import review.servlet.beans.AdminBufferBean;
 import review.servlet.beans.PagesBean;
-import review.servlet.beans.ReviewsBean;
-import review.servlet.beans.TitlesBean;
-import review.servlet.utils.CategoriesUtils;
 import review.servlet.utils.Pagination;
 import review.servlet.utils.RatingUtils;
 import review.servlet.utils.validator.UserValidator;
@@ -84,8 +80,6 @@ public class MainServlet {
 
     @Value("${categories.attribute}")
     private String categoryMapAttribute;
-
-    private final String ALL_TITLES_FROM_CATEGORY = "titles";
 
     @GetMapping({"/", "/home"})
     public String showMain(HttpSession session, Model model, Principal principal) {
@@ -154,47 +148,37 @@ public class MainServlet {
         return "home";
     }
 
-    @GetMapping({"/titles/subcat/{id}/{cityOption}", "/titles/subcat/{id}"})
-    public String getTitle(@PathVariable("id") int idSubCategory, HttpSession session, Model model) {
-        logger.info("Start getAllTitles()...");
-        List<TitlesBean> titles = titleService.getBySubCategoryIdWithCity(idSubCategory);
-        String currentCity = (String) session.getAttribute("currentCity");
-        List<TitlesBean> buf = new ArrayList<>();
-        if (currentCity != null && !currentCity.equals("All")) {
-            for (TitlesBean title : titles) {
-                if (title.getCity().equals(currentCity)) {
-                    buf.add(title);
-                }
+    @GetMapping("/search")
+    public String getSearch(HttpSession session, Model model) {
+        // pagination
+        List<PagesBean> pagesList = Pagination.pagesCount((List<Title>) session.getAttribute("searchResult"), paginationTotal);
+        session.setAttribute("countPagesSearch", pagesList);
+        List<Title> titlesPagination = Pagination.printResult((List<Title>) session.getAttribute("searchResult"), 0, paginationTotal);
+        model.addAttribute("searchResult", titlesPagination);
+        //
+        return "search";
+    }
+
+    @PostMapping("/search")
+    public String search(@RequestParam("search") String searchName, Model model, HttpSession session) {
+        logger.info("Searching for \"" + searchName + "\"");
+        List<Title> titlesList = titleService.getAll();
+        List<Title> resultSearch = new ArrayList<>();
+        for (Title title : titlesList) {
+            if (title.getTitle().toLowerCase().contains(searchName.toLowerCase())) {
+                resultSearch.add(title);
             }
-            session.setAttribute(ALL_TITLES_FROM_CATEGORY, buf);
-        } else {
-            session.setAttribute(ALL_TITLES_FROM_CATEGORY, titles);
         }
-        model.addAttribute("idSubCategory", idSubCategory);
+        session.setAttribute("searchResult", resultSearch);
 
         // pagination
-        List<PagesBean> pagesList = Pagination.pagesCount((List<Title>) session.getAttribute(ALL_TITLES_FROM_CATEGORY), paginationTotal);
-        session.setAttribute("countPages", pagesList);
-        List<Title> titlesPagination = Pagination.printResult((List<Title>) session.getAttribute(ALL_TITLES_FROM_CATEGORY), 0, paginationTotal);
-        model.addAttribute(ALL_TITLES_FROM_CATEGORY, titlesPagination);
+        List<PagesBean> pagesList = Pagination.pagesCount(resultSearch, paginationTotal);
+        session.setAttribute("countPagesSearch", pagesList);
+        List<Title> titlesPagination = Pagination.printResult(resultSearch, 0, paginationTotal);
+        model.addAttribute("searchResult", titlesPagination);
         //
-        return "titles";
-    }
 
-    @GetMapping("/changecity")
-    public String show(@RequestParam("city") String city, HttpSession session, HttpServletRequest request) {
-        session.setAttribute("currentCity", city);
-        String url = request.getHeader("referer");
-        url = url.substring(url.indexOf("/") + 1);
-        return "redirect:/" + url;
-    }
-
-    @GetMapping("/title/{idSubCategory}/page/{number}")
-    public String getPage(@PathVariable("number") int page, @PathVariable("idSubCategory") int idSubCategory, HttpSession session, Model model) {
-        List<Title> titlesPagination = Pagination.printResult((List<Title>) session.getAttribute(ALL_TITLES_FROM_CATEGORY), page * paginationTotal - paginationTotal, paginationTotal);
-        model.addAttribute(ALL_TITLES_FROM_CATEGORY, titlesPagination);
-        model.addAttribute("idSubCategory", idSubCategory);
-        return "titles";
+        return "search";
     }
 
     @GetMapping("/search/page/{number}")
@@ -202,25 +186,6 @@ public class MainServlet {
         List<Title> titlesPagination = Pagination.printResult((List<Title>) session.getAttribute("searchResult"), page * paginationTotal - paginationTotal, paginationTotal);
         model.addAttribute("searchResult", titlesPagination);
         return "search";
-    }
-
-    @GetMapping("/titles/{id}")
-    public String getReviews(@PathVariable("id") int idTitle, Model model) {
-        logger.info("Start showReviews()...");
-        List<Review> reviews = reviewService.getByTitleId(idTitle);
-        Title title = titleService.getById(idTitle);
-        City city = cityService.getById(title.getIdCity());
-        List<ReviewsBean> reviewsBeans = new ArrayList<>();
-        if (!reviews.isEmpty()) {
-            for (Review review : reviews) {
-                User user = userService.getById(review.getIdUser());
-                reviewsBeans.add(new ReviewsBean(review.getReviewName(), review.getMark(), review.getText(), review.getDate(), user.getLogin()));
-            }
-        }
-        model.addAttribute("city", city);
-        model.addAttribute("title", title);
-        model.addAttribute("reviews", reviewsBeans);
-        return "reviews";
     }
 
     @GetMapping("/ratings")
@@ -271,237 +236,6 @@ public class MainServlet {
         return "redirect:/home";
     }
 
-    @GetMapping("/titles/{idTitle}/addreview")
-    public String getAddReviewForm(@PathVariable("idTitle") int idTitle, Model model, Principal principal) {
-        model.addAttribute("idTitle", idTitle);
-        model.addAttribute("review", new Review());
-        User currentUser = userService.getByLogin(principal.getName());
-        List<Review> reviewsByCurrentTitle = reviewService.getByTitleId(idTitle);
-        boolean isReviewExist = false;
-        for (Review elem : reviewsByCurrentTitle) {
-            if (userService.getById(elem.getIdUser()).getLogin().equals(currentUser.getLogin())) {
-                isReviewExist = true;
-                break;
-            }
-        }
-        if (isReviewExist) {
-            model.addAttribute("message", "YOU ALREADY COMMENT THIS TITLE");
-            return getReviews(idTitle, model);
-        }
-        return "addreview";
-    }
-
-    @PostMapping("/titles/{idTitle}/addreview")
-    public String addReview(@ModelAttribute @Valid Review review, BindingResult bindingResult, Principal principal, Model model) {
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("idTitle", review.getIdTitle());
-            return "addreview";
-        }
-        User currentUser = userService.getByLogin(principal.getName());
-        review.setIdUser(currentUser.getId());
-        reviewService.save(review);
-        logger.info("Review was added");
-        return "redirect:/titles/" + review.getIdTitle();
-    }
-
-    @GetMapping({"/titles/subcat/{idSubCat}/{currentCity}/addreviewtonewtitle", "/title/{idSubCat}/page/{number}/addreviewtonewtitle"})
-    public String getAddReviewToNewTitle(@PathVariable("idSubCat") int idSubCat, Model model) {
-        model.addAttribute("idSubCat", idSubCat);
-        return "addreviewtonewtitle";
-    }
-
-    @PostMapping("/titles/subcat/{idSubCat}")
-    public String addAdminBuffer(@PathVariable("idSubCat") int idSubCategory, Principal principal, RedirectAttributes redirectAttributes, Model model,
-                                 @RequestParam("titleName") String titleName,
-                                 @RequestParam("titleDescription") String titleDescription,
-                                 @RequestParam("titleCity") String titleCity,
-                                 @RequestParam("text") String reviewText,
-                                 @RequestParam("reviewName") String reviewName,
-                                 @RequestParam("mark") Integer mark) {
-        if ((titleName == null || titleName.equals("")) || (titleCity == null || titleCity.equals("")) || (reviewName == null || reviewName.equals("")) || (reviewText == null || reviewText.equals("")) || mark == null) {
-            model.addAttribute("errors", "review.empty");
-            return "addreviewtonewtitle";
-        }
-
-        List<Title> titles = titleService.getByName(titleName);
-        if (titles != null) {
-            for (Title title : titles) {
-                if (cityService.getById(title.getIdCity()).getName().equals(titleCity)) {
-                    logger.error("This title already exist");
-                    model.addAttribute("errors", "error.title.unique");
-                    return "addreviewtonewtitle";
-                }
-            }
-        }
-
-        AdminBuffer adminBuffer = new AdminBuffer();
-        adminBuffer.setUserName(userService.getByLogin(principal.getName()).getLogin());
-        adminBuffer.setCategoryName(categoryService.getById(subCategoryService.getById(idSubCategory).getIdCategory()).getName());
-        adminBuffer.setSubCategoryName(subCategoryService.getById(idSubCategory).getName());
-        adminBuffer.setTitleName(titleName);
-        adminBuffer.setTitleDescription(titleDescription);
-        adminBuffer.setTitleCity(titleCity);
-        adminBuffer.setReviewText(reviewText);
-        adminBuffer.setReviewName(reviewName);
-        adminBuffer.setMark(mark);
-        adminBuffer.setAdd(true);
-        adminBufferService.save(adminBuffer);
-        redirectAttributes.addFlashAttribute("userMessage", "You comment send to Admin");
-        return "redirect:/titles/subcat/" + idSubCategory;
-    }
-
-    @GetMapping("/addtitle")
-    public String getAddItem(Model model) {
-        List<Category> categoryList = categoryService.getAll();
-        List<SubCategory> subCategoryList = subCategoryService.getAll();
-        model.addAttribute("categories", categoryList);
-        model.addAttribute("subCategories", subCategoryList);
-        return "addtitle";
-    }
-
-    @PostMapping("/addtitle")
-    public String addItem(@RequestParam("categories") String categoryName,
-                          @RequestParam("subCategories") String subCategoryName,
-                          @RequestParam("title") String titleName,
-                          @RequestParam("cities") String titleCity,
-                          @RequestParam("titleDescription") String titleDescription,
-                          HttpSession session, Model model, RedirectAttributes redirectAttributes) {
-
-        if ((titleName == null || titleName.equals("")) || (titleCity == null || titleCity.equals(""))) {
-            model.addAttribute("titleerror", "title.null");
-            return getAddItem(model);
-        }
-
-        if ((categoryName == null || categoryName.equals("")) || (subCategoryName == null || subCategoryName.equals(""))) {
-            model.addAttribute("categoryerror", "title.nullcategory");
-            return getAddItem(model);
-        }
-
-        Category category;
-        SubCategory subCategory = subCategoryService.getByName(subCategoryName);
-        if (subCategory == null) {
-            category = categoryService.getByName(categoryName);
-            if (category == null) {
-                category = new Category(categoryName);
-                categoryService.save(category);
-            }
-            subCategory = new SubCategory(category.getId(), subCategoryName);
-            subCategoryService.save(subCategory);
-        }
-        List<City> citiesList = cityService.getAll();
-        boolean isCityExist = false;
-        for (City city : citiesList) {
-            if (city.getName().equals(titleCity)) {
-                isCityExist = true;
-                break;
-            }
-        }
-        if (!isCityExist) {
-            City city = new City(titleCity);
-            cityService.save(city);
-            List<String> cities = (List<String>) session.getAttribute("cities");
-            cities.add(city.getName());
-            session.setAttribute("cities", cities);
-        }
-        Title title = new Title(subCategory.getId(), titleName, titleDescription, cityService.getByName(titleCity).getId());
-        titleService.save(title, titleCity);
-
-        // Add category in category map
-        Map<String, List<SubCategory>> categoryMap = CategoriesUtils.addCategoryInMap(session, categoryName, subCategory, categoryMapAttribute);
-
-        redirectAttributes.addFlashAttribute("success", "title.success");
-        session.setAttribute(categoryMapAttribute, categoryMap);
-        logger.info("Title " + titleName + " was create");
-        return "redirect:/addtitle";
-    }
-
-    @GetMapping("/addcategories")
-    public String getAddCategories(Model model) {
-        List<Category> categoryList = categoryService.getAll();
-        model.addAttribute("categories", categoryList);
-        return "addcategories";
-    }
-
-    @PostMapping("/addcategories")
-    public String addCategories(@RequestParam("categories") String categoryName, @RequestParam("subCategories") String subCategoryName, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
-        if ((categoryName == null || categoryName.equals("")) && (subCategoryName == null || subCategoryName.equals(""))) {
-            model.addAttribute("error", "error.nullcategories");
-            return getAddCategories(model);
-        }
-        if ((subCategoryName == null || subCategoryName.equals("")) && categoryName != null) {
-            List<Category> categoryList = categoryService.getAll();
-            for (Category category : categoryList) {
-                if (category.getName().equals(categoryName)) {
-                    model.addAttribute("errorexist", "error.categoryexist");
-                    return getAddCategories(model);
-                }
-            }
-            Category category = new Category(categoryName);
-            categoryService.save(category);
-
-            Map<String, List<SubCategory>> categoryMap = (Map<String, List<SubCategory>>) session.getAttribute(categoryMapAttribute);
-            if (categoryMap != null) {
-                categoryMap.put(categoryName, null); // возможно надо создать пустой arraylist
-            } else {
-                categoryMap = new TreeMap<>();
-                categoryMap.put(categoryName, null); // возможно надо создать пустой arraylist
-            }
-
-            redirectAttributes.addFlashAttribute("success", "category.success");
-            session.setAttribute(categoryMapAttribute, categoryMap);
-        }
-        if (subCategoryName != null && !subCategoryName.equals("")) {
-            if (categoryName == null || categoryName.equals("")) {
-                model.addAttribute("nocategory", "category.null");
-                return getAddCategories(model);
-            }
-            List<SubCategory> subCategories = subCategoryService.getAll();
-            for (SubCategory subCategory : subCategories) {
-                if (subCategory.getName().equals(subCategoryName)) {
-                    model.addAttribute("subcategoryexist", "subcategory.exist");
-                    return getAddCategories(model);
-                }
-            }
-
-            List<Category> categoryList = categoryService.getAll();
-            boolean isExist = false;
-            for (Category category : categoryList) {
-                if (category.getName().equals(categoryName)) {
-                    isExist = true;
-                }
-            }
-            if (isExist) {
-                SubCategory subCategory = new SubCategory(categoryService.getByName(categoryName).getId(), subCategoryName);
-                subCategoryService.save(subCategory);
-                redirectAttributes.addFlashAttribute("success", "category.success");
-
-                // Add in category map
-                Map<String, List<SubCategory>> categoryMap = CategoriesUtils.addCategoryInMap(session, categoryName, subCategory, categoryMapAttribute);
-
-                session.setAttribute(categoryMapAttribute, categoryMap);
-            } else {
-                Category newCategory = new Category(categoryName);
-                categoryService.save(newCategory);
-                SubCategory subCategory = new SubCategory(categoryService.getByName(categoryName).getId(), subCategoryName);
-                subCategoryService.save(subCategory);
-                redirectAttributes.addFlashAttribute("success", "category.success");
-
-                Map<String, List<SubCategory>> categoryMap = (Map<String, List<SubCategory>>) session.getAttribute("categoryMap");
-                if (categoryMap != null) {
-                    categoryMap.put(categoryName, new ArrayList<>(Arrays.asList(subCategory)));
-                } else {
-                    categoryMap = new TreeMap<>();
-                    categoryMap.put(categoryName, new ArrayList<>(Arrays.asList(subCategory)));
-                }
-
-                session.setAttribute(categoryMapAttribute, categoryMap);
-            }
-        }
-        logger.info("Category " + categoryName + " was created");
-        return "redirect:/addcategories";
-    }
-
-
     @GetMapping("/showmessages")
     public String getMessages(Model model, Principal principal) {
         if (principal.getName().equals(adminLogin)) {
@@ -543,61 +277,6 @@ public class MainServlet {
         }
     }
 
-    @PostMapping("/newcategory")
-    public String addNewUserCategory(@RequestParam(value = "add", defaultValue = "") String add,
-                                     @RequestParam(value = "cancel", defaultValue = "") String cancel,
-                                     @RequestParam("idAdminBuffer") Integer idAdminBuffer,
-                                     @RequestParam("categoryName") String categoryName,
-                                     @RequestParam("subCategoryName") String subCategoryName,
-                                     @RequestParam("titleName") String titleName,
-                                     @RequestParam("titleCity") String titleCity,
-                                     @RequestParam("titleDescription") String titleDescription,
-                                     @RequestParam("reviewName") String reviewName,
-                                     @RequestParam("reviewText") String reviewText,
-                                     @RequestParam("mark") int mark,
-                                     @RequestParam("userName") String userName,
-                                     HttpSession session) {
-        if (add.equals("add" + idAdminBuffer)) {
-            AdminBuffer adminBuffer = adminBufferService.getById(idAdminBuffer);
-            adminBuffer.setAdd(false);
-            adminBuffer.setCancel(false);
-            adminBufferService.save(adminBuffer);
-            session.setAttribute("messagesmenu", adminBufferService.getCountFromUsers());
-
-            Title title = new Title();
-            title.setIdSubCategory(subCategoryService.getByName(subCategoryName).getId());
-            title.setTitle(titleName);
-            title.setDescription(titleDescription);
-            titleService.save(title, titleCity);
-            Review review = new Review(title.getId(), userService.getByLogin(userName).getId(), reviewText, mark, reviewName);
-            reviewService.save(review);
-
-            // add message to user
-            String adminMessage = "Your review \"" + reviewName + "\" to \"" + titleName + "(" + titleCity + ")\" successfully added in " + categoryName + " -> " + subCategoryName + ".";
-            UserMessage userMessage = new UserMessage(idAdminBuffer, adminMessage, false);
-            userMessageService.save(userMessage);
-            logger.info("Review was added");
-
-            return "redirect:/showmessages";
-        }
-        if (cancel.equals("cancel" + idAdminBuffer)) {
-            AdminBuffer adminBuffer = adminBufferService.getById(idAdminBuffer);
-            adminBuffer.setAdd(false);
-            adminBuffer.setCancel(true);
-            adminBufferService.save(adminBuffer);
-            session.setAttribute("messagesmenu", adminBufferService.getCountFromUsers());
-
-            // add message to user
-            String adminMessage = "Your review \"" + reviewName + "\" to \"" + titleName + "(" + titleCity + ")\" is cancel!";
-            UserMessage userMessage = new UserMessage(idAdminBuffer, adminMessage, false);
-            userMessageService.save(userMessage);
-            logger.info("Review was cancelled");
-
-            return "redirect:/showmessages";
-        }
-        return "home";
-    }
-
     @PostMapping("/read")
     public String readMessage(@RequestParam("id") int idUserMessage, @RequestParam(value = "read", defaultValue = "") String readButton, HttpSession session, Principal principal) {
         if (readButton.equals("read" + idUserMessage)) {
@@ -610,72 +289,24 @@ public class MainServlet {
         return "redirect:/showmessages";
     }
 
-    @GetMapping("/addallnew")
-    public String getAddAll() {
-        return "addallnew";
+    @GetMapping("/changecity")
+    public String show(@RequestParam("city") String city, HttpSession session, HttpServletRequest request) {
+        session.setAttribute("currentCity", city);
+        String url = request.getHeader("referer");
+        url = url.substring(url.indexOf("/") + 1);
+        return "redirect:/" + url;
     }
 
-    @PostMapping("/addallnew")
-    public String addAllNew(@RequestParam("categoryName") String categoryName, Principal principal, RedirectAttributes redirectAttributes, Model model,
-                            @RequestParam("subCategoryName") String subCategoryName,
-                            @RequestParam("titleName") String titleName,
-                            @RequestParam("titleDescription") String titleDescription,
-                            @RequestParam("titleCity") String titleCity,
-                            @RequestParam("text") String reviewText,
-                            @RequestParam("reviewName") String reviewName,
-                            @RequestParam("mark") Integer mark) {
-        if ((titleName == null || titleName.equals("")) || (titleCity == null || titleCity.equals("")) || (reviewName == null || reviewName.equals("")) || (reviewText == null || reviewText.equals("")) || mark == null || (categoryName == null || categoryName.equals("")) || (subCategoryName == null || subCategoryName.equals(""))) {
-            model.addAttribute("errors", "review.empty");
-            return "addallnew";
-        }
-
-        AdminBuffer adminBuffer = new AdminBuffer();
-        adminBuffer.setUserName(userService.getByLogin(principal.getName()).getLogin());
-        adminBuffer.setCategoryName(categoryName);
-        adminBuffer.setSubCategoryName(subCategoryName);
-        adminBuffer.setTitleName(titleName);
-        adminBuffer.setTitleDescription(titleDescription);
-        adminBuffer.setTitleCity(titleCity);
-        adminBuffer.setReviewText(reviewText);
-        adminBuffer.setReviewName(reviewName);
-        adminBuffer.setMark(mark);
-        adminBuffer.setAdd(true);
-        adminBufferService.save(adminBuffer);
-        redirectAttributes.addFlashAttribute("userMessage", "You comment send to Admin");
-        return "redirect:/home";
+    @GetMapping("/getphoto/{idTitle}")
+    @ResponseBody
+    public byte[] getPhoto(@PathVariable("idTitle") int idTitle) {
+        return titleService.getById(idTitle).getPicture();
     }
 
-    @GetMapping("/search")
-    public String getSearch(HttpSession session, Model model) {
-        // pagination
-        List<PagesBean> pagesList = Pagination.pagesCount((List<Title>) session.getAttribute("searchResult"), paginationTotal);
-        session.setAttribute("countPagesSearch", pagesList);
-        List<Title> titlesPagination = Pagination.printResult((List<Title>) session.getAttribute("searchResult"), 0, paginationTotal);
-        model.addAttribute("searchResult", titlesPagination);
-        //
-        return "search";
-    }
-
-    @PostMapping("/search")
-    public String search(@RequestParam("search") String searchName, Model model, HttpSession session) {
-        logger.info("Searching for \"" + searchName + "\"");
-        List<Title> titlesList = titleService.getAll();
-        List<Title> resultSearch = new ArrayList<>();
-        for (Title title : titlesList) {
-            if (title.getTitle().toLowerCase().contains(searchName.toLowerCase())) {
-                resultSearch.add(title);
-            }
-        }
-        session.setAttribute("searchResult", resultSearch);
-
-        // pagination
-        List<PagesBean> pagesList = Pagination.pagesCount(resultSearch, paginationTotal);
-        session.setAttribute("countPagesSearch", pagesList);
-        List<Title> titlesPagination = Pagination.printResult(resultSearch, 0, paginationTotal);
-        model.addAttribute("searchResult", titlesPagination);
-        //
-
-        return "search";
+    @GetMapping("/getphoto/admin/{idAdminBuffer}")
+    @ResponseBody
+    public byte[] getPhotoAdminPAge(@PathVariable("idAdminBuffer") int idAdminBuffer) {
+        return adminBufferService.getById(idAdminBuffer).getTitlePicture();
     }
 
     @GetMapping("/404")
