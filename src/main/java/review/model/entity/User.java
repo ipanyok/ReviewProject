@@ -23,12 +23,12 @@ public class User {
     private Integer id;
 
     @Column(name = "FIRSTNAME")
-    @Pattern(regexp = "\\+[a-zA-Zа-яА-Я]+|[a-zA-Zа-яА-Я]+")
+    @Pattern(regexp = "\\+[a-zA-Zа-яА-Яё]+|[a-zA-Zа-яА-Яё]+")
     private String firstName;
 
     @Column(name = "LASTNAME")
     @NotNull
-    @Pattern(regexp = "\\+[a-zA-Zа-яА-Я]+|[a-zA-Zа-яА-Я]+")
+    @Pattern(regexp = "\\+[a-zA-Zа-яА-Яё]+|[a-zA-Zа-яА-Яё]+")
     private String lastName;
 
     @Column(name = "LOGIN")

@@ -114,7 +114,6 @@ public class AdminServlet {
 
         redirectAttributes.addFlashAttribute("success", "title.success");
         session.setAttribute(categoryMapAttribute, categoryMap);
-        logger.info("Title " + titleName + " was create");
         return "redirect:/addtitle";
     }
 
@@ -168,9 +167,11 @@ public class AdminServlet {
 
             List<Category> categoryList = categoryService.getAll();
             boolean isExist = false;
-            for (Category category : categoryList) {
-                if (category.getName().equals(categoryName)) {
-                    isExist = true;
+            if (categoryList != null) {
+                for (Category category : categoryList) {
+                    if (category.getName().equals(categoryName)) {
+                        isExist = true;
+                    }
                 }
             }
             if (isExist) {

@@ -101,9 +101,11 @@ public class MainServlet {
         Map<Review, List<String>> mapReviewWithTitles = new HashMap<>();
         for (Review elem : lastAddedReviews) {
             City city = cityService.getById(titleService.getById(elem.getIdTitle()).getIdCity());
+            User user = userService.getById(elem.getIdUser());
             List<String> lastAddedList = new ArrayList<>();
             lastAddedList.add(titleService.getById(elem.getIdTitle()).getTitle());
             lastAddedList.add(city.getName());
+            lastAddedList.add(user.getLogin());
             mapReviewWithTitles.put(elem, lastAddedList);
         }
         model.addAttribute("lastAddedReviews", mapReviewWithTitles);

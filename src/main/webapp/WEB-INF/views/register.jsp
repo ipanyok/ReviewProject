@@ -6,24 +6,7 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <html>
 <head>
-    <meta charset="utf-8">
     <title>Register</title>
-
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
-          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-    <link rel="stylesheet" href="/resources/css/stylebootstrap.css">
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-            crossorigin="anonymous"></script>
 </head>
 <style>
     /* Demo Background */
@@ -37,6 +20,7 @@
         padding-bottom: 40px;
         border-radius: 15px;
         text-align: center;
+        margin-top: 20px;
     }
 
     .form-horizontal .heading {
@@ -180,8 +164,8 @@
 <jsp:include page="menu.jsp"/>
 
 <div class="container">
-    <div class="row">
-        <div class="col-md-offset-3 col-md-6">
+    <div class="row justify-content-center">
+        <div class="col-md-center-3 col-md-6">
             <sf:form method="post" action="/register" modelAttribute="user" class="form-horizontal">
                 <span class="heading" style="color: black">REGISTER</span>
                 <div class="form-group">

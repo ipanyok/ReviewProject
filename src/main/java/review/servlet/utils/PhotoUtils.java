@@ -4,8 +4,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.Part;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 public class PhotoUtils {
 
@@ -17,8 +16,9 @@ public class PhotoUtils {
         if (file != null) {
             try {
                 InputStream inputStream = file.getInputStream();
-                if (inputStream == null) {
-                    logger.info("File inputstream is null");
+                if (file.getSize() == 0) {
+                    logger.info("Load default image");
+                    inputStream = new BufferedInputStream(new FileInputStream(new File(PhotoUtils.class.getResource("/No-image-available.jpg").getFile())));
                 }
                 fileContent = IOUtils.toByteArray(inputStream);
             } catch (IOException e) {

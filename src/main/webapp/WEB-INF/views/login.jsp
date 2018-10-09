@@ -5,24 +5,7 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <html>
 <head>
-    <meta charset="utf-8">
     <title>Login</title>
-
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
-          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-    <link rel="stylesheet" href="/resources/css/stylebootstrap.css">
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-            crossorigin="anonymous"></script>
 </head>
 <style>
     /* Demo Background */
@@ -36,6 +19,7 @@
         padding-bottom: 25px;
         border-radius: 15px;
         text-align: center;
+        margin-top: 20px;
     }
 
     .form-horizontal .heading {
@@ -154,7 +138,7 @@
         color: #fff;
         background: #00b4ef;
         border-radius: 30px;
-        padding: 10px 150px;
+        padding: 10px 145px;
         border: none;
         text-transform: capitalize;
         transition: all 0.5s ease 0s;
@@ -181,9 +165,8 @@
 
 
 <div class="container">
-    <div class="row">
-
-        <div class="col-md-offset-3 col-md-6">
+    <div class="row justify-content-center">
+        <div class="col-md-center-3 col-md-6">
             <form class="form-horizontal" action="/login" method="post">
                 <span class="heading" style="color: black"><spring:message code="login.autorize"/></span>
                 <div class="form-group">
@@ -203,7 +186,7 @@
                 <div class="form-group">
                     <button type="submit" class="btn btn-default"><spring:message code="login.sign"/></button>
                 </div>
-                <h4><a class="text-center" style="color: #00b4ef; text-decoration: none" href="/register"><spring:message code="login.reg"/></a></h4>
+                <h5><a class="text-center" style="color: #00b4ef; text-decoration: none" href="/register"><spring:message code="login.reg"/></a></h5>
             </form>
         </div>
 
