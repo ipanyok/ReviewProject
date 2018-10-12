@@ -81,6 +81,15 @@ public class MainServlet {
     @Value("${categories.attribute}")
     private String categoryMapAttribute;
 
+    @Value("${status.added}")
+    private String statusAdd;
+
+    @Value("${status.inprogress}")
+    private String statusInProgress;
+
+    @Value("${status.cancel}")
+    private String statusCancel;
+
     @GetMapping({"/", "/home"})
     public String showMain(HttpSession session, Model model, Principal principal) {
         if (session.getAttribute(categoryMapAttribute) == null) {
@@ -103,9 +112,10 @@ public class MainServlet {
             City city = cityService.getById(titleService.getById(elem.getIdTitle()).getIdCity());
             User user = userService.getById(elem.getIdUser());
             List<String> lastAddedList = new ArrayList<>();
-            lastAddedList.add(titleService.getById(elem.getIdTitle()).getTitle());
-            lastAddedList.add(city.getName());
-            lastAddedList.add(user.getLogin());
+            lastAddedList.add(titleService.getById(elem.getIdTitle()).getTitle()); // add title name
+            lastAddedList.add(city.getName());                                     // add city
+            lastAddedList.add(user.getLogin());                                    // add user name
+            lastAddedList.add(String.valueOf(elem.getIdTitle()));                  // add title id
             mapReviewWithTitles.put(elem, lastAddedList);
         }
         model.addAttribute("lastAddedReviews", mapReviewWithTitles);
@@ -253,13 +263,13 @@ public class MainServlet {
                 Boolean cancelValue = (Boolean) statusRequests.get("cancel");
                 String status = null;
                 if (isAdd == false && cancelValue == false) {
-                    status = "ADDED";
+                    status = statusAdd;
                 }
                 if (isAdd == true && cancelValue == false) {
-                    status = "IN PROGRESS";
+                    status = statusInProgress;
                 }
                 if (isAdd == false && cancelValue == true) {
-                    status = "CANCEL";
+                    status = statusCancel;
                 }
                 AdminBufferBean buf = new AdminBufferBean(adminBuffer, status);
                 bufferBeansList.add(buf);
@@ -307,7 +317,7 @@ public class MainServlet {
 
     @GetMapping("/getphoto/admin/{idAdminBuffer}")
     @ResponseBody
-    public byte[] getPhotoAdminPAge(@PathVariable("idAdminBuffer") int idAdminBuffer) {
+    public byte[] getPhotoAdminPage(@PathVariable("idAdminBuffer") int idAdminBuffer) {
         return adminBufferService.getById(idAdminBuffer).getTitlePicture();
     }
 

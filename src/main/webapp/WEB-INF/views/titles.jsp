@@ -26,19 +26,37 @@
         <label>NO TITLES</label>
     </c:if>
 
+    <%--<c:if test="${titles.size() != 0}">--%>
+        <%--<h1><p class="text-center"><b>${titles.get(0).category} -> ${titles.get(0).subCategory}</b></p></h1>--%>
+        <%--<br><br><br>--%>
+        <%--<div class="row">--%>
+            <%--<c:forEach items="${titles}" var="title">--%>
+                <%--<div class="col-md-2">--%>
+                    <%--<p><b>${title.title} (${title.city})</b></p>--%>
+                    <%--<p>${title.description}</p>--%>
+                    <%--<p><a href="/titles/${title.idTitle}" style="text-decoration: none;color:black"><spring:message code="show_reviews"/></a></p>--%>
+                <%--</div>--%>
+            <%--</c:forEach>--%>
+        <%--</div>--%>
+    <%--</c:if>--%>
+
     <c:if test="${titles.size() != 0}">
-        <h1><p class="text-center"><b>${titles.get(0).category} -> ${titles.get(0).subCategory}</b></p></h1>
-        <br><br><br>
-        <div class="row">
+        <h1><p class="text-center" style="margin-top: 20px;"><b>${titles.get(0).category} -> ${titles.get(0).subCategory}</b></p></h1>
+        <br>
+        <div class="card-deck" style="width: 60%;">
             <c:forEach items="${titles}" var="title">
-                <div class="col-md-2">
-                    <p><b>${title.title} (${title.city})</b></p>
-                    <p>${title.description}</p>
-                    <p><a href="/titles/${title.idTitle}" style="text-decoration: none;color:black"><spring:message code="show_reviews"/></a></p>
+                <div class="card border-primary" style="background-color: #3a3a3a">
+                    <img class="card-img-top" src="/getphoto/${title.idTitle}" alt="NO IMAGE" style="position: relative">
+                    <div class="card-body" style="background-color: #3a3a3a">
+                        <h5 class="card-title" style="font-family: 'Segoe Print'">${title.title},&nbsp; <small>${title.city}</small></h5>
+                        <p class="card-text" style="font-family: 'Segoe Print'">${title.description}</p>
+                        <p><a href="/titles/${title.idTitle}" class="btn btn-primary" role="button"><spring:message code="show_reviews"/></a></p>
+                    </div>
                 </div>
             </c:forEach>
         </div>
     </c:if>
+
 
 
     <!-- Pagination -->

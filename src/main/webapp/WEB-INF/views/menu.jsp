@@ -207,7 +207,7 @@
                 <a class="nav-link" href="/ratings"><spring:message code="menu.ratings"/></a>
             </li>
             <security:authorize access="(isAuthenticated() and principal.username != 'Admin') or isAnonymous()">
-                <li class="nav-item"><a class="nav-link disabled" href="#"><spring:message code="menu.contact"/></a>
+                <li class="nav-item"><a class="nav-link disabled" href="#" style="text-decoration: none; pointer-events: none"><spring:message code="menu.contact"/></a>
                 </li>
             </security:authorize>
 

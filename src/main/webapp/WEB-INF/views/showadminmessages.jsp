@@ -57,8 +57,12 @@
 
                 </h3>
                 <c:if test="${adminBuffer.status == 'IN PROGRESS'}">
+                    <textarea name="comment"></textarea><br><br>
                     <button name="add" value="add${adminBuffer.adminBuffer.id}" style="color: black">Add</button>
                     <button name="cancel" value="cancel${adminBuffer.adminBuffer.id}" style="color: black">Cancel</button>
+                    <c:if test="${errorcancel != null}">
+                        <p style="color: red">${errorcancel}</p>
+                    </c:if>
                 </c:if>
                 </p>
             </form>

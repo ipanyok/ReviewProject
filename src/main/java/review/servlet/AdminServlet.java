@@ -218,7 +218,8 @@ public class AdminServlet {
                                      @RequestParam("reviewText") String reviewText,
                                      @RequestParam("mark") int mark,
                                      @RequestParam("userName") String userName,
-                                     HttpSession session) {
+                                     @RequestParam(value = "comment", required = false) String comment,
+                                     RedirectAttributes redirectAttributes, HttpSession session) {
         if (add.equals("add" + idAdminBuffer)) {
             AdminBuffer adminBuffer = adminBufferService.getById(idAdminBuffer);
             adminBuffer.setAdd(false);
@@ -254,6 +255,11 @@ public class AdminServlet {
             return "redirect:/showmessages";
         }
         if (cancel.equals("cancel" + idAdminBuffer)) {
+            if (comment == null || comment.equals("")) {
+                logger.info("Comment is empty!");
+                redirectAttributes.addFlashAttribute("errorcancel", "You must to write a reason of cancel");
+                return "redirect:/showmessages";
+            }
             AdminBuffer adminBuffer = adminBufferService.getById(idAdminBuffer);
             adminBuffer.setAdd(false);
             adminBuffer.setCancel(true);
@@ -261,7 +267,7 @@ public class AdminServlet {
             session.setAttribute("messagesmenu", adminBufferService.getCountFromUsers());
 
             // add message to user
-            String adminMessage = "Your review \"" + reviewName + "\" to \"" + titleName + "(" + titleCity + ")\" is cancel!";
+            String adminMessage = "Your review \"" + reviewName + "\" to \"" + titleName + "(" + titleCity + ")\" is cancel! Reason: " + comment;
             UserMessage userMessage = new UserMessage(idAdminBuffer, adminMessage, false);
             userMessageService.save(userMessage);
             logger.info("Review was cancelled");
