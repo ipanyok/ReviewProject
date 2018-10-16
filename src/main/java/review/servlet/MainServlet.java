@@ -249,13 +249,13 @@ public class MainServlet {
     }
 
     @GetMapping("/showmessages")
-    public String getMessages(Model model, Principal principal) {
+    public String getMessages(Model model, Principal principal, HttpSession session) {
         if (principal.getName().equals(adminLogin)) {
             List<AdminBuffer> adminBufferList = adminBufferService.getAll();
+
             List<Category> categoriesList = categoryService.getAll();
-            List<SubCategory> subCategoriesList = subCategoryService.getAll();
             model.addAttribute("categoriesList", categoriesList);
-            model.addAttribute("subCategoriesList", subCategoriesList);
+
             List<AdminBufferBean> bufferBeansList = new ArrayList<>();
             for (AdminBuffer adminBuffer : adminBufferList) {
                 Map<String, Object> statusRequests = adminBufferService.getStatusRequests(adminBuffer.getId());
@@ -271,10 +271,11 @@ public class MainServlet {
                 if (isAdd == false && cancelValue == true) {
                     status = statusCancel;
                 }
-                AdminBufferBean buf = new AdminBufferBean(adminBuffer, status);
+                List<SubCategory> subCategories = subCategoryService.getByCategoryId(categoryService.getByName(adminBuffer.getCategoryName()).getId());
+                AdminBufferBean buf = new AdminBufferBean(adminBuffer, adminBuffer.getCategoryName(), subCategories, status);
                 bufferBeansList.add(buf);
             }
-            model.addAttribute("adminBufferList", bufferBeansList);
+            session.setAttribute("adminBufferList", bufferBeansList);
             return "showadminmessages";
         } else {
             String userLogin = principal.getName();

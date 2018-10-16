@@ -65,8 +65,8 @@
                             <p><a href="/titles/${review.getValue().get(3)}" class="btn btn-primary" role="button">Read more</a></p>
                         </div>
                     </div>
-                    </c:forEach>
-                </div>
+            </c:forEach>
+            </div>
             </div>
             </c:if>
 
@@ -76,9 +76,6 @@
                     <h3 style="color: green">${userMessage}</h3></p><br><br>
                 </div>
             </c:if>
-
-
-
         </div>
     </div>
 </div>

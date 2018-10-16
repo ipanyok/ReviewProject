@@ -6,11 +6,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import review.model.entity.*;
 import review.service.*;
+import review.servlet.beans.AdminBufferBean;
 import review.servlet.utils.CategoriesUtils;
 import review.servlet.utils.PhotoUtils;
 
@@ -53,9 +55,7 @@ public class AdminServlet {
     @GetMapping("/addtitle")
     public String getAddItem(Model model) {
         List<Category> categoryList = categoryService.getAll();
-        List<SubCategory> subCategoryList = subCategoryService.getAll();
         model.addAttribute("categories", categoryList);
-        model.addAttribute("subCategories", subCategoryList);
         return "addtitle";
     }
 
@@ -115,6 +115,20 @@ public class AdminServlet {
         redirectAttributes.addFlashAttribute("success", "title.success");
         session.setAttribute(categoryMapAttribute, categoryMap);
         return "redirect:/addtitle";
+    }
+
+    @GetMapping({"/addtitle/category/{categoryName}", "/addtitle/category"})
+    public String getSubCategoriesByCategory(@PathVariable(value = "categoryName", required = false) String categoryName, HttpSession session, Model model) {
+        if (categoryName != null && !categoryName.equals("")) {
+            List<SubCategory> subCategories = subCategoryService.getByCategoryId(categoryService.getByName(categoryName).getId());
+            session.setAttribute("subCategories", subCategories);
+            session.setAttribute("currentCategory", categoryName);
+        } else {
+            List<Category> categoryList = categoryService.getAll();
+            model.addAttribute("categories", categoryList);
+            session.setAttribute("currentCategory", "");
+        }
+        return "addtitle";
     }
 
     @GetMapping("/addcategories")
@@ -275,6 +289,28 @@ public class AdminServlet {
             return "redirect:/showmessages";
         }
         return "home";
+    }
+
+    @GetMapping("/showmessages/category/{idAdminBuffer}/{categoryName}")
+    public String getSubCategoriesByCategory(@PathVariable("categoryName") String categoryName, @PathVariable("idAdminBuffer") int idAdminBuffer, HttpSession session, Model model) {
+        List<SubCategory> subCategories = subCategoryService.getByCategoryId(categoryService.getByName(categoryName).getId());
+        List<AdminBufferBean> bufferBean = (List<AdminBufferBean>) session.getAttribute("adminBufferList");
+        for (AdminBufferBean elem : bufferBean) {
+            if (elem.getAdminBuffer().getId() == idAdminBuffer) {
+                elem.setSubCategoriesList(subCategories);
+                if (subCategories.size() != 0) {
+                    elem.getAdminBuffer().setSubCategoryName(subCategories.get(0).getName());
+                } else {
+                    elem.getAdminBuffer().setSubCategoryName("");
+                }
+                elem.setCategoryName(categoryName);
+                break;
+            }
+        }
+        List<Category> categoriesList = categoryService.getAll();
+        model.addAttribute("categoriesList", categoriesList);
+        session.setAttribute("adminBufferList", bufferBean);
+        return "showadminmessages";
     }
 
 }

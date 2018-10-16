@@ -13,7 +13,7 @@
 <div class="container-fluid text-center" style="color: white; margin-top: 20px;">
     <form method="post" action="/addtitle" enctype="multipart/form-data">
         <label>Category</label>
-        <input type="text" name="categories" list="categories" style="color: black"/>
+        <input type="text" name="categories" list="categories" style="color: black" value="${currentCategory}" onchange="window.location='/addtitle/category/' + this.value;"/>
         <datalist id="categories" style="color: black">
             <c:forEach items="${categories}" var="category">
                 <option value="${category.name}"/>

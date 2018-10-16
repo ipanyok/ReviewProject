@@ -26,15 +26,15 @@
 
                 <p>
                     <h4>${adminBuffer.adminBuffer.userName}:
-                        <select name="categoryName" style="color: black">
-                            <option style="color: black">${adminBuffer.adminBuffer.categoryName}</option>
+                        <select name="categoryName" style="color: black" onchange="window.location='/showmessages/category/${adminBuffer.adminBuffer.id}/' + this.value;">
+                            <option style="color: black">${adminBuffer.categoryName}</option>
                             <c:forEach items="${categoriesList}" var="category">
                                 <option style="color: black">${category.name}</option>
                             </c:forEach>
                         </select> ->
                         <select name="subCategoryName" style="color: black">
                             <option style="color: black">${adminBuffer.adminBuffer.subCategoryName}</option>
-                            <c:forEach items="${subCategoriesList}" var="subCategory">
+                            <c:forEach items="${adminBuffer.subCategoriesList}" var="subCategory">
                                 <option style="color: black">${subCategory.name}</option>
                             </c:forEach>
                         </select>
