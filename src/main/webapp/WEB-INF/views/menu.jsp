@@ -62,111 +62,6 @@
     }
 </style>
 
-<%--<div class="navbar navbar-inverse navbar-fixed-top">--%>
-<%--<div class="container-fluid">--%>
-<%--<div class="navbar-header" style="height: 45px">--%>
-<%--<label class="navbar-brand" style="color: white"><span class="glyphicon glyphicon-music"--%>
-<%--aria-hidden="true"></span></label>--%>
-<%--</div>--%>
-<%--<div>--%>
-<%--<ul class="nav navbar-nav">--%>
-<%--<li class="divider-vertical"></li>--%>
-<%--<li><a href="/"><spring:message code="menu.main"/></a></li>--%>
-<%--<li class="dropdown">--%>
-<%--<a href="#" class="dropdown-toggle" data-toggle="dropdown"><spring:message code="menu.category"/> <b--%>
-<%--class="caret"></b></a>--%>
-<%--<ul class="dropdown-menu">--%>
-<%--<c:forEach items="${categoryMap}" var="cat">--%>
-<%--<li class="dropdown-submenu">--%>
-<%--<a href="#" class="dropdown-toggle" data-toggle="dropdown">${cat.getKey()}</a>--%>
-
-<%--<c:if test="${cat.getValue().size() != 0}">--%>
-<%--<ul class="dropdown-menu">--%>
-<%--<c:forEach items="${cat.getValue()}" var="catSub">--%>
-<%--<li><a href="/titles/subcat/${catSub.id}/${currentCity}">${catSub.name}</a>--%>
-<%--</li>--%>
-<%--</c:forEach>--%>
-<%--</ul>--%>
-<%--</c:if>--%>
-
-<%--</li>--%>
-<%--</c:forEach>--%>
-<%--</ul>--%>
-<%--</li>--%>
-
-<%--<li><a href="/ratings"><spring:message code="menu.ratings"/></a></li>--%>
-
-<%--<security:authorize access="(isAuthenticated() and principal.username != 'Admin') or isAnonymous()">--%>
-<%--<li><a href="#" style="color:grey;text-decoration: none; pointer-events: none"><spring:message--%>
-<%--code="menu.contact"/></a></li>--%>
-<%--</security:authorize>--%>
-
-
-<%--<security:authorize url="/**/addtitle">--%>
-<%--<li class="dropdown">--%>
-<%--<a href="#" class="dropdown-toggle" data-toggle="dropdown"><spring:message code="menu.add"/> <b--%>
-<%--class="caret"></b></a>--%>
-<%--<ul class="dropdown-menu">--%>
-<%--<li>--%>
-<%--<a href="/addtitle">Add Title</a>--%>
-<%--<a href="/addcategories">Add Categories</a>--%>
-<%--</li>--%>
-<%--</ul>--%>
-<%--</li>--%>
-<%--</security:authorize>--%>
-
-<%--<security:authorize access="isAuthenticated()">--%>
-<%--<li class="cart-icon">--%>
-<%--<a href="/showmessages"><i class="glyphicon glyphicon-envelope"></i>--%>
-<%--<c:if test="${messagesmenu != 0}">--%>
-<%--<span class="badge badge-success">${messagesmenu}</span>--%>
-<%--</c:if>--%>
-<%--</a>--%>
-<%--</li>--%>
-<%--</security:authorize>--%>
-
-<%--<security:authorize access="isAnonymous()">--%>
-<%--<li><a href="/login"><spring:message code="menu.sign_in"/></a></li>--%>
-<%--</security:authorize>--%>
-<%--<security:authorize access="isAuthenticated()">--%>
-<%--<li><a href="/logout"><spring:message code="menu.sign_out"/></a></li>--%>
-<%--</security:authorize>--%>
-<%--</ul>--%>
-
-<%--<form class="navbar-form navbar-right" role="search" method="post" action="/search">--%>
-<%--<security:authorize access="isAuthenticated()">--%>
-<%--<label>--%>
-<%--<h7 style="color: white">Hello, <security:authentication property="principal.username"/>&nbsp;&nbsp;&nbsp;&nbsp;</h7>--%>
-<%--</label>--%>
-<%--</security:authorize>--%>
-<%--<security:authorize access="isAuthenticated()">--%>
-<%--<select style="color: black" onchange="window.location='/changecity?city=' + this.value;">--%>
-<%--<option style="color: black" value="${currentCity}">${currentCity}</option>--%>
-<%--<c:forEach items="${cities}" var="city">--%>
-<%--<option style="color: black">${city}</option>--%>
-<%--</c:forEach>--%>
-<%--</select>--%>
-<%--&nbsp;&nbsp;&nbsp;&nbsp;--%>
-<%--</security:authorize>--%>
-
-<%--<a href="${requestScope['javax.servlet.forward.request_uri']}?lang=en"--%>
-<%--style="color:white;text-decoration: none;">EN&nbsp;&nbsp;&nbsp;&nbsp;</a>--%>
-<%--<label style="color:white;">|</label>--%>
-<%--<a href="${requestScope['javax.servlet.forward.request_uri']}?lang=ua"--%>
-<%--style="color:lightslategrey;text-decoration: none; pointer-events: none">&nbsp;&nbsp;&nbsp;&nbsp;UA&nbsp;&nbsp;&nbsp;&nbsp;</a>--%>
-<%--<div class="form-group">--%>
-<%--<input type="text" class="form-control" placeholder="Search" name="search">--%>
-<%--</div>--%>
-<%--<button type="submit" class="btn btn-success" style="height: 35px"><span--%>
-<%--class="glyphicon glyphicon-search" aria-hidden="true"></span></button>--%>
-<%--</form>--%>
-
-<%--</div>--%>
-<%--</div>--%>
-<%--</div>--%>
-<%--<br><br><br><br>--%>
-
-
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="#">DNO.UA</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -177,48 +72,48 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="/"><spring:message code="menu.main"/></a>
+                <a class="nav-link" href="/" style="font-family: Arial"><spring:message code="menu.main"/></a>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
-                   aria-expanded="false"><spring:message code="menu.category"/></a>
+                   aria-expanded="false" style="font-family: Arial"><spring:message code="menu.category"/></a>
                 <div class="dropdown-menu-wrapper">
                     <div class="dropdown-menu">
                         <c:forEach items="${categoryMap}" var="cat">
                             <c:if test="${cat.getValue().size() != 0}">
                                 <div class="dropdown-submenu">
-                                    <a class="dropdown-item" href="#">${cat.getKey()}</a>
+                                    <a class="dropdown-item" href="#" style="font-family: Arial">${cat.getKey()}</a>
                                     <div class="dropdown-menu">
                                         <c:forEach items="${cat.getValue()}" var="catSub">
                                             <a class="dropdown-item"
-                                               href="/titles/subcat/${catSub.id}/${currentCity}">${catSub.name}</a>
+                                               href="/titles/subcat/${catSub.id}/${currentCity}" style="font-family: Arial">${catSub.name}</a>
                                         </c:forEach>
                                     </div>
                                 </div>
                             </c:if>
                             <c:if test="${cat.getValue().size() == 0}">
-                                <a class="dropdown-item" href="#">${cat.getKey()}</a>
+                                <a class="dropdown-item" href="#" style="font-family: Arial">${cat.getKey()}</a>
                             </c:if>
                         </c:forEach>
                     </div>
                 </div>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/ratings"><spring:message code="menu.ratings"/></a>
+                <a class="nav-link" href="/ratings" style="font-family: Arial"><spring:message code="menu.ratings"/></a>
             </li>
             <security:authorize access="(isAuthenticated() and principal.username != 'Admin') or isAnonymous()">
-                <li class="nav-item"><a class="nav-link disabled" href="#" style="text-decoration: none; pointer-events: none"><spring:message code="menu.contact"/></a>
+                <li class="nav-item"><a class="nav-link disabled" href="#" style="text-decoration: none; pointer-events: none; font-family: Arial"><spring:message code="menu.contact"/></a>
                 </li>
             </security:authorize>
 
             <security:authorize url="/**/addtitle">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
-                       aria-haspopup="true" aria-expanded="false"><spring:message code="menu.add"/></a>
+                       aria-haspopup="true" aria-expanded="false" style="font-family: Arial"><spring:message code="menu.add"/></a>
                     <div class="dropdown-menu-wrapper">
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="/addtitle">Add Title</a>
-                            <a class="dropdown-item" href="/addcategories">Add Categories</a>
+                            <a class="dropdown-item" href="/addtitle" style="font-family: Arial">Додати товар</a>
+                            <a class="dropdown-item" href="/addcategories" style="font-family: Arial">Додати категорії</a>
                         </div>
                     </div>
                 </li>
@@ -226,9 +121,9 @@
 
             <security:authorize access="isAuthenticated()">
                 <li class="cart-icon">
-                    <a href="/showmessages" class="nav-link">
+                    <a href="/showmessages" class="nav-link" style="font-family: Arial">
                             <%--<i class="glyphicon glyphicon-envelope"></i>--%>
-                        Messages
+                                <spring:message code="menu.messages"/>
                         <c:if test="${messagesmenu != 0}">
                             <span class="badge badge-light">${messagesmenu}</span>
                         </c:if>
@@ -237,10 +132,10 @@
             </security:authorize>
 
             <security:authorize access="isAnonymous()">
-                <li class="nav-item"><a class="nav-link" href="/login"><spring:message code="menu.sign_in"/></a></li>
+                <li class="nav-item"><a class="nav-link" href="/login" style="font-family: Arial">&nbsp;&nbsp;&nbsp;<spring:message code="menu.sign_in"/></a></li>
             </security:authorize>
             <security:authorize access="isAuthenticated()">
-                <li class="nav-item"><a class="nav-link" href="/logout"><spring:message code="menu.sign_out"/></a></li>
+                <li class="nav-item"><a class="nav-link" href="/logout" style="font-family: Arial">&nbsp;&nbsp;&nbsp;<spring:message code="menu.sign_out"/></a></li>
             </security:authorize>
         </ul>
 
@@ -248,25 +143,25 @@
         <form class="form-inline my-2 my-lg-0" action="/search" method="post">
             <security:authorize access="isAuthenticated()">
                 <label>
-                    <h7 style="color: white">Hello, <security:authentication property="principal.username"/>&nbsp;&nbsp;&nbsp;&nbsp;</h7>
+                    <h7 style="color: white; font-family: 'Segoe Print'">Hello, <security:authentication property="principal.username"/>&nbsp;&nbsp;&nbsp;&nbsp;</h7>
                 </label>
             </security:authorize>
             <security:authorize access="isAuthenticated()">
-                <select style="color: black" onchange="window.location='/changecity?city=' + this.value;">
-                    <option style="color: black" value="${currentCity}">${currentCity}</option>
+                <select style="color: black; font-family: 'Segoe Print'" onchange="window.location='/changecity?city=' + this.value;">
+                    <option style="color: black; font-family: 'Segoe Print'" value="${currentCity}">${currentCity}</option>
                     <c:forEach items="${cities}" var="city">
-                        <option style="color: black">${city}</option>
+                        <option style="color: black; font-family: 'Segoe Print'">${city}</option>
                     </c:forEach>
                 </select>
                 &nbsp;&nbsp;&nbsp;&nbsp;
             </security:authorize>
             <a href="${requestScope['javax.servlet.forward.request_uri']}?lang=en"
-               style="color:white;text-decoration: none;">EN&nbsp;&nbsp;&nbsp;&nbsp;</a>
+               style="color:lightslategrey;text-decoration: none; pointer-events: none">EN&nbsp;&nbsp;&nbsp;&nbsp;</a>
             <label style="color:white;">|</label>
             <a href="${requestScope['javax.servlet.forward.request_uri']}?lang=ua"
-               style="color:lightslategrey;text-decoration: none; pointer-events: none">&nbsp;&nbsp;&nbsp;&nbsp;UA&nbsp;&nbsp;&nbsp;&nbsp;</a>
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+               style="color:white;text-decoration: none;">&nbsp;&nbsp;&nbsp;&nbsp;UA&nbsp;&nbsp;&nbsp;&nbsp;</a>
+            <input class="form-control mr-sm-2" type="search" placeholder="Знайти" aria-label="Search" name="search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Пошук</button>
         </form>
     </div>
 </nav>

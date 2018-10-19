@@ -29,7 +29,7 @@
     </c:if>
 
     <c:if test="${lastAddedReviews.size() != 0}">
-    <p class="text-center" style="font-size: 40px; color: white; font-family: ''; margin-top: 19px; margin-bottom: auto;">LAST REVIEWS</p>
+    <p class="text-center" style="font-size: 40px; color: white; font-family: 'Segoe Print'; margin-top: 19px; margin-bottom: auto;">Останні Відгуки</p>
     <div class="container p-4">
         <div class="card-deck" style="width: 100%">
             <c:forEach items="${lastAddedReviews}" var="review">
@@ -81,7 +81,7 @@
 </div>
 <div class="static-bottom">
     <div class="container">
-        <p class="text-center" style="font-size: 40px; color: white; font-family: ''">ABOUT US</p>
+        <p class="text-center" style="font-size: 40px; color: white; font-family: 'Segoe Print'">Про Нас</p>
         <div>
             <hr style="border: none; background-color: grey; color: grey; height: 2px;">
         </div>
@@ -93,14 +93,7 @@
             from
             the 19th and early 20th centuries, and replaced several state highway designations.
             The highway was extended to Port Austin in 1933.
-            Starting in the early 1960s, segments of Interstate 75 and Interstate 94 were built, and
-            U.S. 25
-            was shifted to follow them concurrently south of Detroit to Port Huron.
-            On September 26, 1973, the entire designation was removed from the state. The final routing
-            of
-            the highway is still maintained by the state under eight different designations, some
-            unsigned.
-            <br><br><br>
+            <br><br>
         </div>
     </div>
 </div>

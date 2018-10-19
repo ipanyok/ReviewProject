@@ -15,6 +15,7 @@ import review.model.entity.*;
 import review.service.*;
 import review.servlet.beans.AdminBufferBean;
 import review.servlet.beans.PagesBean;
+import review.servlet.beans.TitlesBean;
 import review.servlet.utils.Pagination;
 import review.servlet.utils.RatingUtils;
 import review.servlet.utils.validator.UserValidator;
@@ -163,9 +164,9 @@ public class MainServlet {
     @GetMapping("/search")
     public String getSearch(HttpSession session, Model model) {
         // pagination
-        List<PagesBean> pagesList = Pagination.pagesCount((List<Title>) session.getAttribute("searchResult"), paginationTotal);
+        List<PagesBean> pagesList = Pagination.pagesCount((List<TitlesBean>) session.getAttribute("searchResult"), paginationTotal);
         session.setAttribute("countPagesSearch", pagesList);
-        List<Title> titlesPagination = Pagination.printResult((List<Title>) session.getAttribute("searchResult"), 0, paginationTotal);
+        List<Title> titlesPagination = Pagination.printResult((List<TitlesBean>) session.getAttribute("searchResult"), 0, paginationTotal);
         model.addAttribute("searchResult", titlesPagination);
         //
         return "search";
@@ -175,10 +176,10 @@ public class MainServlet {
     public String search(@RequestParam("search") String searchName, Model model, HttpSession session) {
         logger.info("Searching for \"" + searchName + "\"");
         List<Title> titlesList = titleService.getAll();
-        List<Title> resultSearch = new ArrayList<>();
+        List<TitlesBean> resultSearch = new ArrayList<>();
         for (Title title : titlesList) {
             if (title.getTitle().toLowerCase().contains(searchName.toLowerCase())) {
-                resultSearch.add(title);
+                resultSearch.add(new TitlesBean(title.getId(), title.getTitle(), title.getDescription(), cityService.getById(title.getIdCity()).getName(), null, null));
             }
         }
         session.setAttribute("searchResult", resultSearch);
@@ -186,7 +187,7 @@ public class MainServlet {
         // pagination
         List<PagesBean> pagesList = Pagination.pagesCount(resultSearch, paginationTotal);
         session.setAttribute("countPagesSearch", pagesList);
-        List<Title> titlesPagination = Pagination.printResult(resultSearch, 0, paginationTotal);
+        List<TitlesBean> titlesPagination = Pagination.printResult(resultSearch, 0, paginationTotal);
         model.addAttribute("searchResult", titlesPagination);
         //
 
@@ -195,7 +196,7 @@ public class MainServlet {
 
     @GetMapping("/search/page/{number}")
     public String getPageSearch(@PathVariable("number") int page, HttpSession session, Model model) {
-        List<Title> titlesPagination = Pagination.printResult((List<Title>) session.getAttribute("searchResult"), page * paginationTotal - paginationTotal, paginationTotal);
+        List<TitlesBean> titlesPagination = Pagination.printResult((List<TitlesBean>) session.getAttribute("searchResult"), page * paginationTotal - paginationTotal, paginationTotal);
         model.addAttribute("searchResult", titlesPagination);
         return "search";
     }

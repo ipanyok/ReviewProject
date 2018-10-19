@@ -41,9 +41,9 @@
     <%--</c:if>--%>
 
     <c:if test="${titles.size() != 0}">
-        <h1><p class="text-center" style="margin-top: 20px;"><b>${titles.get(0).category} -> ${titles.get(0).subCategory}</b></p></h1>
+        <h1><p class="text-left" style="margin-top: 20px;"><b>${titles.get(0).category}, &nbsp;${titles.get(0).subCategory}</b></p></h1>
         <br>
-        <div class="card-deck" style="width: 60%;">
+        <div class="card-deck">
             <c:forEach items="${titles}" var="title">
                 <div class="card border-primary" style="background-color: #3a3a3a">
                     <img class="card-img-top" src="/getphoto/${title.idTitle}" alt="NO IMAGE" style="position: relative">
@@ -68,8 +68,12 @@
     </c:if>
 
     <c:if test="${userMessage != null}">
-        <div class="container text-center">
-            <p><h3 style="color: green">${userMessage}</h3></p><br><br>
+        <%--<div class="container text-center">--%>
+            <%--<p><h3 style="color: green">${userMessage}</h3></p><br><br>--%>
+        <%--</div>--%>
+        <div class="alert alert-success" role="alert">
+            <h4 class="alert-heading">${userMessage}</h4>
+            <p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
         </div>
     </c:if>
 
