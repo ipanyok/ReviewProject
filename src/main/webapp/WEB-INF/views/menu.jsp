@@ -4,11 +4,22 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
       integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+
 <style>
     body {
         background-image: url('/resources/img/la.jpg');
@@ -102,9 +113,12 @@
                 <a class="nav-link" href="/ratings" style="font-family: Arial"><spring:message code="menu.ratings"/></a>
             </li>
             <security:authorize access="(isAuthenticated() and principal.username != 'Admin') or isAnonymous()">
-                <li class="nav-item"><a class="nav-link disabled" href="#" style="text-decoration: none; pointer-events: none; font-family: Arial"><spring:message code="menu.contact"/></a>
+                <li class="nav-item"><a href="#" class="nav-link" data-toggle="modal" data-target="#feedbackModal" style="font-family: Arial"><spring:message code="menu.contact"/></a>
                 </li>
             </security:authorize>
+
+            <li class="nav-item"><a href="#" class="nav-link disabled" data-toggle="modal" data-target="#feedbackModal" style="text-decoration: none; pointer-events: none;font-family: Arial">Правила розміщення</a>
+            </li>
 
             <security:authorize url="/**/addtitle">
                 <li class="nav-item dropdown">
@@ -116,18 +130,6 @@
                             <a class="dropdown-item" href="/addcategories" style="font-family: Arial">Додати категорії</a>
                         </div>
                     </div>
-                </li>
-            </security:authorize>
-
-            <security:authorize access="isAuthenticated()">
-                <li class="cart-icon">
-                    <a href="/showmessages" class="nav-link" style="font-family: Arial">
-                            <%--<i class="glyphicon glyphicon-envelope"></i>--%>
-                                <spring:message code="menu.messages"/>
-                        <c:if test="${messagesmenu != 0}">
-                            <span class="badge badge-light">${messagesmenu}</span>
-                        </c:if>
-                    </a>
                 </li>
             </security:authorize>
 
@@ -145,6 +147,14 @@
                 <label>
                     <h7 style="color: white; font-family: 'Segoe Print'">Hello, <security:authentication property="principal.username"/>&nbsp;&nbsp;&nbsp;&nbsp;</h7>
                 </label>
+            </security:authorize>
+            <security:authorize access="isAuthenticated()">
+                <a href="/showmessages" class="cart-icon" style="font-family: Arial;color: white;text-decoration: none;">
+                        <i class="fa fa-envelope-o"></i>
+                        <c:if test="${messagesmenu != 0}">
+                            <span class="badge badge-light bg-warning">${messagesmenu}</span>
+                        </c:if>&nbsp;&nbsp;&nbsp;&nbsp;
+                </a>
             </security:authorize>
             <security:authorize access="isAuthenticated()">
                 <select style="color: black; font-family: 'Segoe Print'" onchange="window.location='/changecity?city=' + this.value;">
@@ -165,3 +175,49 @@
         </form>
     </div>
 </nav>
+
+<!-- Modal -->
+<div class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="feedbackModalLabel">Зворотній зв'язок</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <input id="Full Name" name="Full Name" placeholder="Ім'я" class="form-control" type="text">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <textarea id="comment" name="comment" cols="40" rows="5" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                <label class="form-check-label" for="defaultCheck1">
+                                    I agree to <a href="#">Terms and Conditions</a>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <button type="button" class="btn btn-success">Написати</button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>

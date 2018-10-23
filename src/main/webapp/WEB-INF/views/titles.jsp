@@ -46,7 +46,7 @@
         <div class="card-deck">
             <c:forEach items="${titles}" var="title">
                 <div class="card border-primary" style="background-color: #3a3a3a">
-                    <img class="card-img-top" src="/getphoto/${title.idTitle}" alt="NO IMAGE" style="position: relative">
+                    <img class="card-img-top" src="/getphoto/${title.idTitle}" alt="NO IMAGE" style="height: 250px; width: 100%; display: block;" data-holder-rendered="true">
                     <div class="card-body" style="background-color: #3a3a3a">
                         <h5 class="card-title" style="font-family: 'Segoe Print'">${title.title},&nbsp; <small>${title.city}</small></h5>
                         <p class="card-text" style="font-family: 'Segoe Print'">${title.description}</p>

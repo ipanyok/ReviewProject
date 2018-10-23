@@ -61,13 +61,13 @@ public class ReviewServlet {
         model.addAttribute("city", city);
         model.addAttribute("title", title);
         model.addAttribute("reviews", reviewsBeans);
+        model.addAttribute("review", new Review()); // ???
         return "reviews";
     }
 
-    @GetMapping("/titles/{idTitle}/addreview")
-    public String getAddReviewForm(@PathVariable("idTitle") int idTitle, Model model, Principal principal) {
-        model.addAttribute("idTitle", idTitle);
-        model.addAttribute("review", new Review());
+    @PostMapping("/titles/{idTitle}/addreview")
+    public String addReview(@ModelAttribute @Valid Review review, @PathVariable("idTitle") int idTitle,  BindingResult bindingResult, Principal principal, Model model) {
+        reviewValidator.validate(review, bindingResult);
         User currentUser = userService.getByLogin(principal.getName());
         List<Review> reviewsByCurrentTitle = reviewService.getByTitleId(idTitle);
         boolean isReviewExist = false;
@@ -77,22 +77,19 @@ public class ReviewServlet {
                 break;
             }
         }
-        if (isReviewExist) {
-            model.addAttribute("message", "YOU ALREADY COMMENT THIS TITLE");
+        if (review.getMark() == 0) {
+            model.addAttribute("message", "Поставьте оцінку будь ласка");
             return getReviews(idTitle, model);
         }
-        return "addreview";
-    }
-
-    @PostMapping("/titles/{idTitle}/addreview")
-    public String addReview(@ModelAttribute @Valid Review review, BindingResult bindingResult, Principal principal, Model model) {
-        reviewValidator.validate(review, bindingResult);
+        if (isReviewExist) {
+            model.addAttribute("message", "Ви вже залишали тут відгук");
+            return getReviews(idTitle, model);
+        }
         if (bindingResult.hasErrors()) {
             model.addAttribute("idTitle", review.getIdTitle());
             logger.error("Review validate error");
-            return "addreview";
+            return "redirect:/titles/" + review.getIdTitle();
         }
-        User currentUser = userService.getByLogin(principal.getName());
         review.setIdUser(currentUser.getId());
         reviewService.save(review);
         logger.info("Review was added");

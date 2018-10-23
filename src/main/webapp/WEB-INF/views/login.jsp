@@ -170,7 +170,7 @@
             <form class="form-horizontal" action="/login" method="post">
                 <span class="heading" style="color: black"><spring:message code="login.autorize"/></span>
                 <div class="form-group">
-                    <input type="text" class="form-control" id="inputLogin" name="login" placeholder=<spring:message code="login.login"/>>
+                    <input type="text" class="form-control" id="inputLogin" name="login" autocomplete="off" placeholder=<spring:message code="login.login"/>>
                     <i class="fa fa-user"></i>
                 </div>
                 <div class="form-group help">

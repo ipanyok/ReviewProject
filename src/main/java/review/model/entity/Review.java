@@ -9,7 +9,7 @@ import java.util.Date;
 @NamedQueries({
         @NamedQuery(name = "Review.getAll", query = "select r from Review r"),
         @NamedQuery(name = "Review.getById", query = "select r from Review r where r.id = :id"),
-        @NamedQuery(name = "Review.getByTitleId", query = "select r from Review r where r.idTitle = :idTitle"),
+        @NamedQuery(name = "Review.getByTitleId", query = "select r from Review r where r.idTitle = :idTitle order by r.date desc"),
         @NamedQuery(name = "Review.getLastAdded", query = "select r from Review r order by r.date desc")
 })
 public class Review {

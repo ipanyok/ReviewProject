@@ -16,7 +16,7 @@ public class ReviewValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         Review review = (Review) o;
-        if (review.getMark() < 1 || review.getMark() > 5) {
+        if (review.getMark() < 1 || review.getMark() > 10) {
             errors.rejectValue("mark", "NotEmpty.mark");
         }
     }

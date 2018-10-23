@@ -272,7 +272,12 @@ public class MainServlet {
                 if (isAdd == false && cancelValue == true) {
                     status = statusCancel;
                 }
-                List<SubCategory> subCategories = subCategoryService.getByCategoryId(categoryService.getByName(adminBuffer.getCategoryName()).getId());
+                List<SubCategory> subCategories;
+                if (categoryService.getByName(adminBuffer.getCategoryName()) != null) {
+                    subCategories = subCategoryService.getByCategoryId(categoryService.getByName(adminBuffer.getCategoryName()).getId());
+                } else {
+                    subCategories = null;
+                }
                 AdminBufferBean buf = new AdminBufferBean(adminBuffer, adminBuffer.getCategoryName(), subCategories, status);
                 bufferBeansList.add(buf);
             }
@@ -284,7 +289,11 @@ public class MainServlet {
             List<UserMessage> userMessageList = new ArrayList<>();
             for (AdminBuffer adminBuffer : adminBufferByLogin) {
                 UserMessage userMessage = userMessageService.getByAdminBufferId(adminBuffer.getId());
-                userMessageList.add(userMessage);
+                if (userMessage.isRead() == false) {
+                    userMessageList.add(0, userMessage);
+                } else {
+                    userMessageList.add(userMessage);
+                }
             }
             model.addAttribute("userMessageList", userMessageList);
             return "showusermessages";
@@ -295,6 +304,9 @@ public class MainServlet {
     public String readMessage(@RequestParam("id") int idUserMessage, @RequestParam(value = "read", defaultValue = "") String readButton, HttpSession session, Principal principal) {
         if (readButton.equals("read" + idUserMessage)) {
             UserMessage userMessage = userMessageService.getById(idUserMessage);
+            if (userMessage.isRead() == true) {
+                return "redirect:/showmessages";
+            }
             userMessage.setRead(true);
             userMessageService.save(userMessage);
             User currentUser = userService.getByLogin(principal.getName());
