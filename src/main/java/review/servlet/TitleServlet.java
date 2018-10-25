@@ -100,7 +100,8 @@ public class TitleServlet {
                                  @RequestParam("text") String reviewText,
                                  @RequestParam("reviewName") String reviewName,
                                  @RequestParam("mark") Integer mark) {
-        if ((titleName == null || titleName.equals("")) || (titleCity == null || titleCity.equals("")) || (reviewName == null || reviewName.equals("")) || (reviewText == null || reviewText.equals("")) || mark == null) {
+        if ((titleName == null || titleName.equals("")) || (titleCity == null || titleCity.equals("")) || (reviewName == null || reviewName.equals("")) || (reviewText == null || reviewText.equals("")) || (mark == null || mark == 0)) {
+            logger.error("Required fields are empty.");
             model.addAttribute("errors", "review.empty");
             return "addreviewtonewtitle";
         }
@@ -148,7 +149,8 @@ public class TitleServlet {
                             @RequestParam("text") String reviewText,
                             @RequestParam("reviewName") String reviewName,
                             @RequestParam("mark") Integer mark) {
-        if ((titleName == null || titleName.equals("")) || (titleCity == null || titleCity.equals("")) || (reviewName == null || reviewName.equals("")) || (reviewText == null || reviewText.equals("")) || mark == null || (categoryName == null || categoryName.equals("")) || (subCategoryName == null || subCategoryName.equals(""))) {
+        if ((titleName == null || titleName.equals("")) || (titleCity == null || titleCity.equals("")) || (reviewName == null || reviewName.equals("")) || (reviewText == null || reviewText.equals("")) || (mark == null || mark == 0) || (categoryName == null || categoryName.equals("")) || (subCategoryName == null || subCategoryName.equals(""))) {
+            logger.error("Required fields are empty.");
             model.addAttribute("errors", "review.empty");
             return "addallnew";
         }

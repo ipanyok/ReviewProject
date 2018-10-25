@@ -9,19 +9,6 @@
         background-color: silver;
     }
 
-    .reviews {
-        padding: 15px;
-        max-width: 768px;
-        margin: 0 auto;
-    }
-
-    .review-item {
-        background-color: white;
-        padding: 15px;
-        margin-bottom: 5px;
-        box-shadow: 1px 1px 5px #343a40;
-    }
-
     .review-item .review-date {
         color: #cecece;
     }
@@ -39,32 +26,6 @@
         border: 1px solid #cecece;
     }
 
-    /****Rating Stars***/
-    .raterater-bg-layer {
-        color: rgba(0, 0, 0, 0.25);
-    }
-
-    .raterater-hover-layer {
-        color: rgba(255, 255, 0, 0.75);
-    }
-
-    .raterater-hover-layer.rated { /* after the user selects a rating */
-        color: rgba(255, 255, 0, 1);
-    }
-
-    .raterater-rating-layer {
-        color: rgba(255, 155, 0, 0.75);
-    }
-
-    .raterater-outline-layer {
-        color: rgba(0, 0, 0, 0.25);
-    }
-
-    /* don't change these - you might break something.. */
-    .raterater-wrapper {
-        overflow: visible;
-    }
-
     .software .raterater-wrapper {
         margin-top: 4px;
     }
@@ -78,17 +39,10 @@
         left: 0px;
     }
 
-    .raterater-hover-layer {
-        display: none;
-    }
-
     .raterater-hover-layer i,
     .raterater-rating-layer i {
         width: 0px;
         overflow: hidden;
-    }
-    .checked {
-        color: orange;
     }
 </style>
 <body>
@@ -107,10 +61,9 @@
     <c:if test="${lastAddedReviews.size() == 0}">
     <label>NO REVIEWS</label>
     <c:if test="${userMessage != null}">
-    <div class="container text-center">
-        <p>
-        <h3 style="color: green">${userMessage}</h3></p><br><br>
-    </div>
+        <div class="alert alert-success" role="alert">
+            <h4 class="alert-heading">${userMessage}</h4>
+        </div>
     </c:if>
     </c:if>
 
@@ -158,9 +111,8 @@
             </c:if>
 
             <c:if test="${userMessage != null}">
-                <div class="container text-center">
-                    <p>
-                    <h3 style="color: green">${userMessage}</h3></p><br><br>
+                <div class="alert alert-success" role="alert">
+                    <h4 class="alert-heading">${userMessage}</h4>
                 </div>
             </c:if>
         </div>
@@ -184,7 +136,13 @@
         </div>
     </div>
 </footer>
-
+<div class="copyright pt-2">
+    <div class="container" style="color: white">
+        <div class="row justify-content-md-center">
+            <p> © 2018 xyz Software Pvt. Ltd. </p>
+        </div>
+    </div>
+</div>
 <script>
     !function (t) {
         function a(a, r) {

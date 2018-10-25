@@ -115,7 +115,7 @@
                 <div class="form-group">
                     <div class="col-sm-offset-5 col-sm-12">
                         <input type="text" name="reviewName" class="form-control col-xs-3 replyAuteur" id="reviewName" formControlName="reviewName" maxlength="50" required
-                               placeholder="Введіть назву відгуку ...">
+                               placeholder="Введіть назву відгуку ..." autocomplete="off">
                     </div>
                 </div>
                 <div class="form-group">

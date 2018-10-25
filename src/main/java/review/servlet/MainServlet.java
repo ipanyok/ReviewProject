@@ -205,11 +205,12 @@ public class MainServlet {
     public String getRating(Model model) {
         logger.info("Start showRating()...");
         List<Title> titles = titleService.getAll();
-        Map<String, Double> ratingMap = new HashMap<>();
+        Map<TitlesBean, Double> ratingMap = new HashMap<>();
         for (Title title : titles) {
             Double middleMark = ratingService.getMiddleMark(title.getId());
             if (middleMark != null) {
-                ratingMap.put(title.getTitle() + " (" + cityService.getById(title.getIdCity()).getName() + ")", middleMark);
+                TitlesBean titlesBean = new TitlesBean(title.getId(), title.getTitle(), title.getDescription(), cityService.getById(title.getIdCity()).getName(), null, null);
+                ratingMap.put(titlesBean, middleMark);
             }
         }
         model.addAttribute("ratings", RatingUtils.createRating(ratingMap, countRatings, ratingMiddleMark));
@@ -279,23 +280,39 @@ public class MainServlet {
                     subCategories = null;
                 }
                 AdminBufferBean buf = new AdminBufferBean(adminBuffer, adminBuffer.getCategoryName(), subCategories, status);
-                bufferBeansList.add(buf);
+                if (status.equals(statusInProgress)) {
+                    bufferBeansList.add(0, buf);
+                } else {
+                    bufferBeansList.add(buf);
+                }
             }
             session.setAttribute("adminBufferList", bufferBeansList);
             return "showadminmessages";
         } else {
             String userLogin = principal.getName();
             List<AdminBuffer> adminBufferByLogin = adminBufferService.getByUserLogin(userLogin);
-            List<UserMessage> userMessageList = new ArrayList<>();
+            Map<UserMessage, String> userMessageMap = new LinkedHashMap<>();
+            String parseMessage;
             for (AdminBuffer adminBuffer : adminBufferByLogin) {
                 UserMessage userMessage = userMessageService.getByAdminBufferId(adminBuffer.getId());
-                if (userMessage.isRead() == false) {
-                    userMessageList.add(0, userMessage);
-                } else {
-                    userMessageList.add(userMessage);
+                if (userMessage != null) {
+                    parseMessage = "Вам надійшло повідомлення щодо відгуку \"" + adminBuffer.getReviewName() + "\" до товару \"" + adminBuffer.getTitleName() + "\"";
+                    userMessageMap.put(userMessage, parseMessage);
                 }
             }
-            model.addAttribute("userMessageList", userMessageList);
+            Map<UserMessage, String> userMessageMapSorted = new LinkedHashMap<>();
+            for (Map.Entry<UserMessage, String> elem : userMessageMap.entrySet()) {
+                if (elem.getKey().isRead() == false) {
+                    userMessageMapSorted.put(elem.getKey(), elem.getValue());
+                }
+            }
+            for (Map.Entry<UserMessage, String> elem : userMessageMap.entrySet()) {
+                if (elem.getKey().isRead() == true) {
+                    userMessageMapSorted.put(elem.getKey(), elem.getValue());
+                }
+            }
+
+            model.addAttribute("userMessageMap", userMessageMapSorted);
             return "showusermessages";
         }
     }
