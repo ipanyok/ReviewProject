@@ -114,13 +114,13 @@
                             <div class="form-group row">
                                 <label class="col-lg-3 col-form-label form-control-label">Категорія*</label>
                                 <div class="col-lg-9">
-                                    <input class="form-control" type="text" value="Введіть категорію" name="categoryName" autocomplete="off">
+                                    <input class="form-control" type="text" placeholder="Введіть категорію" name="categoryName" autocomplete="off">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-lg-3 col-form-label form-control-label">Підкатегоія*</label>
                                 <div class="col-lg-9">
-                                    <input class="form-control" type="text" value="Введіть підкатегорію" name="subCategoryName" autocomplete="off">
+                                    <input class="form-control" type="text" placeholder="Введіть підкатегорію" name="subCategoryName" autocomplete="off">
                                 </div>
                             </div>
                             <div class="card-header">
