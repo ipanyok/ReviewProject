@@ -167,7 +167,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-center-3 col-md-6">
-            <form class="form-horizontal" action="/login" method="post">
+            <form class="form-horizontal border border-dark" action="/login" method="post">
                 <span class="heading" style="color: black"><spring:message code="login.autorize"/></span>
                 <div class="form-group">
                     <input type="text" class="form-control" id="inputLogin" name="login" autocomplete="off" placeholder=<spring:message code="login.login"/>>
@@ -186,7 +186,7 @@
                 <div class="form-group">
                     <button type="submit" class="btn btn-default"><spring:message code="login.sign"/></button>
                 </div>
-                <h5><a class="text-center" style="color: #00b4ef; text-decoration: none" href="/register"><spring:message code="login.reg"/></a></h5>
+                <p class="text-center">Ще не має аккаунту? <a style="color: #00b4ef; text-decoration: none" href="/register"><spring:message code="login.reg"/></a></p>
             </form>
         </div>
 

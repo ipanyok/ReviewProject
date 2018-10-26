@@ -139,7 +139,7 @@
         color: #fff;
         background: #00b4ef;
         border-radius: 30px;
-        padding: 10px 147px;
+        padding: 10px 132px;
         border: none;
         text-transform: capitalize;
         transition: all 0.5s ease 0s;
@@ -166,7 +166,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-center-3 col-md-6">
-            <sf:form method="post" action="/register" modelAttribute="user" class="form-horizontal">
+            <sf:form method="post" action="/register" modelAttribute="user" class="form-horizontal border border-dark">
                 <span class="heading" style="color: black">REGISTER</span>
                 <div class="form-group">
                     <sf:label path="firstName" cssStyle="color: black">First Name</sf:label>
