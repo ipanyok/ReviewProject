@@ -1,8 +1,7 @@
 package review.model.entity;
 
-import com.sun.istack.internal.NotNull;
-
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "CATEGORY")
