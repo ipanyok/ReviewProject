@@ -165,76 +165,70 @@
         </div>
     </div>
 </div>
-<%--<footer class="bg-dark text-white">--%>
-    <%--<div class="container">--%>
-        <%--<p class="text-center" style="font-size: 40px; color: white; font-family: 'Segoe Print'">Про Нас</p>--%>
-        <%--<div>--%>
-            <%--<hr style="border: none; background-color: grey; color: grey; height: 2px;">--%>
-        <%--</div>--%>
-        <%--<div class="text-center" style="color:white;">--%>
-            <%--U.S. Highway 25 in the state of Michigan (U.S. 25) was a highway that ran northeasterly from--%>
-            <%--the--%>
-            <%--Ohio state line near Toledo through Monroe and Detroit to Port Huron.--%>
-            <%--Created with the initial U.S. Highway System in 1926, U.S. 25 followed some roadways dating--%>
-            <%--from--%>
-            <%--the 19th and early 20th centuries, and replaced several state highway designations.--%>
-            <%--The highway was extended to Port Austin in 1933.--%>
-            <%--<br><br>--%>
-        <%--</div>--%>
-    <%--</div>--%>
-<%--</footer>--%>
-<%--<div class="copyright pt-2">--%>
-    <%--<div class="container" style="color: white">--%>
-        <%--<div class="row justify-content-md-center">--%>
-            <%--<p> © 2018 xyz Software Pvt. Ltd. </p>--%>
-        <%--</div>--%>
-    <%--</div>--%>
-<%--</div>--%>
+<footer class="bg-dark text-white">
+    <div class="container">
+        <p class="text-center" style="font-size: 40px; color: white; font-family: 'Segoe Print'">Про Нас</p>
+        <div>
+            <hr style="border: none; background-color: grey; color: grey; height: 2px;">
+        </div>
+        <div class="text-center" style="color:white;">
+            U.S. Highway 25 in the state of Michigan (U.S. 25) was a highway that ran northeasterly from
+            the
+            Ohio state line near Toledo through Monroe and Detroit to Port Huron.
+            Created with the initial U.S. Highway System in 1926, U.S. 25 followed some roadways dating
+            from
+            the 19th and early 20th centuries, and replaced several state highway designations.
+            The highway was extended to Port Austin in 1933.
+            <br><br>
+        </div>
+    </div>
+</footer>
+
 
 <footer class="footer bg-dark text-white">
 
 
     <!-- Footer Links -->
-    <div class="container pt-5 pb-2">
-        <div class="row">
+    <%--<div class="container pt-5 pb-2">--%>
+        <%--<div class="row">--%>
 
-            <div class="col-md-3 col-lg-4 col-xl-3">
-                <h4>Company name</h4>
-                <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
-                <p>
-                    When an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting
-                </p>
-            </div>
+            <%--<div class="col-md-3 col-lg-4 col-xl-3">--%>
+                <%--<h4>Company name</h4>--%>
+                <%--<hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">--%>
+                <%--<p>--%>
+                    <%--When an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting--%>
+                <%--</p>--%>
+            <%--</div>--%>
 
-            <div class="col-md-2 col-lg-2 col-xl-2 mx-auto">
-                <h4>Products</h4>
-                <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
-                <p><a href="#" class="text-white">Product-1</a></p>
-                <p><a href="#" class="text-white">Product-2</a></p>
-                <p><a href="#" class="text-white">Product-3</a></p>
-                <p><a href="#" class="text-white">Product-4</a></p>
-            </div>
+            <%--<div class="col-md-2 col-lg-2 col-xl-2 mx-auto">--%>
+                <%--<h4>Products</h4>--%>
+                <%--<hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">--%>
+                <%--<p><a href="#" class="text-white">Product-1</a></p>--%>
+                <%--<p><a href="#" class="text-white">Product-2</a></p>--%>
+                <%--<p><a href="#" class="text-white">Product-3</a></p>--%>
+                <%--<p><a href="#" class="text-white">Product-4</a></p>--%>
+            <%--</div>--%>
 
-            <div class="col-md-3 col-lg-2 col-xl-2 mx-auto">
-                <h4>Useful links</h4>
-                <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
-                <p><a href="#" class="text-white">Home</a></p>
-                <p><a href="#" class="text-white">About Us</a></p>
-                <p><a href="#" class="text-white">Services</a></p>
-                <p><a href="#" class="text-white">Contact</a></p>
-            </div>
+            <%--<div class="col-md-3 col-lg-2 col-xl-2 mx-auto">--%>
+                <%--<h4>Useful links</h4>--%>
+                <%--<hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">--%>
+                <%--<p><a href="#" class="text-white">Home</a></p>--%>
+                <%--<p><a href="#" class="text-white">About Us</a></p>--%>
+                <%--<p><a href="#" class="text-white">Services</a></p>--%>
+                <%--<p><a href="#" class="text-white">Contact</a></p>--%>
+            <%--</div>--%>
 
-            <div class="col-md-4 col-lg-3 col-xl-3">
-                <h4>Contact</h4>
-                <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
-                <p><i class="fa fa-home mr-3"></i> Company Location</p>
-                <p><i class="fa fa-envelope mr-3"></i> info@example.com</p>
-                <p><i class="fa fa-phone mr-3"></i> + 98 765 432 11</p>
-                <p><i class="fa fa-print mr-3"></i> + 98 765 432 10</p>
-            </div>
+            <%--<div class="col-md-4 col-lg-3 col-xl-3">--%>
+                <%--<h4>Contact</h4>--%>
+                <%--<hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">--%>
+                <%--<p><i class="fa fa-home mr-3"></i> Company Location</p>--%>
+                <%--<p><i class="fa fa-envelope mr-3"></i> info@example.com</p>--%>
+                <%--<p><i class="fa fa-phone mr-3"></i> + 98 765 432 11</p>--%>
+                <%--<p><i class="fa fa-print mr-3"></i> + 98 765 432 10</p>--%>
+            <%--</div>--%>
 
-        </div>
-    </div>
+        <%--</div>--%>
+    <%--</div>--%>
     <!-- Footer Links-->
 
     <hr class="bg-white mx-4 mt-2 mb-1">
@@ -242,7 +236,7 @@
     <!-- Copyright-->
     <div class="container-fluid">
         <p class="text-center m-0 py-1">
-            © 2017 Copyright <a href="#" class="text-white">Bootstrap-4</a>
+            © 2018 Copyright <a href="#" class="text-white">Panya</a>
         </p>
     </div>
     <!-- Copyright -->
