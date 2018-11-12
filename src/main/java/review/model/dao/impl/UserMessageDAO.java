@@ -27,7 +27,7 @@ public class UserMessageDAO implements IUserMessageDAO {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private final String query = "select count(*) from reviews.usermessage u, reviews.adminbuffer a where u.idAdminBuffer = a.id and u.isread = false and a.userName = ?";
+    private final String query = "select count(*) from reviews.USERMESSAGE u, reviews.ADMINBUFFER a where u.IDADMINBUFFER = a.ID and u.ISREAD = false and a.USERNAME = ?";
 
     @PersistenceContext
     private EntityManager entityManager;

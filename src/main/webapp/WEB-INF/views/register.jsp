@@ -199,7 +199,7 @@
                 </div>
                 <div class="form-group">
                     <label style="color: black">City</label>
-                    <sf:input path="city" list="cities" class="form-control"/>
+                    <sf:input path="city" list="cities" class="form-control" autocomplete="off"/>
                     <datalist id="cities">
                         <c:forEach items="${cities}" var="city">
                             <option value="${city}"/>

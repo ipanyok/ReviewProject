@@ -27,8 +27,8 @@ public class AdminBufferDAO implements IAdminBufferDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private final String query = "select count(*) from reviews.adminbuffer where isadd = true";
-    private final String queryForStatusRequests = "select isAdd, cancel from reviews.adminbuffer where id = ?";
+    private final String query = "select count(*) from reviews.ADMINBUFFER where ISADD = true";
+    private final String queryForStatusRequests = "select ISADD, CANCEL from reviews.ADMINBUFFER where ID = ?";
 
     @Override
     public void saveBuffer(AdminBuffer adminBuffer) {

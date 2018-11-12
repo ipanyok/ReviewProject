@@ -1,7 +1,7 @@
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <html>
 <title>Home</title>
 <style>
@@ -183,67 +183,6 @@
         </div>
     </div>
 </footer>
-
-
-<footer class="footer bg-dark text-white">
-
-
-    <!-- Footer Links -->
-    <%--<div class="container pt-5 pb-2">--%>
-        <%--<div class="row">--%>
-
-            <%--<div class="col-md-3 col-lg-4 col-xl-3">--%>
-                <%--<h4>Company name</h4>--%>
-                <%--<hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">--%>
-                <%--<p>--%>
-                    <%--When an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting--%>
-                <%--</p>--%>
-            <%--</div>--%>
-
-            <%--<div class="col-md-2 col-lg-2 col-xl-2 mx-auto">--%>
-                <%--<h4>Products</h4>--%>
-                <%--<hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">--%>
-                <%--<p><a href="#" class="text-white">Product-1</a></p>--%>
-                <%--<p><a href="#" class="text-white">Product-2</a></p>--%>
-                <%--<p><a href="#" class="text-white">Product-3</a></p>--%>
-                <%--<p><a href="#" class="text-white">Product-4</a></p>--%>
-            <%--</div>--%>
-
-            <%--<div class="col-md-3 col-lg-2 col-xl-2 mx-auto">--%>
-                <%--<h4>Useful links</h4>--%>
-                <%--<hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">--%>
-                <%--<p><a href="#" class="text-white">Home</a></p>--%>
-                <%--<p><a href="#" class="text-white">About Us</a></p>--%>
-                <%--<p><a href="#" class="text-white">Services</a></p>--%>
-                <%--<p><a href="#" class="text-white">Contact</a></p>--%>
-            <%--</div>--%>
-
-            <%--<div class="col-md-4 col-lg-3 col-xl-3">--%>
-                <%--<h4>Contact</h4>--%>
-                <%--<hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">--%>
-                <%--<p><i class="fa fa-home mr-3"></i> Company Location</p>--%>
-                <%--<p><i class="fa fa-envelope mr-3"></i> info@example.com</p>--%>
-                <%--<p><i class="fa fa-phone mr-3"></i> + 98 765 432 11</p>--%>
-                <%--<p><i class="fa fa-print mr-3"></i> + 98 765 432 10</p>--%>
-            <%--</div>--%>
-
-        <%--</div>--%>
-    <%--</div>--%>
-    <!-- Footer Links-->
-
-    <hr class="bg-white mx-4 mt-2 mb-1">
-
-    <!-- Copyright-->
-    <div class="container-fluid">
-        <p class="text-center m-0 py-1">
-            © 2018 Copyright <a href="#" class="text-white">Panya</a>
-        </p>
-    </div>
-    <!-- Copyright -->
-
-</footer>
-
-
 
 <script>
     !function (t) {

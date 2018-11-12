@@ -5,8 +5,6 @@
 <html>
 <head>
     <title>Reviews</title>
-
-
     <style>
         body {
             background-color: silver;

@@ -17,7 +17,7 @@ public class RatingDAO implements IRatingDAO {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private final String query = "select sum(MARK)/count(*) from reviews.review where IDTITLE = ?";
+    private final String query = "select sum(MARK)/count(*) from reviews.REVIEW where IDTITLE = ?";
 
     @Override
     public Double getMiddleMark(int id) {
