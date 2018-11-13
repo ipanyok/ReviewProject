@@ -129,6 +129,14 @@ public class MainServlet {
         cityNames.add("All");
         session.setAttribute("cities", cityNames);
 
+        List<Title> allTitlesByLimit = titleService.getAllByLimit(limitReviews);
+        List<TitlesBean> allTitlesByLimitBean = new ArrayList<>();
+        for (Title title : allTitlesByLimit) {
+            TitlesBean titlesBean = new TitlesBean(title.getId(), title.getTitle(), title.getDescription(), cityService.getById(title.getIdCity()).getName(), null, null);
+            allTitlesByLimitBean.add(titlesBean);
+        }
+        model.addAttribute("lastAddedTitles", allTitlesByLimitBean);
+
         if (principal != null) {
             if (!principal.getName().equals(adminLogin)) {
                 User currentUser = userService.getByLogin(principal.getName());

@@ -54,4 +54,8 @@ public class TitleService {
     public List<TitlesBean> getBySubCategoryIdWithCity(int id) {
         return titleDAO.getBySubCategoryIdWithCity(id);
     }
+
+    public List<Title> getAllByLimit(int limit) {
+        return titleDAO.getAllByLimit(limit);
+    }
 }

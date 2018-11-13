@@ -71,4 +71,10 @@ public class TitleDAO implements ITitleDAO {
         return query.getResultList();
     }
 
+    @Override
+    public List<Title> getAllByLimit(int limit) {
+        TypedQuery<Title> query = entityManager.createNamedQuery("Title.getAll", Title.class).setMaxResults(limit);
+        return query.getResultList();
+    }
+
 }

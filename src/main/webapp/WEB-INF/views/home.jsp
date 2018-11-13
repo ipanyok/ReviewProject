@@ -104,8 +104,23 @@
 </security:authorize>
 
 <div class="container">
-    <c:if test="${lastAddedReviews.size() == 0}">
-    <label>NO REVIEWS</label>
+    <c:if test="${lastAddedReviews.size() < 3}">
+        <p class="text-center" style="font-size: 40px; color: white; font-family: 'Segoe Print'; margin-top: 19px; margin-bottom: auto;">Наші товари</p>
+        <br>
+        <div class="card-deck">
+            <c:forEach items="${lastAddedTitles}" var="title">
+                <div class="card border-primary" style="background-color: #3a3a3a">
+                    <img class="card-img-top" src="/getphoto/${title.idTitle}" alt="NO IMAGE" style="height: 250px; width: 100%; display: block;" data-holder-rendered="true">
+                    <div class="card-body" style="background-color: #3a3a3a">
+                        <h5 class="card-title" style="font-family: 'Segoe Print'; color: white">${title.title},&nbsp; <small>${title.city}</small></h5>
+                        <p class="card-text" style="font-family: 'Segoe Print'; color: white">${title.description}</p>
+                        <p><a href="/titles/${title.idTitle}" class="btn btn-primary" role="button"><spring:message code="show_reviews"/></a></p>
+                    </div>
+                </div>
+            </c:forEach>
+        </div>
+        <br><br><br>
+
     <c:if test="${userMessage != null}">
         <div class="alert alert-success" role="alert">
             <h4 class="alert-heading">${userMessage}</h4>
@@ -113,7 +128,7 @@
     </c:if>
     </c:if>
 
-    <c:if test="${lastAddedReviews.size() != 0}">
+    <c:if test="${lastAddedReviews.size() >= 3}">
     <p class="text-center" style="font-size: 40px; color: white; font-family: 'Segoe Print'; margin-top: 19px; margin-bottom: auto;">Останні Відгуки</p>
     <div class="container p-4">
         <div class="card-deck" style="width: 100%">

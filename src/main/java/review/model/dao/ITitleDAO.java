@@ -20,4 +20,6 @@ public interface ITitleDAO {
     List<Title> getBySubCategoryId(int id);
 
     List<TitlesBean> getBySubCategoryIdWithCity(int id);
+
+    List<Title> getAllByLimit(int limit);
 }
