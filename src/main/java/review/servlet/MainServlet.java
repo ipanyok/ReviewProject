@@ -138,6 +138,7 @@ public class MainServlet {
         model.addAttribute("lastAddedTitles", allTitlesByLimitBean);
 
         if (principal != null) {
+            logger.info("Login as " + principal.getName());
             if (!principal.getName().equals(adminLogin)) {
                 User currentUser = userService.getByLogin(principal.getName());
                 if (session.getAttribute("currentCity") == null) {
