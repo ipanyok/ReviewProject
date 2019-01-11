@@ -13,7 +13,7 @@
 <jsp:include page="menu.jsp"/>
 
 <div class="container">
-    <h1>ACCESS DENIED</h1>
+    <h1 style="color: white">ACCESS DENIED</h1>
 </div>
 
 </body>

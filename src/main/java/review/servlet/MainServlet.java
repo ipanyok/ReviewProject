@@ -235,8 +235,10 @@ public class MainServlet {
     }
 
     @GetMapping("/register")
-    public String getRegister(Model model) {
+    public String getRegister(Model model, HttpSession session) {
         model.addAttribute("user", new User());
+        List<String> cities = (List<String>) session.getAttribute("cities");
+        cities.remove("All");
         return "register";
     }
 

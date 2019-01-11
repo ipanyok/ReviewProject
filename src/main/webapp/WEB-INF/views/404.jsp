@@ -13,7 +13,7 @@
 <jsp:include page="menu.jsp"/>
 
 <div class="container">
- <h1>Oops, this page did not found...</h1>
+ <h1 style="color: white">Oops, this page did not found...</h1>
 </div>
 
 </body>
