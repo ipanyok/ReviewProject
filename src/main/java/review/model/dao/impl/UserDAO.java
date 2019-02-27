@@ -37,6 +37,7 @@ public class UserDAO implements IUserDAO {
 
     @Override
     public List<User> getAll() {
+        logger.info("Start get all users");
         return entityManager.createNamedQuery("User.getAll", User.class).getResultList();
     }
 

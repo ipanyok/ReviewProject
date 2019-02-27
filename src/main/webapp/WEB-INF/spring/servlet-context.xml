@@ -15,7 +15,7 @@
 
     <context:component-scan base-package="review"/>
     <context:annotation-config/>
-    <context:property-placeholder location="classpath:/configuration.properties" />
+    <context:property-placeholder location="classpath:/configuration.properties"/>
     <mvc:resources mapping="/resources/**" location="/resources/"/>
     <mvc:annotation-driven/>
 
@@ -27,7 +27,7 @@
 
     <mvc:interceptors>
         <mvc:interceptor>
-            <mvc:mapping path="/**" />
+            <mvc:mapping path="/**"/>
             <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
                 <property name="paramName" value="lang"/>
             </bean>
@@ -46,5 +46,19 @@
     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
 
     <bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver"/>
+
+
+    <bean id="invokerService" class="org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter">
+        <property name="service" ref="userDAO"/>
+        <property name="serviceInterface" value="review.model.dao.IUserDAO"/>
+    </bean>
+
+    <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="mappings">
+            <value>
+                /user.service=invokerService
+            </value>
+        </property>
+    </bean>
 
 </beans>

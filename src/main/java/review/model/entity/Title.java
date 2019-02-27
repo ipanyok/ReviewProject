@@ -1,6 +1,7 @@
 package review.model.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "TITLE")
@@ -10,7 +11,7 @@ import javax.persistence.*;
         @NamedQuery(name = "Title.getByName", query = "select t from Title t where t.title = :title"),
         @NamedQuery(name = "Title.getBySubCategoryId", query = "select t from Title t where t.idSubCategory = :idSubCategory")
 })
-public class Title {
+public class Title implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

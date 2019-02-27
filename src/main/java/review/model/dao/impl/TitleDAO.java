@@ -30,6 +30,7 @@ public class TitleDAO implements ITitleDAO {
 
     @Override
     public List<Title> getAll() {
+        logger.info("Start get all titles");
         return entityManager.createNamedQuery("Title.getAll", Title.class).getResultList();
     }
 
