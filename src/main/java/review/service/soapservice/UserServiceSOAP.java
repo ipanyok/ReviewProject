@@ -9,6 +9,8 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 import review.model.entity.User;
 import review.service.UserService;
 
+import java.util.List;
+
 @Endpoint
 public class UserServiceSOAP {
 
@@ -22,7 +24,7 @@ public class UserServiceSOAP {
     @PayloadRoot(namespace = NAMESPACE, localPart = "getUserRequest")
     @ResponsePayload
     public GetUserResponse getUserByLogin(@RequestPayload GetUserRequest request) {
-        logger.info("Start SOAP service");
+        logger.info("Start SOAP service. Get by login");
         String userLogin = request.getLogin();
         User user = userService.getByLogin(userLogin);
         review.service.soapservice.User userRemote = new review.service.soapservice.User();
@@ -33,6 +35,23 @@ public class UserServiceSOAP {
         GetUserResponse response = new GetUserResponse();
         response.setUser(userRemote);
         return response;
+    }
+
+    @PayloadRoot(namespace = NAMESPACE, localPart = "getAllUserRequest")
+    @ResponsePayload
+    public GetAllUserResponse getAllUsers() {
+        logger.info("Start SOAP service. Get all users");
+        List<User> allUsersList = userService.getAll();
+        GetAllUserResponse responce = new GetAllUserResponse();
+        for (User user : allUsersList) {
+            review.service.soapservice.User userRemote = new review.service.soapservice.User();
+            userRemote.setLogin(user.getLogin());
+            userRemote.setLastName(user.getLastName());
+            userRemote.setFirstName(user.getFirstName());
+            userRemote.setEmail(user.getEmail());
+            responce.getUserList().add(userRemote);
+        }
+        return responce;
     }
 
 }
