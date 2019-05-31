@@ -7,6 +7,9 @@
                            http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
     <security:http use-expressions="true">
+
+        <security:intercept-url pattern="/rest/**" access="isAuthenticated()"/>
+
         <security:intercept-url pattern="/**/addreview" access="isAuthenticated() and principal.username != 'Admin'"/>
         <security:intercept-url pattern="/**/addreviewtonewtitle" access="isAuthenticated() and principal.username != 'Admin'"/>
         <security:intercept-url pattern="/**/addtitle" access="isAuthenticated() and principal.username == 'Admin'"/>
@@ -33,6 +36,5 @@
             <security:password-encoder ref="bCryptPasswordEncoder"/>
         </security:authentication-provider>
     </security:authentication-manager>
-
 
 </beans>

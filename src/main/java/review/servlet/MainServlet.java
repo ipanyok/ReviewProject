@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import review.model.entity.*;
 import review.service.*;
+import review.service.activemqmessages.MessageSender;
 import review.servlet.beans.AdminBufferBean;
 import review.servlet.beans.PagesBean;
 import review.servlet.beans.TitlesBean;
@@ -90,6 +91,21 @@ public class MainServlet {
 
     @Value("${status.cancel}")
     private String statusCancel;
+
+    @Autowired
+    MessageSender messageSender;
+
+    @GetMapping("/sendmessage")
+    public String redirect() {
+        messageSender.send("Send my message in ActiveMQQueue!!!");
+        return "redirect:/";
+    }
+
+    @ExceptionHandler(Exception.class)
+    public String handleIOException(Exception e) {
+        logger.error(e.getMessage());
+        return "redirect:/";
+    }
 
     @GetMapping({"/", "/home"})
     public String showMain(HttpSession session, Model model, Principal principal) {

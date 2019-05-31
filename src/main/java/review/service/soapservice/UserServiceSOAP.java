@@ -53,5 +53,4 @@ public class UserServiceSOAP {
         }
         return responce;
     }
-
 }

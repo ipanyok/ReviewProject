@@ -47,4 +47,19 @@
 
     <bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver"/>
 
+    <bean id="activeMQConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <constructor-arg value="tcp://localhost:61616"/>
+    </bean>
+
+    <bean id="messageListenerContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="activeMQConnectionFactory"/>
+        <property name="destinationName" value="exampleQueue"/>
+        <property name="messageListener" ref="simpleMessageListener"/>
+    </bean>
+
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <constructor-arg ref="activeMQConnectionFactory"/>
+        <property name="defaultDestinationName" value="exampleQueue"/>
+    </bean>
+
 </beans>
